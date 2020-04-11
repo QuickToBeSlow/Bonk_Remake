@@ -50,11 +50,11 @@ Test.prototype.createWorld = function() {
 	// 	new b2Vec2(500 / m_physScale, 100 / m_physScale),
 	// 	new b2Vec2(500 / m_physScale, 0 / m_physScale)
 	// ];
-	sd.SetAsBox((400) / m_physScale, (25) / m_physScale);
+	sd.SetAsBox((400) / m_physScale, (10) / m_physScale);
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	// bd.userData = "ramp";
-	bd.position.Set((100) / m_physScale, (50) / m_physScale);
+	bd.position.Set((300) / m_physScale, (50) / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
