@@ -46,8 +46,8 @@ Test.prototype.createWorld = function() {
 
 	var vxs = [new b2Vec2(0, 0),
 		
-		new b2Vec2(200 / m_physScale, 0),
-		new b2Vec2(200 / m_physScale, 100 / m_physScale),
+		new b2Vec2(100 / m_physScale, 0),
+		new b2Vec2(100 / m_physScale, 100 / m_physScale),
 		new b2Vec2(0, 100 / m_physScale)];
 	sd.SetAsArray(vxs, vxs.length);
 	fd.density = 0;
@@ -67,13 +67,13 @@ Test.prototype.createWorld = function() {
 	bd.type = b2Body.b2_dynamicBody;
 	bd.userData = "ball";
 	bd.isBullet = true;
-	bd.position.Set(ctx.style.width*0.75/m_physScale, 140 / m_physScale);
+	bd.position.Set(ctx.width*0.75/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
-	bd.position.Set(ctx.style.width*0.25/m_physScale, 140 / m_physScale);
+	bd.position.Set(ctx.width*0.25/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
