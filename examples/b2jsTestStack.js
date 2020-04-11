@@ -41,30 +41,44 @@ Test.prototype.createWorld = function() {
 	}
 	// Create ramp
 
-	var vxs = [new b2Vec2(0, 0),
+	// var vxs = [new b2Vec2(0, 0),
 		
-		new b2Vec2(200 / m_physScale, 0),
-		new b2Vec2(0, 100 / m_physScale)];
-	sd.SetAsArray(vxs, vxs.length);
-	fd.density = 0;
-	bd.type = b2Body.b2_staticBody;
-	bd.userData = "ramp";
-	bd.position.Set(0, 0);
+	// 	new b2Vec2(200 / m_physScale, 0),
+	// 	new b2Vec2(0, 100 / m_physScale)];
+	// sd.SetAsArray(vxs, vxs.length);
+	// fd.density = 0;
+	// bd.type = b2Body.b2_staticBody;
+	// bd.userData = "ramp";
+	// bd.position.Set(0, 0);
+	// b = world.CreateBody(bd);
+	// b.CreateFixture(fd);
+
+	// Create ball
+	var P1 = new b2CircleShape();
+	P1.m_radius = 15/m_physScale;
+	fd.density = 1;
+	fd.restitution = 0.8;
+	fd.friction = 0.1;
+	fd.shape = P1;
+	bd.type = b2Body.b2_dynamicBody;
+	bd.userData = "ball";
+	bd.isBullet = true;
+	bd.position.Set(50/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
-	// Create ball
-	var cd = new b2CircleShape();
-	cd.m_radius = 40/m_physScale;
-	fd.density = 8;
-	fd.restitution = 0.4;
-	fd.friction = 0.5;
-	fd.shape = cd;
-	bd.type = b2Body.b2_dynamicBody;
-	bd.userData = "ball";
-	bd.position.Set(50/m_physScale, 140 / m_physScale);
+	var P2 = new b2CircleShape();
+	P2.m_radius = 15/m_physScale;
+	// fd.density = 1;
+	// fd.restitution = 0.8;
+	// fd.friction = 0.1;
+	// fd.shape = P2;
+	// bd.type = b2Body.b2_dynamicBody;
+	// bd.userData = "ball";
+	// bd.isBullet = true;
+	// bd.position.Set(50/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
-	b.CreateFixture(fd);	
+	b.CreateFixture(fd);
 
 	return world;
 };
