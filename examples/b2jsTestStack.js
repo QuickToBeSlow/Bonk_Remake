@@ -44,17 +44,17 @@ Test.prototype.createWorld = function() {
 	// }
 	// Create ramp
 
-	var vxs = [
-		new b2Vec2(100 / m_physScale, 0),
-		new b2Vec2(100 / m_physScale, 100 / m_physScale),
-		new b2Vec2(500 / m_physScale, 100 / m_physScale),
-		new b2Vec2(500 / m_physScale, 0 / m_physScale)
-	];
-	sd.SetAsArray(vxs, vxs.length);
+	// var vxs = [
+	// 	new b2Vec2(100 / m_physScale, 0),
+	// 	new b2Vec2(100 / m_physScale, 100 / m_physScale),
+	// 	new b2Vec2(500 / m_physScale, 100 / m_physScale),
+	// 	new b2Vec2(500 / m_physScale, 0 / m_physScale)
+	// ];
+	sd.SetAsBox((400) / m_physScale, (25) / m_physScale);
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	// bd.userData = "ramp";
-	bd.position.Set(0, 0);
+	bd.position.Set((100) / m_physScale, (50) / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
