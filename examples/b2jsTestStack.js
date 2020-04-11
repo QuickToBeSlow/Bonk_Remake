@@ -69,14 +69,6 @@ Test.prototype.createWorld = function() {
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
-	// fd.density = 1;
-	// fd.restitution = 0.8;
-	// fd.friction = 0.1;
-	// fd.shape = P2;
-	// bd.type = b2Body.b2_dynamicBody;
-	// bd.userData = "ball";
-	// bd.isBullet = true;
-	// bd.position.Set(50/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
