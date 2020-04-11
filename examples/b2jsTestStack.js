@@ -44,11 +44,12 @@ Test.prototype.createWorld = function() {
 	// }
 	// Create ramp
 
-	var vxs = [new b2Vec2(0, 0),
-		
+	var vxs = [
 		new b2Vec2(100 / m_physScale, 0),
 		new b2Vec2(100 / m_physScale, 100 / m_physScale),
-		new b2Vec2(500 / m_physScale, 100 / m_physScale)];
+		new b2Vec2(500 / m_physScale, 100 / m_physScale),
+		new b2Vec2(500 / m_physScale, 0 / m_physScale)
+	];
 	sd.SetAsArray(vxs, vxs.length);
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
