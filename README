@@ -1,12 +1,3 @@
-This is a JavaScript Version of Box2D 2.1a
-
-Open examples/index.html to see it in action or watch it online at http://heikobehrens.net/box2d.js
-Also, box2d.js became part of cocos2d-javascript. Have a look at it's demo page http://cocos2d-javascript.org/demo?demo=box2d
-
-Box2D (original C++ version) http://www.box2d.org
-Box2DFlash (maintained port to AS3) http://www.box2dflash.org
-Box2DJS (outdated port to JS) http://box2d-js.sourceforge.net
-
-Thanks to Jonas Wagner for getting things rolling http://29a.ch/2010/4/17/box2d-2-flash-ported-javascript
-
-(I will write more about this project, soon)
+Currently I'm repurposing code from https://github.com/HBehrens/box2d.js. The plan is to convert one of their programs
+into a remake of the popular io game bonk2.io. In addition, I plan to add in machine learning so that I can train bots to
+eventually play the game for me.
