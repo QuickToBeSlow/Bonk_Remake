@@ -1,0 +1,611 @@
+diff --git a/javascript/Box2D/Collision/Features.js b/javascript/Box2D/Collision/Features.js
+index d0d5427..4b83af8 100644
+--- a/javascript/Box2D/Collision/Features.js
++++ b/javascript/Box2D/Collision/Features.js
+@@ -8,37 +8,37 @@ Features.prototype.__varz = function(){
+ // static methods
+ // static attributes
+ // methods
+-Features.prototype.get = function () {
++Features.prototype.__defineGetter__("referenceEdge", function() {
+ 		return this._referenceEdge;
+-	}
+-Features.prototype.set = function (value) {
++    });   
++Features.prototype.__defineSetter__("referenceEdge", function(value) {
+ 		this._referenceEdge = value;
+ 		this._m_id._key = (this._m_id._key & 0xffffff00) | (this._referenceEdge & 0x000000ff);
+-	}
+-Features.prototype.get = function () {
++    });
++Features.prototype.__defineGetter__("incidentEdge", function() {
+ 		return this._incidentEdge;
+-	}
+-Features.prototype.set = function (value) {
++    });
++Features.prototype.__defineSetter__("incidentEdge", function(value) {
+ 		this._incidentEdge = value;
+ 		this._m_id._key = (this._m_id._key & 0xffff00ff) | ((this._incidentEdge << 8) & 0x0000ff00);
+-	}
+-Features.prototype.get = function () {
++    });
++Features.prototype.__defineGetter__("incidentVertex", function() {
+ 		return this._incidentVertex;
+-	}
+-Features.prototype.set = function (value) {
++    });
++Features.prototype.__defineSetter__("incidentVertex", function(value) {
+ 		this._incidentVertex = value;
+ 		this._m_id._key = (this._m_id._key & 0xff00ffff) | ((this._incidentVertex << 16) & 0x00ff0000);
+-	}
+-Features.prototype.get = function () {
++    });
++Features.prototype.__defineGetter__("flip", function() {
+ 		return this._flip;
+-	}
+-Features.prototype.set = function (value) {
++    });
++Features.prototype.__defineSetter__("flip", function(value) {
+ 		this._flip = value;
+ 		this._m_id._key = (this._m_id._key & 0x00ffffff) | ((this._flip << 24) & 0xff000000);
+-	}
++    });
+ // attributes
+ Features.prototype._referenceEdge =  0;
+ Features.prototype._incidentEdge =  0;
+ Features.prototype._incidentVertex =  0;
+ Features.prototype._flip =  0;
+-Features.prototype._m_id =  null;
+\ No newline at end of file
++Features.prototype._m_id =  null;    
+\ No newline at end of file
+diff --git a/javascript/Box2D/Collision/Shapes/b2PolygonShape.js b/javascript/Box2D/Collision/Shapes/b2PolygonShape.js
+index fa4fdc0..92142b9 100644
+--- a/javascript/Box2D/Collision/Shapes/b2PolygonShape.js
++++ b/javascript/Box2D/Collision/Shapes/b2PolygonShape.js
+@@ -216,7 +216,7 @@ b2PolygonShape.prototype.SetAsArray = function (vertices, vertexCount ) {
+ 		this.SetAsVector(v, vertexCount);
+ 	}
+ b2PolygonShape.prototype.SetAsVector = function (vertices, vertexCount ) {
+-		if (vertexCount == 0)
++		if (typeof vertexCount == "undefined")
+ 			vertexCount = vertices.length;
+ 			
+ 		b2Settings.b2Assert(2 <= vertexCount);
+diff --git a/javascript/Box2D/Collision/b2AABB.js b/javascript/Box2D/Collision/b2AABB.js
+index e8fadd5..acc53c0 100644
+--- a/javascript/Box2D/Collision/b2AABB.js
++++ b/javascript/Box2D/Collision/b2AABB.js
+@@ -32,11 +32,11 @@ b2AABB.prototype.GetExtents = function () {
+ 		 (this.upperBound.y - this.lowerBound.y) / 2);
+ 	}
+ b2AABB.prototype.Contains = function (aabb) {
+-		var result = true;
+-		result &&= this.lowerBound.x <= aabb.lowerBound.x;
+-		result &&= this.lowerBound.y <= aabb.lowerBound.y;
+-		result &&= aabb.upperBound.x <= this.upperBound.x;
+-		result &&= aabb.upperBound.y <= this.upperBound.y;
++		var result = true
++			&& (this.lowerBound.x <= aabb.lowerBound.x)
++			&& (this.lowerBound.y <= aabb.lowerBound.y)
++			&& (aabb.upperBound.x <= this.upperBound.x)
++			&& (aabb.upperBound.y <= this.upperBound.y);
+ 		return result;
+ 	}
+ b2AABB.prototype.RayCast = function (output, input) {
+diff --git a/javascript/Box2D/Collision/b2ContactID.js b/javascript/Box2D/Collision/b2ContactID.js
+index 8d5fe00..4b26afd 100644
+--- a/javascript/Box2D/Collision/b2ContactID.js
++++ b/javascript/Box2D/Collision/b2ContactID.js
+@@ -20,16 +20,16 @@ b2ContactID.prototype.Copy = function () {
+ 		id.key = key;
+ 		return id;
+ 	}
+-b2ContactID.prototype.get = function () {
++b2ContactID.prototype.__defineSetter__("key", function () {
+ 		return this._key;
+-	}
+-b2ContactID.prototype.set = function (value) {
++    });
++b2ContactID.prototype.__defineSetter__("key", function(value) { 
+ 		this._key = value;
+ 		this.features._referenceEdge = this._key & 0x000000ff;
+ 		this.features._incidentEdge = ((this._key & 0x0000ff00) >> 8) & 0x000000ff;
+ 		this.features._incidentVertex = ((this._key & 0x00ff0000) >> 16) & 0x000000ff;
+ 		this.features._flip = ((this._key & 0xff000000) >> 24) & 0x000000ff;
+-	}
++    });
+ // attributes
+ b2ContactID.prototype._key =  0;
+ b2ContactID.prototype.features =  new Features();
+\ No newline at end of file
+diff --git a/javascript/Box2D/Collision/b2DistanceProxy.js b/javascript/Box2D/Collision/b2DistanceProxy.js
+index eb06178..1cb2d4f 100644
+--- a/javascript/Box2D/Collision/b2DistanceProxy.js
++++ b/javascript/Box2D/Collision/b2DistanceProxy.js
+@@ -14,7 +14,7 @@ b2DistanceProxy.prototype.Set = function (shape) {
+ 				case b2Shape.e_circleShape:
+ 				{
+ 					var circle = shape;
+-					this.m_vertices = new Array(1, true);
++					this.m_vertices = new Array(1);
+ 					this.m_vertices[0] = circle.m_p;
+ 					this.m_count = 1;
+ 					this.m_radius = circle.m_radius;
+diff --git a/javascript/Box2D/Collision/b2DynamicTreeBroadPhase.js b/javascript/Box2D/Collision/b2DynamicTreeBroadPhase.js
+index a2428bc..c2ca788 100644
+--- a/javascript/Box2D/Collision/b2DynamicTreeBroadPhase.js
++++ b/javascript/Box2D/Collision/b2DynamicTreeBroadPhase.js
+@@ -61,29 +61,30 @@ b2DynamicTreeBroadPhase.prototype.UpdatePairs = function (callback) {
+ 		
+ 		for(var i=0, queryProxy=null;i<this.m_moveBuffer.length, queryProxy=this.m_moveBuffer[i]; i++)
+ 		{
+-			function this.QueryCallback(proxy)
++			var that = this;
++			function QueryCallback(proxy)
+ 			{
+ 				
+ 				if (proxy == queryProxy)
+ 					return true;
+ 					
+ 				
+-				if (this.m_pairCount == this.m_pairBuffer.length)
++				if (that.m_pairCount == that.m_pairBuffer.length)
+ 				{
+-					this.m_pairBuffer[this.m_pairCount] = new b2DynamicTreePair();
++					that.m_pairBuffer[that.m_pairCount] = new b2DynamicTreePair();
+ 				}
+ 				
+-				var pair = this.m_pairBuffer[this.m_pairCount];
++				var pair = that.m_pairBuffer[that.m_pairCount];
+ 				pair.proxyA = proxy < queryProxy?proxy:queryProxy;
+ 				pair.proxyB = proxy >= queryProxy?proxy:queryProxy;
+-				++this.m_pairCount;
++				++that.m_pairCount;
+ 				
+ 				return true;
+ 			}
+ 			
+ 			
+ 			var fatAABB = this.m_tree.GetFatAABB(queryProxy);
+-			this.m_tree.Query(this.QueryCallback, fatAABB);
++			this.m_tree.Query(QueryCallback, fatAABB);
+ 		}
+ 		
+ 		
+@@ -114,24 +115,6 @@ b2DynamicTreeBroadPhase.prototype.UpdatePairs = function (callback) {
+ 			}
+ 		}
+ 	}
+-b2DynamicTreeBroadPhase.prototype.QueryCallback = function (proxy) {
+-				
+-				if (proxy == queryProxy)
+-					return true;
+-					
+-				
+-				if (this.m_pairCount == this.m_pairBuffer.length)
+-				{
+-					this.m_pairBuffer[this.m_pairCount] = new b2DynamicTreePair();
+-				}
+-				
+-				var pair = this.m_pairBuffer[this.m_pairCount];
+-				pair.proxyA = proxy < queryProxy?proxy:queryProxy;
+-				pair.proxyB = proxy >= queryProxy?proxy:queryProxy;
+-				++this.m_pairCount;
+-				
+-				return true;
+-			}
+ b2DynamicTreeBroadPhase.prototype.Query = function (callback, aabb) {
+ 		this.m_tree.Query(callback, aabb);
+ 	}
+diff --git a/javascript/Box2D/Collision/b2RayCastInput.js b/javascript/Box2D/Collision/b2RayCastInput.js
+index 79e8ddb..34ad6b4 100644
+--- a/javascript/Box2D/Collision/b2RayCastInput.js
++++ b/javascript/Box2D/Collision/b2RayCastInput.js
+@@ -2,12 +2,13 @@ var b2RayCastInput = function() {
+ this.__varz();
+ this.__constructor.apply(this, arguments);
+ }
+-b2RayCastInput.prototype.__constructor = function (this.p1 , this.p2 , this.maxFraction ) {
+-			if (this.p1)
+-				this.p1.SetV(this.p1);
+-			if (this.p2)
+-				this.p2.SetV(this.p2);
+-			this.maxFraction = this.maxFraction;
++b2RayCastInput.prototype.__constructor = function (p1 , p2 , maxFraction ) {
++			if (p1)
++				this.p1.SetV(p1);
++			if (p2)
++				this.p2.SetV(p2);
++			if (maxFraction)
++				this.maxFraction = maxFraction;
+ 		}
+ b2RayCastInput.prototype.__varz = function(){
+ this.p1 =  new b2Vec2();
+diff --git a/javascript/Box2D/Common/Math/b2Vec2.js b/javascript/Box2D/Common/Math/b2Vec2.js
+index e94ec27..8c56b7e 100644
+--- a/javascript/Box2D/Common/Math/b2Vec2.js
++++ b/javascript/Box2D/Common/Math/b2Vec2.js
+@@ -1,9 +1,7 @@
+-var b2Vec2 = function() {
+-this.__varz();
+-this.__constructor.apply(this, arguments);
++var b2Vec2 = function(x_, y_) {
++    if(arguments.length == 2) {
++        this.x=x_; this.y=y_;
+ }
+-b2Vec2.prototype.__constructor = function (x_, y_) {this.x=x_; this.y=y_;}
+-b2Vec2.prototype.__varz = function(){
+ }
+ // static methods
+ b2Vec2.Make = function (x_, y_) {
+@@ -82,5 +80,5 @@ b2Vec2.prototype.IsValid = function () {
+ 		return b2Math.IsValid(this.x) && b2Math.IsValid(this.y);
+ 	}
+ // attributes
+-b2Vec2.prototype.x =  null;
+-b2Vec2.prototype.y =  null;
+\ No newline at end of file
++b2Vec2.prototype.x =  0;
++b2Vec2.prototype.y =  0;
+\ No newline at end of file
+diff --git a/javascript/Box2D/Common/Math/b2Vec3.js b/javascript/Box2D/Common/Math/b2Vec3.js
+index fcc66f2..c5aa7af 100644
+--- a/javascript/Box2D/Common/Math/b2Vec3.js
++++ b/javascript/Box2D/Common/Math/b2Vec3.js
+@@ -1,13 +1,7 @@
+-var b2Vec3 = function() {
+-this.__varz();
+-this.__constructor.apply(this, arguments);
++var b2Vec3 = function(x, y, z) {
++	if(arguments.length == 3) {
++		this.x=x; this.y=y; this.z=z;
+ }
+-b2Vec3.prototype.__constructor = function (this.x , this.y , this.z ) {
+-		this.x = this.x;
+-		this.y = this.y;
+-		this.z = this.z;
+-	}
+-b2Vec3.prototype.__varz = function(){
+ }
+ // static methods
+ // static attributes
+@@ -15,10 +9,10 @@ b2Vec3.prototype.__varz = function(){
+ b2Vec3.prototype.SetZero = function () {
+ 		this.x = this.y = this.z = 0.0;
+ 	}
+-b2Vec3.prototype.Set = function (this.x, this.y, this.z) {
+-		this.x = this.x;
+-		this.y = this.y;
+-		this.z = this.z;
++b2Vec3.prototype.Set = function (x, y, z) {
++		this.x = x;
++		this.y = y;
++		this.z = z;
+ 	}
+ b2Vec3.prototype.SetV = function (v) {
+ 		this.x = v.x;
+@@ -40,6 +34,6 @@ b2Vec3.prototype.Multiply = function (a) {
+ 		this.x *= a; this.y *= a; this.z *= a;
+ 	}
+ // attributes
+-b2Vec3.prototype.x =  null;
+-b2Vec3.prototype.y =  null;
+-b2Vec3.prototype.z =  null;
+\ No newline at end of file
++b2Vec3.prototype.x =  0;
++b2Vec3.prototype.y =  0;
++b2Vec3.prototype.z =  0;
+\ No newline at end of file
+diff --git a/javascript/Box2D/Common/b2Color.js b/javascript/Box2D/Common/b2Color.js
+index 2034474..47473b8 100644
+--- a/javascript/Box2D/Common/b2Color.js
++++ b/javascript/Box2D/Common/b2Color.js
+@@ -17,18 +17,28 @@ b2Color.prototype.Set = function (rr, gg, bb) {
+ 		this._g = parseInt(255 * b2Math.Clamp(gg, 0.0, 1.0));
+ 		this._b = parseInt(255 * b2Math.Clamp(bb, 0.0, 1.0));
+ 	}
+-b2Color.prototype.set = function (rr) {
++	
++b2Color.prototype.__defineGetter__("r", function() {
++			return this._r;
++		});
++b2Color.prototype.__defineSetter__("r", function(rr) {
+ 		this._r = parseInt(255 * b2Math.Clamp(rr, 0.0, 1.0));
+-	}
+-b2Color.prototype.set = function (gg) {
++	});
++b2Color.prototype.__defineGetter__("g", function() {
++				return this._g;
++			});
++b2Color.prototype.__defineSetter__("g", function(gg) {
+ 		this._g = parseInt(255 * b2Math.Clamp(gg, 0.0, 1.0));
+-	}
+-b2Color.prototype.set = function (bb) {
++	});
++b2Color.prototype.__defineGetter__("b", function() {
++					return this._b;
++				});
++b2Color.prototype.__defineSetter__("b", function(bb) {
+ 		this._b = parseInt(255 * b2Math.Clamp(bb, 0.0, 1.0));
+-	}
+-b2Color.prototype.get = function () {
++	});
++b2Color.prototype.__defineGetter__("color", function() {
+ 		return (this._r << 16) | (this._g << 8) | (this._b);
+-	}
++	});
+ // attributes
+ b2Color.prototype._r =  0;
+ b2Color.prototype._g =  0;
+diff --git a/javascript/Box2D/Dynamics/b2ContactManager.js b/javascript/Box2D/Dynamics/b2ContactManager.js
+index b601fbf..dd5b875 100644
+--- a/javascript/Box2D/Dynamics/b2ContactManager.js
++++ b/javascript/Box2D/Dynamics/b2ContactManager.js
+@@ -105,7 +105,10 @@ b2ContactManager.prototype.AddPair = function (proxyUserDataA, proxyUserDataB) {
+ 		
+ 	}
+ b2ContactManager.prototype.FindNewContacts = function () {
+-		this.m_broadPhase.UpdatePairs(this.AddPair);
++		var that = this;
++		this.m_broadPhase.UpdatePairs(function(a,b){
++			return that.AddPair(a, b);
++			});
+ 	}
+ b2ContactManager.prototype.Destroy = function (c) {
+ 		
+diff --git a/javascript/Box2D/Dynamics/b2DebugDraw.js b/javascript/Box2D/Dynamics/b2DebugDraw.js
+index 252b31f..17e7a93 100644
+--- a/javascript/Box2D/Dynamics/b2DebugDraw.js
++++ b/javascript/Box2D/Dynamics/b2DebugDraw.js
+@@ -64,6 +64,23 @@ b2DebugDraw.prototype.SetXFormScale = function (xformScale) {
+ b2DebugDraw.prototype.GetXFormScale = function () {
+ 		return this.m_xformScale;
+ 	}
++	
++b2DebugDraw.prototype.Clear = function() {
++	this.m_sprite.clearRect(0, 0, this.m_sprite.canvas.width, this.m_sprite.canvas.height);
++}
++
++b2DebugDraw.prototype.Y = function(y) {
++	return this.m_sprite.canvas.height - y;
++}
++
++b2DebugDraw.prototype.ToWorldPoint = function(localPoint) {
++	return new b2Vec2(localPoint.x / this.m_drawScale, this.Y(localPoint.y)/this.m_drawScale);
++}
++
++b2DebugDraw.prototype.ColorStyle = function(color, alpha) {
++	return "rgba("+color.r+", "+color.g +", " + color.b + ", " + alpha + ")";
++}
++	
+ b2DebugDraw.prototype.DrawPolygon = function (vertices, vertexCount, color) {
+ 		
+ 		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+@@ -75,16 +92,19 @@ b2DebugDraw.prototype.DrawPolygon = function (vertices, vertexCount, color) {
+ 		
+ 	}
+ b2DebugDraw.prototype.DrawSolidPolygon = function (vertices, vertexCount, color) {
++		this.m_sprite.strokeSyle = this.ColorStyle(color, this.m_alpha);
++		this.m_sprite.lineWidth = this.m_lineThickness;
++		this.m_sprite.fillStyle = this.ColorStyle(color, this.m_fillAlpha);
+ 		
+-		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+-		this.m_sprite.graphics.moveTo(vertices[0].x * this.m_drawScale, vertices[0].y * this.m_drawScale);
+-		this.m_sprite.graphics.beginFill(color.color, this.m_fillAlpha);
++		this.m_sprite.beginPath();
++		this.m_sprite.moveTo(vertices[0].x * this.m_drawScale, this.Y(vertices[0].y * this.m_drawScale));
+ 		for (var i = 1; i < vertexCount; i++){
+-				this.m_sprite.graphics.lineTo(vertices[i].x * this.m_drawScale, vertices[i].y * this.m_drawScale);
++				this.m_sprite.lineTo(vertices[i].x * this.m_drawScale, this.Y(vertices[i].y * this.m_drawScale));
+ 		}
+-		this.m_sprite.graphics.lineTo(vertices[0].x * this.m_drawScale, vertices[0].y * this.m_drawScale);
+-		this.m_sprite.graphics.endFill();
+-		
++		this.m_sprite.lineTo(vertices[0].x * this.m_drawScale, this.Y(vertices[0].y * this.m_drawScale));
++		this.m_sprite.fill();
++		this.m_sprite.stroke();
++		this.m_sprite.closePath();
+ 	}
+ b2DebugDraw.prototype.DrawCircle = function (center, radius, color) {
+ 		
+@@ -93,33 +113,43 @@ b2DebugDraw.prototype.DrawCircle = function (center, radius, color) {
+ 		
+ 	}
+ b2DebugDraw.prototype.DrawSolidCircle = function (center, radius, axis, color) {
++		this.m_sprite.strokeSyle = this.ColorStyle(color, this.m_alpha);
++		this.m_sprite.lineWidth = this.m_lineThickness;
++		this.m_sprite.fillStyle = this.ColorStyle(color, this.m_fillAlpha);
+ 		
+-		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+-		this.m_sprite.graphics.moveTo(0,0);
+-		this.m_sprite.graphics.beginFill(color.color, this.m_fillAlpha);
+-		this.m_sprite.graphics.drawCircle(center.x * this.m_drawScale, center.y * this.m_drawScale, radius * this.m_drawScale);
+-		this.m_sprite.graphics.endFill();
+-		this.m_sprite.graphics.moveTo(center.x * this.m_drawScale, center.y * this.m_drawScale);
+-		this.m_sprite.graphics.lineTo((center.x + axis.x*radius) * this.m_drawScale, (center.y + axis.y*radius) * this.m_drawScale);
+-		
++		this.m_sprite.beginPath();
++		this.m_sprite.arc(center.x * this.m_drawScale, this.Y(center.y * this.m_drawScale), radius * this.m_drawScale, 0, Math.PI*2, true);
++		this.m_sprite.fill();
++		this.m_sprite.stroke();
++		this.m_sprite.closePath();
+ 	}
+ b2DebugDraw.prototype.DrawSegment = function (p1, p2, color) {
+ 		
+-		this.m_sprite.graphics.lineStyle(this.m_lineThickness, color.color, this.m_alpha);
+-		this.m_sprite.graphics.moveTo(p1.x * this.m_drawScale, p1.y * this.m_drawScale);
+-		this.m_sprite.graphics.lineTo(p2.x * this.m_drawScale, p2.y * this.m_drawScale);
++		this.m_sprite.lineWidth = this.m_lineThickness;
++		this.m_sprite.strokeSyle = this.ColorStyle(color, this.m_alpha);
++		this.m_sprite.beginPath();
++		this.m_sprite.moveTo(p1.x * this.m_drawScale, this.Y(p1.y * this.m_drawScale));
++		this.m_sprite.lineTo(p2.x * this.m_drawScale, this.Y(p2.y * this.m_drawScale));
++		this.m_sprite.stroke();
++		this.m_sprite.closePath();		
+ 		
+ 	}
+ b2DebugDraw.prototype.DrawTransform = function (xf) {
++		this.m_sprite.lineWidth = this.m_lineThickness;
+ 		
+-		this.m_sprite.graphics.lineStyle(this.m_lineThickness, 0xff0000, this.m_alpha);
+-		this.m_sprite.graphics.moveTo(xf.position.x * this.m_drawScale, xf.position.y * this.m_drawScale);
+-		this.m_sprite.graphics.lineTo((xf.position.x + this.m_xformScale*xf.R.col1.x) * this.m_drawScale, (xf.position.y + this.m_xformScale*xf.R.col1.y) * this.m_drawScale);
+-		
+-		this.m_sprite.graphics.lineStyle(this.m_lineThickness, 0x00ff00, this.m_alpha);
+-		this.m_sprite.graphics.moveTo(xf.position.x * this.m_drawScale, xf.position.y * this.m_drawScale);
+-		this.m_sprite.graphics.lineTo((xf.position.x + this.m_xformScale*xf.R.col2.x) * this.m_drawScale, (xf.position.y + this.m_xformScale*xf.R.col2.y) * this.m_drawScale);
++		this.m_sprite.strokeSyle = this.ColorStyle(new b2Color(255, 0, 0), this.m_alpha);
++		this.m_sprite.beginPath();
++		this.m_sprite.moveTo(xf.position.x * this.m_drawScale, this.Y(xf.position.y * this.m_drawScale));
++		this.m_sprite.lineTo((xf.position.x + this.m_xformScale*xf.R.col1.x) * this.m_drawScale, this.Y((xf.position.y + this.m_xformScale*xf.R.col1.y) * this.m_drawScale));
++		this.m_sprite.stroke();
++		this.m_sprite.closePath();
+ 		
++		this.m_sprite.strokeSyle = this.ColorStyle(new b2Color(0, 255, 0), this.m_alpha);
++		this.m_sprite.beginPath();
++		this.m_sprite.moveTo(xf.position.x * this.m_drawScale, this.Y(xf.position.y * this.m_drawScale));
++		this.m_sprite.lineTo((xf.position.x + this.m_xformScale*xf.R.col2.x) * this.m_drawScale, this.Y((xf.position.y + this.m_xformScale*xf.R.col2.y) * this.m_drawScale));
++		this.m_sprite.stroke();
++		this.m_sprite.closePath();
+ 	}
+ // attributes
+ b2DebugDraw.prototype.m_drawFlags =  0;
+diff --git a/javascript/Box2D/Dynamics/b2World.js b/javascript/Box2D/Dynamics/b2World.js
+index 4cccd3a..99da12c 100644
+--- a/javascript/Box2D/Dynamics/b2World.js
++++ b/javascript/Box2D/Dynamics/b2World.js
+@@ -1075,7 +1075,7 @@ b2World.prototype.DrawDebugData = function () {
+ 			return;
+ 		}
+ 		
+-		this.m_debugDraw.m_sprite.graphics.clear();
++		this.m_debugDraw.Clear();
+ 		
+ 		var flags = this.m_debugDraw.GetFlags();
+ 		
+@@ -1202,15 +1202,12 @@ b2World.prototype.DrawDebugData = function () {
+ 	}
+ b2World.prototype.QueryAABB = function (callback, aabb) {
+ 		var broadPhase = this.m_contactManager.m_broadPhase;
+-		function this.WorldQueryWrapper(proxy)
++		function WorldQueryWrapper(proxy)
+ 		{
+ 			return callback(broadPhase.GetUserData(proxy));
+ 		}
+-		broadPhase.Query(this.WorldQueryWrapper, aabb);
++		broadPhase.Query(WorldQueryWrapper, aabb);
+ 	}
+-b2World.prototype.WorldQueryWrapper = function (proxy) {
+-			return callback(broadPhase.GetUserData(proxy));
+-		}
+ b2World.prototype.QueryShape = function (callback, shape, transform ) {
+ 		if (transform == null)
+ 		{
+@@ -1218,7 +1215,7 @@ b2World.prototype.QueryShape = function (callback, shape, transform ) {
+ 			transform.SetIdentity();
+ 		}
+ 		var broadPhase = this.m_contactManager.m_broadPhase;
+-		function this.WorldQueryWrapper(proxy)
++		function WorldQueryWrapper(proxy)
+ 		{
+ 			var fixture = broadPhase.GetUserData(proxy)
+ 			if(b2Shape.TestOverlap(shape, transform, fixture.GetShape(), fixture.GetBody().GetTransform()))
+@@ -1227,17 +1224,11 @@ b2World.prototype.QueryShape = function (callback, shape, transform ) {
+ 		}
+ 		var aabb = new b2AABB();
+ 		shape.ComputeAABB(aabb, transform);
+-		broadPhase.Query(this.WorldQueryWrapper, aabb);
++		broadPhase.Query(WorldQueryWrapper, aabb);
+ 	}
+-b2World.prototype.WorldQueryWrapper = function (proxy) {
+-			var fixture = broadPhase.GetUserData(proxy)
+-			if(b2Shape.TestOverlap(shape, transform, fixture.GetShape(), fixture.GetBody().GetTransform()))
+-				return callback(fixture);
+-			return true;
+-		}
+ b2World.prototype.QueryPoint = function (callback, p) {
+ 		var broadPhase = this.m_contactManager.m_broadPhase;
+-		function this.WorldQueryWrapper(proxy)
++		function WorldQueryWrapper(proxy)
+ 		{
+ 			var fixture = broadPhase.GetUserData(proxy)
+ 			if(fixture.TestPoint(p))
+@@ -1248,18 +1239,12 @@ b2World.prototype.QueryPoint = function (callback, p) {
+ 		var aabb = new b2AABB();
+ 		aabb.lowerBound.Set(p.x - b2Settings.b2_linearSlop, p.y - b2Settings.b2_linearSlop);
+ 		aabb.upperBound.Set(p.x + b2Settings.b2_linearSlop, p.y + b2Settings.b2_linearSlop);
+-		broadPhase.Query(this.WorldQueryWrapper, aabb);
++		broadPhase.Query(WorldQueryWrapper, aabb);
+ 	}
+-b2World.prototype.WorldQueryWrapper = function (proxy) {
+-			var fixture = broadPhase.GetUserData(proxy)
+-			if(fixture.TestPoint(p))
+-				return callback(fixture);
+-			return true;
+-		}
+ b2World.prototype.RayCast = function (callback, point1, point2) {
+ 		var broadPhase = this.m_contactManager.m_broadPhase;
+ 		var output = new b2RayCastOutput;
+-		function this.RayCastWrapper(input, proxy)
++		function RayCastWrapper(input, proxy)
+ 		{
+ 			var userData = broadPhase.GetUserData(proxy);
+ 			var fixture = userData;
+@@ -1275,50 +1260,28 @@ b2World.prototype.RayCast = function (callback, point1, point2) {
+ 			return input.maxFraction;
+ 		}
+ 		var input = new b2RayCastInput(point1, point2);
+-		broadPhase.RayCast(this.RayCastWrapper, input);
++		broadPhase.RayCast(RayCastWrapper, input);
+ 	}
+-b2World.prototype.RayCastWrapper = function (input, proxy) {
+-			var userData = broadPhase.GetUserData(proxy);
+-			var fixture = userData;
+-			var hit = fixture.RayCast(output, input);
+-			if (hit)
+-			{
+-				var fraction = output.fraction;
+-				var point = new b2Vec2(
+-					(1.0 - fraction) * point1.x + fraction * point2.x,
+-					(1.0 - fraction) * point1.y + fraction * point2.y);
+-				return callback(fixture, point, output.normal, fraction);
+-			}
+-			return input.maxFraction;
+-		}
+ b2World.prototype.RayCastOne = function (point1, point2) {
+ 		var result;
+-		function this.RayCastOneWrapper(fixture, point, normal, fraction)
++		function RayCastOneWrapper(fixture, point, normal, fraction)
+ 		{
+ 			result = fixture;
+ 			return fraction;
+ 		}
+-		this.RayCast(this.RayCastOneWrapper, point1, point2);
++		this.RayCast(RayCastOneWrapper, point1, point2);
+ 		return result;
+ 	}
+-b2World.prototype.RayCastOneWrapper = function (fixture, point, normal, fraction) {
+-			result = fixture;
+-			return fraction;
+-		}
+ b2World.prototype.RayCastAll = function (point1, point2) {
+ 		var result = new Array();
+-		function this.RayCastAllWrapper(fixture, point, normal, fraction)
++		function RayCastAllWrapper(fixture, point, normal, fraction)
+ 		{
+ 			result[result.length] = fixture;
+ 			return 1;
+ 		}
+-		this.RayCast(this.RayCastAllWrapper, point1, point2);
++		this.RayCast(RayCastAllWrapper, point1, point2);
+ 		return result;
+ 	}
+-b2World.prototype.RayCastAllWrapper = function (fixture, point, normal, fraction) {
+-			result[result.length] = fixture;
+-			return 1;
+-		}
+ b2World.prototype.GetBodyList = function () {
+ 		return this.m_bodyList;
+ 	}
+

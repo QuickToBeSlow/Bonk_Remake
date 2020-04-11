@@ -1,0 +1,2 @@
+goto http://closure-compiler.googlecode.com to download the latest closure compiler.
+Extract the file "compiler.jar" into this directory.
