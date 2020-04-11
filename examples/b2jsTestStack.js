@@ -53,7 +53,7 @@ Test.prototype.createWorld = function() {
 	sd.SetAsArray(vxs, vxs.length);
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
-	bd.userData = "ramp";
+	// bd.userData = "ramp";
 	bd.position.Set(0, 0);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
