@@ -1,6 +1,7 @@
 (function(){
 
 var ctx = document.getElementById("canvas");
+console.log(ctx);
 
 var Test = function() {
 	b2jsTest.__constructor.apply(this, arguments);

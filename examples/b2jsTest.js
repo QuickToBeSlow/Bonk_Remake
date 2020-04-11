@@ -8,7 +8,7 @@ Test.__constructor = function(canvas) {
 	var that = this;
 	this._canvas = canvas;
 	this._paused = true;
-	this._fps = 200;
+	this._fps = 30;
 	this._dbgDraw = new b2DebugDraw();
 	
 	this._handleMouseMove = function(e){
