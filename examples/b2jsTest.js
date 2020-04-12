@@ -72,24 +72,24 @@ Test.prototype.createWorld = function(){
 	var wall = new b2PolygonShape();
 	var wallBd = new b2BodyDef();
 	
-	// Left
-	wallBd.position.Set( -9.5 / m_physScale, 36 / m_physScale / 2);
-	wall.SetAsBox(10/m_physScale, 40/m_physScale/2);
-	this._wallLeft = m_world.CreateBody(wallBd);
-	this._wallLeft.CreateFixture2(wall);
-	// Right
-	wallBd.position.Set((64 + 9.5) / m_physScale, 36 / m_physScale / 2);
-	this._wallRight = m_world.CreateBody(wallBd);
-	this._wallRight.CreateFixture2(wall);
-	// Top
-	wallBd.position.Set(64 / m_physScale / 2, (36 + 9.5) / m_physScale);
-	wall.SetAsBox(68/m_physScale/2, 10/m_physScale);
-	this._wallTop = m_world.CreateBody(wallBd);
-	this._wallTop.CreateFixture2(wall);	
-	// Bottom
-	wallBd.position.Set(64 / m_physScale / 2, -9.5 / m_physScale);
-	this._wallBottom = m_world.CreateBody(wallBd);
-	this._wallBottom.CreateFixture2(wall);
+	// // Left
+	// wallBd.position.Set( -9.5 / m_physScale, 36 / m_physScale / 2);
+	// wall.SetAsBox(10/m_physScale, 40/m_physScale/2);
+	// this._wallLeft = m_world.CreateBody(wallBd);
+	// this._wallLeft.CreateFixture2(wall);
+	// // Right
+	// wallBd.position.Set((64 + 9.5) / m_physScale, 36 / m_physScale / 2);
+	// this._wallRight = m_world.CreateBody(wallBd);
+	// this._wallRight.CreateFixture2(wall);
+	// // Top
+	// wallBd.position.Set(64 / m_physScale / 2, (36 + 9.5) / m_physScale);
+	// wall.SetAsBox(68/m_physScale/2, 10/m_physScale);
+	// this._wallTop = m_world.CreateBody(wallBd);
+	// this._wallTop.CreateFixture2(wall);	
+	// // Bottom
+	// wallBd.position.Set(64 / m_physScale / 2, -9.5 / m_physScale);
+	// this._wallBottom = m_world.CreateBody(wallBd);
+	// this._wallBottom.CreateFixture2(wall);
 	
 	return m_world;
 };
