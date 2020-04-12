@@ -16,10 +16,11 @@ Test.prototype.createWorld = function() {
 	var sd = new b2PolygonShape();
 	var bd = new b2BodyDef();
 	bd.type = b2Body.b2_dynamicBody;
+	bd.fixedRotation = true;
 	//bd.isBullet = true;
 	var b;
 	fd.density = 1.0;
-	fd.friction = 0.5;
+	fd.friction = 0.0;
 	fd.restitution = 0.1;
 	fd.shape = sd;
 	var i;
