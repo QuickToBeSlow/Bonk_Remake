@@ -69,13 +69,13 @@ Test.prototype.createWorld = function() {
 	bd.type = b2Body.b2_dynamicBody;
 	bd.userData = "ball";
 	bd.isBullet = true;
-	bd.position.Set(ctx.width*0.75/m_physScale, 140 / m_physScale);
+	bd.position.Set(200/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
-	bd.position.Set(ctx.width*0.25/m_physScale, 140 / m_physScale);
+	bd.position.Set(400/m_physScale, 140 / m_physScale);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 
