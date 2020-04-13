@@ -32,10 +32,18 @@ Test.__constructor = function(canvas) {
 	this._handleMouseUp = function(e) {
 		that._mouseDown = false;
 	};
+	this._handleKeyDown = function(e) {
+		that._keyDown =[true, e.code];
+	}
+	this._handleKeyDown = function(e) {
+		that._keyDown =[false, e.code];
+	}
 	// see _updateUserInteraction
 	canvas.addEventListener("mousemove", this._handleMouseMove, true);
 	canvas.addEventListener("mousedown", this._handleMouseDown, true);
 	canvas.addEventListener("mouseup", this._handleMouseUp, true);
+	canvas.addEventListener("onkeydown", this._handleKeyDown, true);
+	canvas.addEventListener("onkeyup", this._handleKeyUp, true);
 	
 	this._velocityIterationsPerSecond = 300;
 	this._positionIterationsPerSecond = 200;
@@ -58,6 +66,8 @@ Test.prototype.destroy = function() {
 	canvas.removeEventListener("mousemove", this._handleMouseMove, true);
 	canvas.removeEventListener("mousedown", this._handleMouseDown, true);
 	canvas.removeEventListener("mouseup", this._handleMouseUp, true);
+	canvas.removeEventListener("onkeydown", this._handleKeyDown, true);
+	canvas.removeEventListener("onkeyup", this._handleKeyUp, true);
 	this._canvas = null;
 	this._dbgDraw = null;
 	this._world = null;
@@ -188,6 +198,32 @@ Test.prototype._updateMouseInteraction = function() {
 
 Test.prototype._updateKeyboardInteraction = function() {
 	// TBD
+	if (this._keyDown.length != 0) {
+		if (this._keyDown[0]) {
+			if (this._keyDown[1] == "w") {
+
+			} else if (this._keyDown[1] == "a") {
+
+			} else if (this._keyDown[1] == "s") {
+
+			} else if (this._keyDown[1] == "d") {
+
+			}
+		} else {
+			if (this._keyDown[1] == "w") {
+				
+			} else if (this._keyDown[1] == "a") {
+
+			} else if (this._keyDown[1] == "s") {
+
+			} else if (this._keyDown[1] == "d") {
+
+			}
+		}
+	}
+
+
+
 }
 
 Test.prototype._updateUserInteraction = function() {
