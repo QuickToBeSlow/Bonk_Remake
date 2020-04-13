@@ -203,6 +203,8 @@ Test.prototype._updateKeyboardInteraction = function() {
 	var left = false;
 	var right = false;
 	if (!this._keyDown == undefined) {
+		console.log("pressed");
+		console.log(this_keyDown);
 		if (this._keyDown[0]) {
 			if (this._keyDown[1] == "w") {
 				up = true;
