@@ -195,34 +195,48 @@ Test.prototype._updateMouseInteraction = function() {
 		}
 	}	
 }
-
+var speed = 10;
 Test.prototype._updateKeyboardInteraction = function() {
 	// TBD
+	var up = false;
+	var down = false;
+	var left = false;
+	var right = false;
 	if (this._keyDown.length != 0) {
 		if (this._keyDown[0]) {
 			if (this._keyDown[1] == "w") {
-
+				up = true;
 			} else if (this._keyDown[1] == "a") {
-
+				left = true;
 			} else if (this._keyDown[1] == "s") {
-
+				down = true;
 			} else if (this._keyDown[1] == "d") {
-
+				right = true;
 			}
 		} else {
 			if (this._keyDown[1] == "w") {
-				
+				up = false;
 			} else if (this._keyDown[1] == "a") {
-
+				left = false;
 			} else if (this._keyDown[1] == "s") {
-
+				down = false;
 			} else if (this._keyDown[1] == "d") {
-
+				right = false;
 			}
 		}
 	}
-
-
+	if (up) {
+		Player1.applyForce(new b2Vec2(0, speed));
+	}
+	if (down) {
+		Player1.applyForce(new b2Vec2(0, -speed));
+	}
+	if (left) {
+		Player1.applyForce(new b2Vec2(-speed, 0));
+	}
+	if (right) {
+		Player1.applyForce(new b2Vec2(speed, 0));
+	}
 
 }
 
