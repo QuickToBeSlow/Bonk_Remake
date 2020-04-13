@@ -34,6 +34,8 @@ Test.__constructor = function(canvas) {
 	};
 	this._handleKeyDown = function(e) {
 		that._keyDown = [true, e.code];
+		console.log(this._keyDown);
+		console.log(e);
 	}
 	this._handleKeyDown = function(e) {
 		that._keyDown = [false, e.code];
