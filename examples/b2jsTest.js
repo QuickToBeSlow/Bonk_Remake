@@ -44,8 +44,8 @@ Test.__constructor = function(canvas) {
 	canvas.addEventListener("mousemove", this._handleMouseMove, true);
 	canvas.addEventListener("mousedown", this._handleMouseDown, true);
 	canvas.addEventListener("mouseup", this._handleMouseUp, true);
-	document.addEventListener("onkeydown", this._handleKeyDown, true);
-	document.addEventListener("onkeyup", this._handleKeyUp, true);
+	canvas.addEventListener("onkeydown", this._handleKeyDown, true);
+	canvas.addEventListener("onkeyup", this._handleKeyUp, true);
 	
 	this._velocityIterationsPerSecond = 300;
 	this._positionIterationsPerSecond = 200;
@@ -68,8 +68,8 @@ Test.prototype.destroy = function() {
 	canvas.removeEventListener("mousemove", this._handleMouseMove, true);
 	canvas.removeEventListener("mousedown", this._handleMouseDown, true);
 	canvas.removeEventListener("mouseup", this._handleMouseUp, true);
-	document.removeEventListener("onkeydown", this._handleKeyDown, true);
-	document.removeEventListener("onkeyup", this._handleKeyUp, true);
+	canvas.removeEventListener("onkeydown", this._handleKeyDown, true);
+	canvas.removeEventListener("onkeyup", this._handleKeyUp, true);
 	this._canvas = null;
 	this._dbgDraw = null;
 	this._world = null;
