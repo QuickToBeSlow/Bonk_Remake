@@ -33,10 +33,10 @@ Test.__constructor = function(canvas) {
 		that._mouseDown = false;
 	};
 	this._handleKeyDown = function(e) {
-		that._keyDown =[true, e.code];
+		that._keyDown = [true, e.code];
 	}
 	this._handleKeyDown = function(e) {
-		that._keyDown =[false, e.code];
+		that._keyDown = [false, e.code];
 	}
 	// see _updateUserInteraction
 	canvas.addEventListener("mousemove", this._handleMouseMove, true);
@@ -202,7 +202,7 @@ Test.prototype._updateKeyboardInteraction = function() {
 	var down = false;
 	var left = false;
 	var right = false;
-	if (this._keyDown.length != 0) {
+	if (this._keyDown.length != 0 || !this._keyDown == undefined) {
 		if (this._keyDown[0]) {
 			if (this._keyDown[1] == "w") {
 				up = true;
