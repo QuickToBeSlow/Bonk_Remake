@@ -37,7 +37,7 @@ Test.__constructor = function(canvas) {
 		that._keyDown = [true, e.code];
 		console.log("working (keys)");
 	}
-	this._handleKeyDown = function(e) {
+	this._handleKeyUp = function(e) {
 		that._keyDown = [false, e.code];
 	}
 	// see _updateUserInteraction
