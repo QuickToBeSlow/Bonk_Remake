@@ -44,8 +44,8 @@ Test.__constructor = function(canvas) {
 	canvas.addEventListener("mousemove", this._handleMouseMove, true);
 	canvas.addEventListener("mousedown", this._handleMouseDown, true);
 	canvas.addEventListener("mouseup", this._handleMouseUp, true);
-	document.addEventListener("keydown", this._handleKeyDown, true);
-	document.addEventListener("keyup", this._handleKeyUp, true);
+	document.addEventListener("keydown", this._handleKeyDown);
+	document.addEventListener("keyup", this._handleKeyUp);
 	
 	this._velocityIterationsPerSecond = 300;
 	this._positionIterationsPerSecond = 200;
