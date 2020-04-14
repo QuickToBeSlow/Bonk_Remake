@@ -76,7 +76,7 @@ Test.prototype.destroy = function() {
 }
 
 Test.prototype.createWorld = function(){
-	var m_world = new b2World(new b2Vec2(0.0, -9.81), true);
+	var m_world = new b2World(new b2Vec2(0.0, -9.81*2), true);
 	var m_physScale = 1;
 	m_world.SetWarmStarting(true);
 	
@@ -210,13 +210,13 @@ Test.prototype._updateMouseInteraction = function() {
 		}
 	}	
 }
-var speed = 100;
+var speed = 150;
+window.up = false;
+window.down = false;
+window.left = false;
+window.right = false;
 Test.prototype._updateKeyboardInteraction = function() {
 	// TBD
-	window.up = false;
-	window.down = false;
-	window.left = false;
-	window.right = false;
 	// console.log(this._keyDown);
 	if (this._keyDown != undefined) {
 		// console.log("pressed");
@@ -231,7 +231,7 @@ Test.prototype._updateKeyboardInteraction = function() {
 			} else if (this._keyDown[1] == "KeyD") {
 				window.right = true;
 			}
-		} else {
+		} else if (this._keyDown[0] == false) {
 			if (this._keyDown[1] == "KeyW") {
 				window.up = false;
 			} else if (this._keyDown[1] == "KeyA") {
@@ -242,6 +242,7 @@ Test.prototype._updateKeyboardInteraction = function() {
 				window.right = false;
 			}
 		}
+		this._keyDown = undefined;
 	}
 
 
