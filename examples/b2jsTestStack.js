@@ -70,14 +70,14 @@ Test.prototype.createWorld = function() {
 	bd.userData = "ball";
 	bd.isBullet = true;
 	bd.position.Set(200/m_physScale, 140 / m_physScale);
-	var Player1 = world.CreateBody(bd);
-	Player1.CreateFixture(fd);
+	window.Player1 = world.CreateBody(bd);
+	window.Player1.CreateFixture(fd);
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
 	bd.position.Set(400/m_physScale, 140 / m_physScale);
-	var Player2 = world.CreateBody(bd);
-	Player2.CreateFixture(fd);
+	window.Player2 = world.CreateBody(bd);
+	window.Player2.CreateFixture(fd);
 
 	return world;
 };
