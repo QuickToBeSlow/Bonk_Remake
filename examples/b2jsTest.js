@@ -145,7 +145,20 @@ Test.prototype.step = function(delta) {
 		return;
 		
 	this._world.ClearForces();
-	
+
+	if (window.up) {
+		window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
+	}
+	if (window.down) {
+		window.Player1.ApplyForce(new b2Vec2(0, -speed), window.Player1.GetPosition());
+	}
+	if (window.left) {
+		window.Player1.ApplyForce(new b2Vec2(-speed, 0), window.Player1.GetPosition());
+	}
+	if (window.right) {
+		window.Player1.ApplyForce(new b2Vec2(speed, 0), window.Player1.GetPosition());
+	}
+
 	var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 	
 	this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);	
@@ -197,51 +210,40 @@ Test.prototype._updateMouseInteraction = function() {
 		}
 	}	
 }
-var speed = 100000;
+var speed = 100;
 Test.prototype._updateKeyboardInteraction = function() {
 	// TBD
-	var up = false;
-	var down = false;
-	var left = false;
-	var right = false;
+	window.up = false;
+	window.down = false;
+	window.left = false;
+	window.right = false;
 	// console.log(this._keyDown);
 	if (this._keyDown != undefined) {
 		// console.log("pressed");
 		// console.log(this._keyDown);
 		if (this._keyDown[0] == true) {
 			if (this._keyDown[1] == "KeyW") {
-				up = true;
+				window.up = true;
 			} else if (this._keyDown[1] == "KeyA") {
-				left = true;
+				window.left = true;
 			} else if (this._keyDown[1] == "KeyS") {
-				down = true;
+				window.down = true;
 			} else if (this._keyDown[1] == "KeyD") {
-				right = true;
+				window.right = true;
 			}
 		} else {
 			if (this._keyDown[1] == "KeyW") {
-				up = false;
+				window.up = false;
 			} else if (this._keyDown[1] == "KeyA") {
-				left = false;
+				window.left = false;
 			} else if (this._keyDown[1] == "KeyS") {
-				down = false;
+				window.down = false;
 			} else if (this._keyDown[1] == "KeyD") {
-				right = false;
+				window.right = false;
 			}
 		}
 	}
-	if (up) {
-		window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
-	}
-	if (down) {
-		window.Player1.ApplyForce(new b2Vec2(0, -speed), window.Player1.GetPosition());
-	}
-	if (left) {
-		window.Player1.ApplyForce(new b2Vec2(-speed, 0), window.Player1.GetPosition());
-	}
-	if (right) {
-		window.Player1.ApplyForce(new b2Vec2(speed, 0), window.Player1.GetPosition());
-	}
+
 
 }
 
