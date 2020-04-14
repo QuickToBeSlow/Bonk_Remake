@@ -231,16 +231,16 @@ Test.prototype._updateKeyboardInteraction = function() {
 		}
 	}
 	if (up) {
-		Player1.applyForce(new b2Vec2(0, speed));
+		window.Player1.applyForce(new b2Vec2(0, speed));
 	}
 	if (down) {
-		Player1.applyForce(new b2Vec2(0, -speed));
+		window.Player1.applyForce(new b2Vec2(0, -speed));
 	}
 	if (left) {
-		Player1.applyForce(new b2Vec2(-speed, 0));
+		window.Player1.applyForce(new b2Vec2(-speed, 0));
 	}
 	if (right) {
-		Player1.applyForce(new b2Vec2(speed, 0));
+		window.Player1.applyForce(new b2Vec2(speed, 0));
 	}
 
 }
