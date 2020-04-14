@@ -38,7 +38,7 @@ Test.__constructor = function(canvas) {
 		// console.log(e.code);
 	}
 	this._handleKeyUp = function(e) {
-		that._keyDown = [false, e.code];
+		that._keyUp = [false, e.code];
 	}
 	// see _updateUserInteraction
 	canvas.addEventListener("mousemove", this._handleMouseMove, true);
@@ -231,19 +231,25 @@ Test.prototype._updateKeyboardInteraction = function() {
 			} else if (this._keyDown[1] == "KeyD") {
 				window.right = true;
 			}
-		} else if (this._keyDown[0] == false) {
-			if (this._keyDown[1] == "KeyW") {
+		}
+	}
+	if (this._keyUp != undefined) {
+		if (this._keyUp[0] == false) {
+			if (this._keyUp[1] == "KeyW") {
 				window.up = false;
-			} else if (this._keyDown[1] == "KeyA") {
+			} else if (this._keyUp[1] == "KeyA") {
 				window.left = false;
-			} else if (this._keyDown[1] == "KeyS") {
+			} else if (this._keyUp[1] == "KeyS") {
 				window.down = false;
-			} else if (this._keyDown[1] == "KeyD") {
+			} else if (this._keyUp[1] == "KeyD") {
 				window.right = false;
+				console.log("Right released");
 			}
 		}
-		this._keyDown = undefined;
 	}
+		this._keyDown = undefined;
+		this._keyUp = undefined;
+
 
 
 }
