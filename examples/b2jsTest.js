@@ -34,8 +34,8 @@ Test.__constructor = function(canvas) {
 	};
 	this._handleKeyDown = function(e) {
 		that._keyDown = [true, e.code];
-		console.log(e);
-		console.log(e.code);
+		// console.log(e);
+		// console.log(e.code);
 	}
 	this._handleKeyUp = function(e) {
 		that._keyDown = [false, e.code];
@@ -204,27 +204,28 @@ Test.prototype._updateKeyboardInteraction = function() {
 	var down = false;
 	var left = false;
 	var right = false;
+	console.log(this._keyDown);
 	if (!this._keyDown == undefined) {
 		console.log("pressed");
 		console.log(this._keyDown);
 		if (this._keyDown[0]) {
-			if (this._keyDown[1] == "w") {
+			if (this._keyDown[1] == "KeyW") {
 				up = true;
-			} else if (this._keyDown[1] == "a") {
+			} else if (this._keyDown[1] == "KeyA") {
 				left = true;
-			} else if (this._keyDown[1] == "s") {
+			} else if (this._keyDown[1] == "KeyS") {
 				down = true;
-			} else if (this._keyDown[1] == "d") {
+			} else if (this._keyDown[1] == "KeyD") {
 				right = true;
 			}
 		} else {
-			if (this._keyDown[1] == "w") {
+			if (this._keyDown[1] == "KeyW") {
 				up = false;
-			} else if (this._keyDown[1] == "a") {
+			} else if (this._keyDown[1] == "KeyA") {
 				left = false;
-			} else if (this._keyDown[1] == "s") {
+			} else if (this._keyDown[1] == "KeyS") {
 				down = false;
-			} else if (this._keyDown[1] == "d") {
+			} else if (this._keyDown[1] == "KeyD") {
 				right = false;
 			}
 		}
