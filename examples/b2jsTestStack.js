@@ -78,7 +78,7 @@ Test.prototype.createWorld = function() {
 	bd.position.Set(400/m_physScale, 140 / m_physScale);
 	window.Player2 = world.CreateBody(bd);
 	window.Player2.CreateFixture(fd);
-	// console.log(Player2);
+	console.log(Player2);
 
 	return world;
 };

@@ -197,7 +197,7 @@ Test.prototype._updateMouseInteraction = function() {
 		}
 	}	
 }
-var speed = 10;
+var speed = 100000;
 Test.prototype._updateKeyboardInteraction = function() {
 	// TBD
 	var up = false;
@@ -206,9 +206,9 @@ Test.prototype._updateKeyboardInteraction = function() {
 	var right = false;
 	// console.log(this._keyDown);
 	if (this._keyDown != undefined) {
-		console.log("pressed");
-		console.log(this._keyDown);
-		if (this._keyDown[0]) {
+		// console.log("pressed");
+		// console.log(this._keyDown);
+		if (this._keyDown[0] == true) {
 			if (this._keyDown[1] == "KeyW") {
 				up = true;
 			} else if (this._keyDown[1] == "KeyA") {
@@ -231,16 +231,16 @@ Test.prototype._updateKeyboardInteraction = function() {
 		}
 	}
 	if (up) {
-		window.Player1.ApplyForce(new b2Vec2(0, speed));
+		window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
 	}
 	if (down) {
-		window.Player1.ApplyForce(new b2Vec2(0, -speed));
+		window.Player1.ApplyForce(new b2Vec2(0, -speed), window.Player1.GetPosition());
 	}
 	if (left) {
-		window.Player1.ApplyForce(new b2Vec2(-speed, 0));
+		window.Player1.ApplyForce(new b2Vec2(-speed, 0), window.Player1.GetPosition());
 	}
 	if (right) {
-		window.Player1.ApplyForce(new b2Vec2(speed, 0));
+		window.Player1.ApplyForce(new b2Vec2(speed, 0), window.Player1.GetPosition());
 	}
 
 }
