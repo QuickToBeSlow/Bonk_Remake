@@ -33,19 +33,19 @@ Test.__constructor = function(canvas) {
 		that._mouseDown = false;
 	};
 	this._handleKeyDown = function(e) {
-		that._keyDown = [true, e.code];
+		that._keyDown = e.code;
 		// console.log(e);
 		// console.log(e.code);
 	}
 	this._handleKeyUp = function(e) {
-		that._keyUp = [false, e.code];
+		that._keyUp = e.code;
 	}
 	// see _updateUserInteraction
 	canvas.addEventListener("mousemove", this._handleMouseMove, true);
 	canvas.addEventListener("mousedown", this._handleMouseDown, true);
 	canvas.addEventListener("mouseup", this._handleMouseUp, true);
-	canvas.addEventListener("keydown", this._handleKeyDown, true);
-	canvas.addEventListener("keyup", this._handleKeyUp, true);
+	document.addEventListener("keydown", this._handleKeyDown, true);
+	document.addEventListener("keyup", this._handleKeyUp, true);
 	
 	this._velocityIterationsPerSecond = 300;
 	this._positionIterationsPerSecond = 200;
@@ -68,8 +68,8 @@ Test.prototype.destroy = function() {
 	canvas.removeEventListener("mousemove", this._handleMouseMove, true);
 	canvas.removeEventListener("mousedown", this._handleMouseDown, true);
 	canvas.removeEventListener("mouseup", this._handleMouseUp, true);
-	canvas.removeEventListener("onkeydown", this._handleKeyDown, true);
-	canvas.removeEventListener("onkeyup", this._handleKeyUp, true);
+	document.removeEventListener("keydown", this._handleKeyDown, true);
+	document.removeEventListener("keyup", this._handleKeyUp, true);
 	this._canvas = null;
 	this._dbgDraw = null;
 	this._world = null;
@@ -219,32 +219,27 @@ Test.prototype._updateKeyboardInteraction = function() {
 	// TBD
 	// console.log(this._keyDown);
 	if (this._keyDown != undefined) {
-		// console.log("pressed");
-		// console.log(this._keyDown);
-		if (this._keyDown[0] == true) {
-			if (this._keyDown[1] == "KeyW") {
-				window.up = true;
-			} else if (this._keyDown[1] == "KeyA") {
-				window.left = true;
-			} else if (this._keyDown[1] == "KeyS") {
-				window.down = true;
-			} else if (this._keyDown[1] == "KeyD") {
-				window.right = true;
-			}
+	// console.log("pressed");
+	// console.log(this._keyDown);
+		if (this._keyDown == "KeyW") {
+			window.up = true;
+		} else if (this._keyDown == "KeyA") {
+			window.left = true;
+		} else if (this._keyDown == "KeyS") {
+			window.down = true;
+		} else if (this._keyDown == "KeyD") {
+			window.right = true;
 		}
 	}
 	if (this._keyUp != undefined) {
-		if (this._keyUp[0] == false) {
-			if (this._keyUp[1] == "KeyW") {
-				window.up = false;
-			} else if (this._keyUp[1] == "KeyA") {
-				window.left = false;
-			} else if (this._keyUp[1] == "KeyS") {
-				window.down = false;
-			} else if (this._keyUp[1] == "KeyD") {
-				window.right = false;
-				console.log("Right released");
-			}
+		if (this._keyUp == "KeyW") {
+			window.up = false;
+		} else if (this._keyUp == "KeyA") {
+			window.left = false;
+		} else if (this._keyUp == "KeyS") {
+			window.down = false;
+		} else if (this._keyUp == "KeyD") {
+			window.right = false;
 		}
 	}
 		this._keyDown = undefined;
