@@ -27,7 +27,6 @@ Test.__constructor = function(canvas) {
 		that._mousePoint = that._dbgDraw.ToWorldPoint(p);
 	};
 	this._handleMouseDown = function(e){
-		console.log("working");
 		that._mouseDown = true;
 	};
 	this._handleMouseUp = function(e) {
@@ -35,7 +34,8 @@ Test.__constructor = function(canvas) {
 	};
 	this._handleKeyDown = function(e) {
 		that._keyDown = [true, e.code];
-		console.log("working (keys)");
+		console.log(e);
+		console.log(e.code);
 	}
 	this._handleKeyUp = function(e) {
 		that._keyDown = [false, e.code];
