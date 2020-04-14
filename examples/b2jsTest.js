@@ -204,8 +204,8 @@ Test.prototype._updateKeyboardInteraction = function() {
 	var down = false;
 	var left = false;
 	var right = false;
-	console.log(this._keyDown);
-	if (!this._keyDown == undefined) {
+	// console.log(this._keyDown);
+	if (this._keyDown != undefined) {
 		console.log("pressed");
 		console.log(this._keyDown);
 		if (this._keyDown[0]) {
