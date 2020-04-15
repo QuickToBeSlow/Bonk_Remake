@@ -74,9 +74,9 @@ Test.prototype.destroy = function() {
 	this._dbgDraw = null;
 	this._world = null;
 }
-
+var onPlatform = false;
 Test.prototype.createWorld = function(){
-	var m_world = new b2World(new b2Vec2(0.0, -9.81*2), true);
+	var m_world = new b2World(new b2Vec2(0.0, -9.81*3), true);
 	var m_physScale = 1;
 	m_world.SetWarmStarting(true);
 	
@@ -102,7 +102,29 @@ Test.prototype.createWorld = function(){
 	// wallBd.position.Set(64 / m_physScale / 2, -9.5 / m_physScale);
 	// this._wallBottom = m_world.CreateBody(wallBd);
 	// this._wallBottom.CreateFixture2(wall);
-	
+    var b2Listener = b2ContactListener;
+	// console.log(b2ContactListener);
+	//Add listeners for contact
+	var listener = new b2Listener;
+    listener.BeginContact = function(contact) {
+        console.log(contact.GetFixtureA().GetBody().GetUserData());
+        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+			onPlatform = true;
+		}
+    }
+    listener.EndContact = function(contact) {
+		// console.log(contact.GetFixtureA().GetBody().GetUserData());
+        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+			onPlatform = false;
+		}
+    }
+    listener.PostSolve = function(contact, impulse) {
+        
+    }
+    listener.PreSolve = function(contact, oldManifold) {
+
+    }
+    m_world.SetContactListener(listener);
 	return m_world;
 };
 
@@ -145,7 +167,8 @@ Test.prototype.step = function(delta) {
 		return;
 		
 	this._world.ClearForces();
-
+	// console.log(this._world.GetContactList());
+	// console.log(window.Player1);
 	if (window.up) {
 		window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
 	}
@@ -280,7 +303,7 @@ Test.prototype._update = function() {
 
 Test.prototype._updateFPS = function() {
 	this._fpsAchieved = this._fpsCounter;
-	this.log("fps: " + this._fpsAchieved);
+	// this.log("fps: " + this._fpsAchieved);
 	this._fpsCounter = 0;
 	
 	if(!this._paused) {

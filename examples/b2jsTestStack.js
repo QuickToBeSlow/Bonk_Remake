@@ -54,6 +54,7 @@ Test.prototype.createWorld = function() {
 	sd.SetAsBox((200) / m_physScale, (10) / m_physScale);
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
+	bd.userData = "Floor";
 	// bd.userData = "ramp";
 	bd.position.Set((300) / m_physScale, (50) / m_physScale);
 	b = world.CreateBody(bd);
@@ -67,7 +68,7 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.shape = P1;
 	bd.type = b2Body.b2_dynamicBody;
-	bd.userData = "ball";
+	bd.userData = "Player1";
 	bd.isBullet = true;
 	bd.position.Set(200/m_physScale, 140 / m_physScale);
 	window.Player1 = world.CreateBody(bd);
@@ -76,6 +77,7 @@ Test.prototype.createWorld = function() {
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
 	bd.position.Set(400/m_physScale, 140 / m_physScale);
+	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
 	window.Player2.CreateFixture(fd);
 	console.log(Player2);
