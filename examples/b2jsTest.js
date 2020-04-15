@@ -103,19 +103,20 @@ Test.prototype.createWorld = function(){
 	// this._wallBottom = m_world.CreateBody(wallBd);
 	// this._wallBottom.CreateFixture2(wall);
     var b2Listener = b2ContactListener;
-	// console.log(b2ContactListener);
 	//Add listeners for contact
 	var listener = new b2Listener;
     listener.BeginContact = function(contact) {
-        console.log(contact.GetFixtureA().GetBody().GetUserData());
-        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+        // console.log(contact.GetFixtureA().GetBody().GetUserData());
+        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureA().GetBody().GetUserData() == 'Player1') {
 			onPlatform = true;
+			console.log(onPlatform);
 		}
     }
     listener.EndContact = function(contact) {
 		// console.log(contact.GetFixtureA().GetBody().GetUserData());
-        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureA().GetBody().GetUserData() == 'Player1') {
 			onPlatform = false;
+			console.log(onPlatform);
 		}
     }
     listener.PostSolve = function(contact, impulse) {
