@@ -107,14 +107,14 @@ Test.prototype.createWorld = function(){
 	var listener = new b2Listener;
     listener.BeginContact = function(contact) {
         // console.log(contact.GetFixtureA().GetBody().GetUserData());
-        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureA().GetBody().GetUserData() == 'Player1') {
+        if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 			onPlatform = true;
 			console.log(onPlatform);
 		}
     }
     listener.EndContact = function(contact) {
 		// console.log(contact.GetFixtureA().GetBody().GetUserData());
-        if (contact.GetFixtureB().GetBody().GetUserData() == 'Floor' && contact.GetFixtureA().GetBody().GetUserData() == 'Player1') {
+        if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 			onPlatform = false;
 			console.log(onPlatform);
 		}
