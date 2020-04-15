@@ -76,7 +76,7 @@ Test.prototype.destroy = function() {
 }
 var onPlatform = false;
 Test.prototype.createWorld = function(){
-	var m_world = new b2World(new b2Vec2(0.0, -9.81*3), true);
+	var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
 	var m_physScale = 1;
 	m_world.SetWarmStarting(true);
 	
@@ -190,6 +190,10 @@ Test.prototype.step = function(delta) {
 	
 	this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);	
 }
+window.scores = [0,0];
+Test.prototype.endGame = function (winner) {
+	window.scores[winner-1]++;
+}
 
 Test.prototype._updateMouseInteraction = function() {
 	// todo: refactor into world helper or similar
@@ -237,7 +241,7 @@ Test.prototype._updateMouseInteraction = function() {
 		}
 	}	
 }
-var speed = 150;
+var speed = 135;
 window.up = false;
 window.down = false;
 window.left = false;

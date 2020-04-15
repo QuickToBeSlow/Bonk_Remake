@@ -154,6 +154,7 @@
 		var runner = null;
 
 		function resetCurrentRunner() {
+			window.scores = [0,0];
 			var wasPaused = false;
 			if(runner) {
 				wasPaused = runner.isPaused();
