@@ -169,8 +169,11 @@ Test.prototype.step = function(delta) {
 		
 	this._world.ClearForces();
 	// console.log(this._world.GetContactList());
-	// console.log(window.Player1);
+	// console.log(window.Player1.GetLinearVelocity());
 	if (window.up) {
+		if (onPlatform && window.Player1.GetLinearVelocity().y < 4) {
+			window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
+		}
 		window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
 	}
 	if (window.down) {
