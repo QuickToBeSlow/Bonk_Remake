@@ -167,7 +167,10 @@
 			c.fillText("speed:" + supaSpeed,5, 30);
 		}
 	}
-	
+	var strength = 5;
+	var decay = 0.02;
+	var regrowth = 0.05;
+	var slowDown = false;
 	Test.prototype.step = function(delta) {
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
@@ -176,7 +179,23 @@
 				return;
 			this._world.ClearForces();
 			// console.log(this._world.GetContactList());
-			// console.log(window.Player1.GetLinearVelocity());
+			// console.log(window.Player1);
+			if (window.space) {
+				// slowDown = true;
+				window.Player1.SetMassData(strength);
+				if (strength>1) {
+					strength-=decay;
+				} else {
+					strength = 1;
+				}
+			} else {
+				// slowDown = false;
+				if (strength<5) {
+					strength+=regrowth;
+				} else {
+					strength = 5;
+				}
+			}
 			if (window.up) {
 				if (onPlatform && window.Player1.GetLinearVelocity().y < 4) {
 					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
@@ -266,6 +285,7 @@
 	window.down = false;
 	window.left = false;
 	window.right = false;
+	window.space = false;
 	Test.prototype._updateKeyboardInteraction = function() {
 		// TBD
 		// console.log(this._keyDown);
@@ -280,6 +300,8 @@
 				window.down = true;
 			} else if (this._keyDown == "KeyD") {
 				window.right = true;
+			} else if (this._keyUp == "Space") {
+				window.space = true;
 			}
 		}
 		if (this._keyUp != undefined) {
@@ -291,6 +313,8 @@
 				window.down = false;
 			} else if (this._keyUp == "KeyD") {
 				window.right = false;
+			} else if (this._keyUp == "Space") {
+				window.space = false;
 			}
 		}
 			this._keyDown = undefined;
