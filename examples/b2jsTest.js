@@ -77,6 +77,7 @@
 		this._world = null;
 	}
 	
+	
 	var onPlatform = false;
 	Test.prototype.createWorld = function(){
 		var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
@@ -157,7 +158,7 @@
 			this._world.SetDebugDraw(this._dbgDraw);
 			this._world.DrawDebugData();
 		}
-		
+
 		c.fillStyle = "black";
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
