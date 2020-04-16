@@ -77,7 +77,7 @@
 		this._world = null;
 	}
 	
-	
+
 	var onPlatform = false;
 	Test.prototype.createWorld = function(){
 		var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
@@ -205,7 +205,7 @@
 				// slowDown = false;
 				window.PFixture1.SetDensity(1);
 				window.Player1.ResetMassData();
-				if (strength<5) {
+				if (strength<maxStrength) {
 					strength+=regrowth;
 				} else {
 					strength = 5;
