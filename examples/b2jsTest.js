@@ -166,10 +166,20 @@
 			c.fillText("FPS: " + this._fpsAchieved, 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
 		}
+		if (window.space) {
+			c.strokeStyle = "rgb("+(127*(strength/maxStrength)+127)+","+(127*(strength/maxStrength)+127)+","+(127*(strength/maxStrength)+127)+")";
+			// c.strokeStyle = "rgb(255,255,255)";
+			c.beginPath();
+			c.lineWidth = 3;
+			c.arc(window.Player1.GetPosition().x*12.5,-window.Player1.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
+			c.stroke();
+			c.strokeStyle = "rgb(0,0,0)";
+		}
 	}
-	var strength = 5;
-	var decay = 0.02;
-	var regrowth = 0.05;
+	var maxStrength = 5;
+	var strength = maxStrength;
+	var decay = 0.01;
+	var regrowth = 0.02;
 	var slowDown = false;
 	Test.prototype.step = function(delta) {
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
