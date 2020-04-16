@@ -125,7 +125,7 @@
 	<h1>Bonk2.io remake</h1>
 	<p>use the tools below to pause the game, go one step ahead in the game, or resume the game.
 	</p>
-	<canvas tabindex = "1" id="canvas" width="480"  height="270"></canvas>
+	<canvas tabindex = "1" id="canvas" width="800"  height="600"></canvas>
 	<hr>
 	<!-- <button id="prev" >&lt;-- previous simulation</button>
 	<button id="next" >next simulation --&gt;</button> -->
@@ -133,6 +133,8 @@
 	<button id="resume" >resume</button>
 	<button id="pause" >pause</button>
 	<button id="step" >single step</button>
+	<button id="supaSpeedDown" >speed down</button>
+	<button id="supaSpeedUp" >speed up</button>
 	<hr>
 
 
@@ -184,7 +186,7 @@
 		});
 		
 		$('#step').click(function(){
-			runner.step(1/30);
+			runner.step(1/120);
 			runner.draw();
 		});
 		
@@ -195,6 +197,15 @@
 		$('#pause').click(function(){
 			runner.pause();
 		});
+		
+		$('#supaSpeedUp').click(function(){
+			runner.supaSpeedUp();
+		});
+		
+		$('#supaSpeedDown').click(function(){
+			runner.supaSpeedDown();
+		});
+		
 		
 	});
 
