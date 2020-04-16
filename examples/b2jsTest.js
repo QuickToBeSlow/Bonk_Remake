@@ -112,14 +112,14 @@
 			// console.log(contact.GetFixtureA().GetBody().GetUserData());
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 				onPlatform = true;
-				console.log(onPlatform);
+				// console.log(onPlatform);
 			}
 		}
 		listener.EndContact = function(contact) {
 			// console.log(contact.GetFixtureA().GetBody().GetUserData());
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 				onPlatform = false;
-				console.log(onPlatform);
+				// console.log(onPlatform);
 			}
 		}
 		listener.PostSolve = function(contact, impulse) {
@@ -179,10 +179,12 @@
 				return;
 			this._world.ClearForces();
 			// console.log(this._world.GetContactList());
-			// console.log(window.Player1);
+			// console.log(window.Player1.GetMass());
 			if (window.space) {
 				// slowDown = true;
-				window.Player1.SetMassData(strength);
+				window.PFixture1.SetDensity(strength);
+				// console.log(PFixture1);
+				window.Player1.ResetMassData();
 				if (strength>1) {
 					strength-=decay;
 				} else {
@@ -190,6 +192,8 @@
 				}
 			} else {
 				// slowDown = false;
+				window.PFixture1.SetDensity(1);
+				window.Player1.ResetMassData();
 				if (strength<5) {
 					strength+=regrowth;
 				} else {
@@ -288,10 +292,8 @@
 	window.space = false;
 	Test.prototype._updateKeyboardInteraction = function() {
 		// TBD
-		// console.log(this._keyDown);
+
 		if (this._keyDown != undefined) {
-		// console.log("pressed");
-		// console.log(this._keyDown);
 			if (this._keyDown == "KeyW") {
 				window.up = true;
 			} else if (this._keyDown == "KeyA") {
@@ -300,7 +302,7 @@
 				window.down = true;
 			} else if (this._keyDown == "KeyD") {
 				window.right = true;
-			} else if (this._keyUp == "Space") {
+			} else if (this._keyDown == "Space") {
 				window.space = true;
 			}
 		}

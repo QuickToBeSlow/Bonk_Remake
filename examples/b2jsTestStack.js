@@ -72,15 +72,15 @@ Test.prototype.createWorld = function() {
 	bd.isBullet = true;
 	bd.position.Set(200/m_physScale, 140 / m_physScale);
 	window.Player1 = world.CreateBody(bd);
-	window.Player1.CreateFixture(fd);
+	window.PFixture1 = window.Player1.CreateFixture(fd);
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
 	bd.position.Set(400/m_physScale, 140 / m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
-	window.Player2.CreateFixture(fd);
-	console.log(Player2);
+	window.PFixture2 = window.Player2.CreateFixture(fd);
+	// console.log(Player2);
 
 	return world;
 };
