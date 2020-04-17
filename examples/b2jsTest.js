@@ -265,12 +265,11 @@
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
 		window.scores[winner]++;
-		window.up = false;
-		window.down = false;
-		window.left = false;
-		window.right = false;
-		window.space = false;
-		window.wasPaused = false;
+		window.up = [false, false];
+		window.down = [false, false];
+		window.left = [false, false];
+		window.right = [false, false];
+		window.space = [false, false];
 		if(window.runner) {
 			window.wasPaused = runner.isPaused();
 			window.runner.destroy();
