@@ -167,6 +167,7 @@
 			c.fillText("FPS: " + this._fpsAchieved, 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
 		}
+		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
 		if (window.space) {
 			c.strokeStyle = "rgb("+(127*(strength/maxStrength)+127)+","+(127*(strength/maxStrength)+127)+","+(127*(strength/maxStrength)+127)+")";
 			// c.strokeStyle = "rgb(255,255,255)";
@@ -183,6 +184,13 @@
 	var regrowth = 0.02;
 	var slowDown = false;
 	Test.prototype.step = function(delta) {
+		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
+			//Player2 wins
+			this.endGame(1);
+		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
+			//Player1 wins
+			this.endGame(0);
+		}
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 
@@ -245,7 +253,22 @@
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
-		window.scores[winner-1]++;
+		window.scores[winner]++;
+		window.up = false;
+		window.down = false;
+		window.left = false;
+		window.right = false;
+		window.space = false;
+		window.wasPaused = false;
+		if(window.runner) {
+			window.wasPaused = runner.isPaused();
+			window.runner.destroy();
+		}
+		window.runner = new window.runners[0]($("#canvas")[0]);
+		if(window.wasPaused)
+			window.runner.draw();
+		else	
+			window.runner.resume();
 	}
 	
 	Test.prototype._updateMouseInteraction = function() {

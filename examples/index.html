@@ -152,21 +152,26 @@
 
 	$(document).ready(function(){
 		
-		var runners = [b2jsTestStack];
-		var runner = null;
+		window.runners = [b2jsTestStack];
+		window.runner = null;
+		window.scores = [0,0];
 
 		function resetCurrentRunner() {
-			window.scores = [0,0];
-			var wasPaused = false;
-			if(runner) {
-				wasPaused = runner.isPaused();
-				runner.destroy();
+			window.up = false;
+			window.down = false;
+			window.left = false;
+			window.right = false;
+			window.space = false;
+			window.wasPaused = false;
+			if(window.runner) {
+				window.wasPaused = runner.isPaused();
+				window.runner.destroy();
 			}
-			runner = new runners[0]($("#canvas")[0]);
-			if(wasPaused)
-				runner.draw();
+			window.runner = new window.runners[0]($("#canvas")[0]);
+			if(window.wasPaused)
+				window.runner.draw();
 			else	
-				runner.resume();
+				window.runner.resume();
 		}
 		
 		resetCurrentRunner();
