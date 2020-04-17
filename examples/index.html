@@ -157,11 +157,11 @@
 		window.scores = [0,0];
 
 		function resetCurrentRunner() {
-			window.up = false;
-			window.down = false;
-			window.left = false;
-			window.right = false;
-			window.space = false;
+			window.up = [false, false];
+			window.down = [false, false];
+			window.left = [false, false];
+			window.right = [false, false];
+			window.space = [false, false];
 			window.wasPaused = false;
 			if(window.runner) {
 				window.wasPaused = runner.isPaused();
