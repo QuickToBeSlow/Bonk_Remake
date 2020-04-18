@@ -888,7 +888,7 @@
 		}	
 	}
 	
-	var speed = 135;
+	var speed = 140;
 	window.up = [false,false];
 	window.down = [false,false];
 	window.left = [false,false];
