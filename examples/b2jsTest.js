@@ -543,7 +543,7 @@
 		}
 		return false;
 	  }
-	  
+
 	Test.__constructor = function(canvas) {
 		var that = this;
 		this._canvas = canvas;
@@ -573,12 +573,34 @@
 			that._mouseDown = false;
 		};
 		this._handleKeyDown = function(e) {
-			that._keyDown = e.code;
+			// that._keyDown = e.code;
 			// console.log(e);
 			// console.log(e.code);
+			if (e.code == "KeyW") {
+				window.up[0] = true;
+			} else if (e.code == "KeyA") {
+				window.left[0] = true;
+			} else if (e.code == "KeyS") {
+				window.down[0] = true;
+			} else if (e.code == "KeyD") {
+				window.right[0] = true;
+			} else if (e.code == "Space") {
+				window.heavy[0] = true;
+			}
 		}
 		this._handleKeyUp = function(e) {
-			that._keyUp = e.code;
+			// that._keyUp = e.code;
+			if (e.code == "KeyW") {
+				window.up[0] = false;
+			} else if (e.code == "KeyA") {
+				window.left[0] = false;
+			} else if (e.code == "KeyS") {
+				window.down[0] = false;
+			} else if (e.code == "KeyD") {
+				window.right[0] = false;
+			} else if (e.code == "Space") {
+				window.heavy[0] = false;
+			}
 		}
 		// see _updateUserInteraction
 		canvas.addEventListener("mousemove", this._handleMouseMove, true);
