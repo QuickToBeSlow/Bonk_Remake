@@ -747,10 +747,10 @@
 		}
 	}
 	
-	var maxStrengths = [5,5];		//array of player heavy-mass.
+	var maxStrengths = [10,10];		//array of player heavy-mass.
 	var strengths = maxStrengths;//copy the maxStrengths array.
-	var decay = 0.01; 					//constant
-	var regrowth = 0.02; 				//constant
+	var decay = 0.005; 					//constant
+	var regrowth = 0.01; 				//constant
 	var slowDown = false;
 	
 	Test.prototype.step = function(delta) {
@@ -776,7 +776,7 @@
 				// console.log(PFixture1);
 				window.Player1.ResetMassData();
 				if (strengths[0]>1) {
-					strengths[0]-=decay;
+					strengths[0]-=decay*maxStrength;
 				} else {
 					strengths[0] = 1;
 				}
@@ -785,7 +785,7 @@
 				window.PFixture1.SetDensity(1);
 				window.Player1.ResetMassData();
 				if (strengths[0]<maxStrengths[0]) {
-					strengths[0]+=regrowth;
+					strengths[0]+=regrowth*maxStrength;
 				} else {
 					strengths[0] = maxStrengths[0];
 				}
