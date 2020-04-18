@@ -85,6 +85,6 @@ Test.prototype.createWorld = function() {
 	return world;
 };
 
-window.b2jsTestStack = Test;
+window.levelSettings = Test;
 	
 })();

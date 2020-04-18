@@ -761,7 +761,7 @@
 			//Player1 wins
 			this.endGame(0);
 		}
-		console.log(window.up);
+		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 
@@ -776,7 +776,7 @@
 				// console.log(PFixture1);
 				window.Player1.ResetMassData();
 				if (strengths[0]>1) {
-					strengths[0]-=decay*maxStrength;
+					strengths[0]-=decay*maxStrengths[0];
 				} else {
 					strengths[0] = 1;
 				}
@@ -785,7 +785,7 @@
 				window.PFixture1.SetDensity(1);
 				window.Player1.ResetMassData();
 				if (strengths[0]<maxStrengths[0]) {
-					strengths[0]+=regrowth*maxStrength;
+					strengths[0]+=regrowth*maxStrengths[0];
 				} else {
 					strengths[0] = maxStrengths[0];
 				}
