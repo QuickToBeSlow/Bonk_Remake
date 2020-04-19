@@ -423,70 +423,6 @@
 	  
 	  //end of deepqlearn code.
 	  
-	  //Neural Network goes here.
-	  
-	  
-	  function newNN() {
-		window.num_inputs = 9;
-		window.num_actions = 6;
-		var temporal_window = 1; // amount of temporal memory. 0 = agent lives in-the-moment :)
-		var network_size = window.num_inputs * temporal_window + window.num_actions * temporal_window + window.num_inputs;
-	  
-		layer_defs = [];
-		layer_defs.push({
-		  type: 'input',
-		  out_sx: 1,
-		  out_sy: 1,
-		  out_depth: network_size
-		});
-		layer_defs.push({
-		  type: 'fc',
-		  num_neurons: 36,
-		  activation: 'maxout'
-		});
-		layer_defs.push({
-		  type: 'fc',
-		  num_neurons: 18,
-		  activation: 'maxout'
-		});
-		// layer_defs.push({
-		//   type: 'fc',
-		//   num_neurons: 15,
-		//   activation: 'maxout'
-		// });
-		layer_defs.push({
-		  type: 'regression',
-		  num_neurons: window.num_actions
-		});
-	  
-		net = new convnetjs.Net();
-		net.makeLayers(layer_defs);
-	  
-		var tdtrainer_options = {
-		  learning_rate: 0.001,
-		  momentum: 0.5,
-		  batch_size: 20,
-		  l2_decay: 0.0
-		};
-	  
-		window.opt = {};
-		window.opt.temporal_window = temporal_window;
-		window.opt.experience_size = 30000;
-		window.opt.start_learn_threshold = 1000;
-		window.opt.gamma = 0.7;
-		window.opt.learning_steps_total = 200000;
-		window.opt.learning_steps_burnin = 3000;
-		window.opt.epsilon_min = 0.05;
-		window.opt.epsilon_test_time = 0.05;
-		window.opt.layer_defs = layer_defs;
-		window.opt.tdtrainer_options = tdtrainer_options;
-		// window.opt.tdtrainer_options = tdtrainer_options;
-	  
-		window.brain = new deepqlearn.Brain(window.num_inputs, window.num_actions, window.opt);
-		window.brain.learning = true;
-		// brain.learning = true; //turn on brain learning when switch is flipped.
-	  }
-	  
 	  
 	  var Vec = function(x, y) {
 		this.x = x;
@@ -543,6 +479,68 @@
 		}
 		return false;
 	  }
+
+	  function newNNs() {
+		window.num_inputs = 8;
+		window.num_actions = 5;
+		var temporal_window = 1; // amount of temporal memory. 0 = agent lives in-the-moment :)
+		var network_size = window.num_inputs * temporal_window + window.num_actions * temporal_window + window.num_inputs;
+	  
+		layer_defs = [];
+		layer_defs.push({
+		  type: 'input',
+		  out_sx: 1,
+		  out_sy: 1,
+		  out_depth: network_size
+		});
+		layer_defs.push({
+		  type: 'fc',
+		  num_neurons: 50,
+		  activation: 'relu'
+		});
+		layer_defs.push({
+		  type: 'fc',
+		  num_neurons: 50,
+		  activation: 'relu'
+		});
+		layer_defs.push({
+		  type: 'regression',
+		  num_neurons: window.num_actions
+		});
+	  
+		net = new convnetjs.Net();
+		net.makeLayers(layer_defs);
+	  
+		trainer = new convnetjs.SGDTrainer(net, {
+		  learning_rate: 0.01,
+		  momentum: 0.9,
+		  batch_size: 5,
+		  l2_decay: 0.0
+		});
+	  
+		window.opt = {};
+		window.opt.temporal_window = temporal_window;
+		window.opt.experience_size = 30000;
+		window.opt.start_learn_threshold = 1000;
+		window.opt.gamma = 0.7;
+		window.opt.learning_steps_total = 200000;
+		window.opt.learning_steps_burnin = 3000;
+		window.opt.epsilon_min = 0.05;
+		window.opt.epsilon_test_time = 0.05;
+		window.opt.layer_defs = layer_defs;
+		// window.opt.tdtrainer_options = tdtrainer_options;
+		window.brains = [];
+		window.brains.push(new deepqlearn.Brain(window.num_inputs, window.num_actions, window.opt));
+		window.brains.push(new deepqlearn.Brain(window.num_inputs, window.num_actions, window.opt));
+		window.brains[0].learning = true;
+		window.brains[1].learning = true;
+		// brain.learning = true; //turn on brain learning when switch is flipped.
+	  }
+newNNs();
+
+//make sure to make brains[0] and brains[1].learning togglable.
+
+
 
 	Test.__constructor = function(canvas) {
 		var that = this;
@@ -752,8 +750,10 @@
 	var decay = 0.005; 					//constant
 	var regrowth = 0.01; 				//constant
 	var slowDown = false;
-	
+	var reward = 0; //for use in training the neural networks.
+	var state = [];
 	Test.prototype.step = function(delta) {
+		// console.log(window.Player1);
 		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 			//Player2 wins
 			this.endGame(1);
@@ -770,6 +770,10 @@
 			this._world.ClearForces();
 			// console.log(this._world.GetContactList());
 			// console.log(window.Player1.GetMass());
+
+			state = [window.Player1.GetPosition().x, window.Player1.GetPosition().y, window.Player1.GetLinearVelocity().x, window.Player1.GetLinearVelocity().y, window.Player2.GetPosition().x, window.Player2.GetPosition().y, window.Player2.GetLinearVelocity().x, window.Player2.GetLinearVelocity().y, window.heavy[0], window.heavy[1]];
+
+
 			if (window.heavy[0]) {
 				// slowDown = true;
 				window.PFixture1.SetDensity(strengths[0]);
@@ -988,6 +992,6 @@
 		return this._paused;
 	}
 	
-	window.b2jsTest = Test;
+	window.gameEngine = Test;
 		
 	})();

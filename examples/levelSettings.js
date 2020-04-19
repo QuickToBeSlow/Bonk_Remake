@@ -4,12 +4,12 @@ var ctx = document.getElementById("canvas");
 console.log(ctx);
 
 var Test = function() {
-	b2jsTest.__constructor.apply(this, arguments);
+	gameEngine.__constructor.apply(this, arguments);
 };
-extend(Test.prototype, b2jsTest.prototype)
+extend(Test.prototype, gameEngine.prototype)
 
 Test.prototype.createWorld = function() {
-	var world = b2jsTest.prototype.createWorld.apply(this, arguments);
+	var world = gameEngine.prototype.createWorld.apply(this, arguments);
 	var m_physScale = 10;
 	
 	var fd = new b2FixtureDef();
