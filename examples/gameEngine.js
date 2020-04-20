@@ -783,11 +783,11 @@ newNNs();
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
 			action = brains[0].forward(state);
-			window.up[0] = false;
-			window.down[0] = false;
-			window.left[0] = false;
-			window.right[0] = false;
-			window.heavy[0] = false;
+			window.up[1] = false;
+			window.down[1] = false;
+			window.left[1] = false;
+			window.right[1] = false;
+			window.heavy[1] = false;
 			switch (action) {
 				case 0:
 					window.up[1] = true;
