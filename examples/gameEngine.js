@@ -1089,7 +1089,7 @@ newNNs();
 		delta = (time - this._lastUpdate) / 1000;
 		this._lastUpdate = time;
 		if (Math.floor(delta)%10 == 0) {
-			window.brains[0].backward(reward);
+			// window.brains[0].backward(reward);
 		}
 		if(delta > 10)
 			delta = 1/this._fps;
