@@ -1,5 +1,8 @@
 (function(){
 
+	var reward = 0; //for use in training the neural networks.
+
+
 	var Test = function() {
 		this.__constructor(arguments);
 	}
@@ -677,6 +680,10 @@ newNNs();
 				onPlatform[1]= true;
 				// console.log(onPlatform2);
 			}
+			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
+				reward+=1;
+				// console.log(onPlatform2);
+			}
 		}
 		listener.EndContact = function(contact) {
 			// console.log(contact.GetFixtureA().GetBody().GetUserData());
@@ -759,7 +766,6 @@ newNNs();
 	var decay = 0.005; 							//constant
 	var regrowth = 0.01; 						//constant
 	var slowDown = false;
-	var reward = 0; //for use in training the neural networks.
 	var state = new convnetjs.Vol(1,1,10);
 	var action;
 	Test.prototype.step = function(delta) {
@@ -767,9 +773,11 @@ newNNs();
 		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 			//Player2 wins
 			this.endGame(1);
+			reward += 5;
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
+			reward -= 5;
 		}
 		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
@@ -791,6 +799,7 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
+			reward += 0.0001;
 			action = brains[0].forward(state);
 			window.up[1] = false;
 			window.down[1] = false;
@@ -1077,6 +1086,9 @@ newNNs();
 		var time = new Date().getTime();
 		delta = (time - this._lastUpdate) / 1000;
 		this._lastUpdate = time;
+		if (Math.floor(delta)%10 == 0) {
+			window.brains[0].backward(reward);
+		}
 		if(delta > 10)
 			delta = 1/this._fps;
 			
