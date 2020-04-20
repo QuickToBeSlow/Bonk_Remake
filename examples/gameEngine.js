@@ -481,8 +481,8 @@
 	  }
 
 	  function newNNs() {
-		window.num_inputs = 8;
-		window.num_actions = 5;
+		window.num_inputs = 10;
+		window.num_actions = 18;
 		var temporal_window = 1; // amount of temporal memory. 0 = agent lives in-the-moment :)
 		var network_size = window.num_inputs * temporal_window + window.num_actions * temporal_window + window.num_inputs;
 	  
@@ -751,7 +751,8 @@ newNNs();
 	var regrowth = 0.01; 						//constant
 	var slowDown = false;
 	var reward = 0; //for use in training the neural networks.
-	var state = [];
+	var state = new convnetjs.Vol(1,1,10);
+	var action;
 	Test.prototype.step = function(delta) {
 		// console.log(window.Player1);
 		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
@@ -770,10 +771,97 @@ newNNs();
 			this._world.ClearForces();
 			// console.log(this._world.GetContactList());
 			// console.log(window.Player1.GetMass());
-
 			state = [window.Player1.GetPosition().x, window.Player1.GetPosition().y, window.Player1.GetLinearVelocity().x, window.Player1.GetLinearVelocity().y, window.Player2.GetPosition().x, window.Player2.GetPosition().y, window.Player2.GetLinearVelocity().x, window.Player2.GetLinearVelocity().y, window.heavy[0], window.heavy[1]];
+			// state.w[0] = window.Player1.GetPosition().x;
+			// state.w[1] = window.Player1.GetPosition().y;
+			// state.w[2] = window.Player1.GetLinearVelocity().x;
+			// state.w[3] = window.Player1.GetLinearVelocity().y;
+			// state.w[4] = window.Player2.GetPosition().x;
+			// state.w[5] = window.Player2.GetPosition().y;
+			// state.w[6] = window.Player2.GetLinearVelocity().x;
+			// state.w[7] = window.Player2.GetLinearVelocity().y;
+			// state.w[8] = window.heavy[0];
+			// state.w[9] = window.heavy[1];
+			action = brains[0].forward(state);
+			window.up[0] = false;
+			window.down[0] = false;
+			window.left[0] = false;
+			window.right[0] = false;
+			window.heavy[0] = false;
+			switch (action) {
+				case 0:
+					window.up[1] = true;
+					break;
+				case 1:
+					window.down[1] = true;
+					break;
+				case 2:
+					window.left[1] = true;
+					break;
+				case 3:
+					window.right[1] = true;
+					break;
+				case 4:
+					window.heavy[1] = true;
+					break;
+				case 5:
+					window.up[1] = true;
+					window.heavy[1] = true;
+					break;
+				case 6:
+					window.down[1] = true;
+					window.heavy[1] = true;
+					break;
+				case 7:
+					window.left[1] = true;
+					window.heavy[1] = true;
+					break;
+				case 8:
+					window.right[1] = true;
+					window.heavy[1] = true;
+					break;
+				case 9:
+					window.up[1] = true;
+					window.left[1] = true;
+					break;
+				case 10:
+					window.up[1] = true;
+					window.right[1] = true;
+					break;
+				case 11:
+					window.down[1] = true;
+					window.left[1] = true;
+					break;
+				case 12:
+					window.down[1] = true;
+					window.right[1] = true;
+					break;
+				case 13:
+					window.heavy[1] = true;
+					window.up[1] = true;
+					window.left[1] = true;
+					break;
+				case 14:
+					window.heavy[1] = true;
+					window.up[1] = true;
+					window.right[1] = true;
+					break;
+				case 15:
+					window.heavy[1] = true;
+					window.down[1] = true;
+					window.left[1] = true;
+					break;
+				case 16:
+					window.heavy[1] = true;
+					window.down[1] = true;
+					window.right[1] = true;
+					break;
+				case 17:
+					//do nothing.
+					break;
+			}
 
-
+			// console.log(brains[0]);
 			if (window.heavy[0]) {
 				// slowDown = true;
 				window.PFixture1.SetDensity(strengths[0]);
@@ -794,6 +882,26 @@ newNNs();
 					strengths[0] = maxStrengths[0];
 				}
 			}
+			if (window.heavy[1]) {
+				// slowDown = true;
+				window.PFixture2.SetDensity(strengths[1]);
+				// console.log(PFixture1);
+				window.Player2.ResetMassData();
+				if (strengths[1]>1) {
+					strengths[1]-=(decay*maxStrengths[1]);
+				} else {
+					strengths[1] = 1;
+				}
+			} else {
+				// slowDown = false;
+				window.PFixture2.SetDensity(1);
+				window.Player2.ResetMassData();
+				if (strengths[1]<maxStrengths[1]) {
+					strengths[1]+=(regrowth*maxStrengths[1]);
+				} else {
+					strengths[1] = maxStrengths[1];
+				}
+			}
 			if (window.up[0]) {
 				if (onPlatform[0] && window.Player1.GetLinearVelocity().y < 4) {
 					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
@@ -809,7 +917,21 @@ newNNs();
 			if (window.right[0]) {
 				window.Player1.ApplyForce(new b2Vec2(speed, 0), window.Player1.GetPosition());
 			}
-					
+			if (window.up[1]) {
+				if (onPlatform[1] && window.Player2.GetLinearVelocity().y < 4) {
+					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
+				}
+				window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
+			}
+			if (window.down[1]) {
+				window.Player1.ApplyForce(new b2Vec2(0, -speed), window.Player2.GetPosition());
+			}
+			if (window.left[1]) {
+				window.Player1.ApplyForce(new b2Vec2(-speed, 0), window.Player2.GetPosition());
+			}
+			if (window.right[1]) {
+				window.Player1.ApplyForce(new b2Vec2(speed, 0), window.Player2.GetPosition());
+			}		
 			//this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
 		
 			this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
