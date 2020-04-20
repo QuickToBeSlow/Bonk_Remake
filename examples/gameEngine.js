@@ -745,10 +745,10 @@ newNNs();
 		}
 	}
 	
-	var maxStrengths = [10,10];		//array of player heavy-mass.
-	var strengths = maxStrengths;//copy the maxStrengths array.
-	var decay = 0.005; 					//constant
-	var regrowth = 0.01; 				//constant
+	const maxStrengths = [10,10];				//array of player heavy-mass.
+	var strengths = maxStrengths.slice(0);		//copy the maxStrengths array.
+	var decay = 0.005; 							//constant
+	var regrowth = 0.01; 						//constant
 	var slowDown = false;
 	var reward = 0; //for use in training the neural networks.
 	var state = [];
@@ -780,7 +780,7 @@ newNNs();
 				// console.log(PFixture1);
 				window.Player1.ResetMassData();
 				if (strengths[0]>1) {
-					strengths[0]-=decay*maxStrengths[0];
+					strengths[0]-=(decay*maxStrengths[0]);
 				} else {
 					strengths[0] = 1;
 				}
@@ -789,7 +789,7 @@ newNNs();
 				window.PFixture1.SetDensity(1);
 				window.Player1.ResetMassData();
 				if (strengths[0]<maxStrengths[0]) {
-					strengths[0]+=regrowth*maxStrengths[0];
+					strengths[0]+=(regrowth*maxStrengths[0]);
 				} else {
 					strengths[0] = maxStrengths[0];
 				}
