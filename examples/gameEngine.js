@@ -774,10 +774,12 @@ newNNs();
 			//Player2 wins
 			this.endGame(1);
 			reward += 5;
+			window.brains[0].backward(reward);
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
 			reward -= 5;
+			window.brains[0].backward(reward);
 		}
 		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
