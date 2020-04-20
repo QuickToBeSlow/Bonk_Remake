@@ -743,6 +743,15 @@ newNNs();
 			c.stroke();
 			c.strokeStyle = "rgb(0,0,0)";
 		}
+		if (window.heavy[1]) {
+			c.strokeStyle = "rgb("+(127*(strengths[1]/maxStrengths[1])+127)+","+(127*(strengths[1]/maxStrengths[1])+127)+","+(127*(strengths[1]/maxStrengths[1])+127)+")";
+			// c.strokeStyle = "rgb(255,255,255)";
+			c.beginPath();
+			c.lineWidth = 3;
+			c.arc(window.Player2.GetPosition().x*12.5,-window.Player2.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
+			c.stroke();
+			c.strokeStyle = "rgb(0,0,0)";
+		}
 	}
 	
 	const maxStrengths = [10,10];				//array of player heavy-mass.
