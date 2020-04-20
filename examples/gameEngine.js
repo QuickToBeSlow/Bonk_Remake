@@ -860,7 +860,7 @@ newNNs();
 					//do nothing.
 					break;
 			}
-
+			console.log(window.up);
 			// console.log(brains[0]);
 			if (window.heavy[0]) {
 				// slowDown = true;
@@ -885,7 +885,7 @@ newNNs();
 			if (window.heavy[1]) {
 				// slowDown = true;
 				window.PFixture2.SetDensity(strengths[1]);
-				// console.log(PFixture1);
+				// console.log(PFixture2);
 				window.Player2.ResetMassData();
 				if (strengths[1]>1) {
 					strengths[1]-=(decay*maxStrengths[1]);
@@ -919,18 +919,18 @@ newNNs();
 			}
 			if (window.up[1]) {
 				if (onPlatform[1] && window.Player2.GetLinearVelocity().y < 4) {
-					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
+					window.Player2.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
 				}
-				window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
+				window.Player2.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
 			}
 			if (window.down[1]) {
-				window.Player1.ApplyForce(new b2Vec2(0, -speed), window.Player2.GetPosition());
+				window.Player2.ApplyForce(new b2Vec2(0, -speed), window.Player2.GetPosition());
 			}
 			if (window.left[1]) {
-				window.Player1.ApplyForce(new b2Vec2(-speed, 0), window.Player2.GetPosition());
+				window.Player2.ApplyForce(new b2Vec2(-speed, 0), window.Player2.GetPosition());
 			}
 			if (window.right[1]) {
-				window.Player1.ApplyForce(new b2Vec2(speed, 0), window.Player2.GetPosition());
+				window.Player2.ApplyForce(new b2Vec2(speed, 0), window.Player2.GetPosition());
 			}		
 			//this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
 		
