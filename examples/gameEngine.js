@@ -498,16 +498,16 @@
 		});
 		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 50,
+		  num_neurons: 20,
 		  activation: 'relu'
 		});
 		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 50,
+		  num_neurons: 20,
 		  activation: 'relu'
 		});
 		layer_defs.push({
-		  type: 'softmax',
+		  type: 'regression',
 		  num_neurons: window.num_actions
 		});
 	  
@@ -520,7 +520,7 @@
 		//   batch_size: 64,
 		//   l2_decay: 0.0
 		// });
-		var tdtrainer_options = {learning_rate:0.001, momentum:0.0, batch_size:1, l2_decay:0.01};
+		var tdtrainer_options = {learning_rate:0.01, momentum:0.9, batch_size:1, l2_decay:0.0};
 
 		window.opt = {};
 		window.opt.temporal_window = temporal_window;
@@ -682,7 +682,9 @@ newNNs();
 				// console.log(onPlatform2);
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
-				reward+=1;
+				reward=1;
+				window.brains[0].backward(reward);
+
 				// console.log(onPlatform2);
 			}
 		}
@@ -774,14 +776,15 @@ newNNs();
 		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 			//Player2 wins
 			this.endGame(1);
-			reward += 5;
+			reward = 5;
 			window.brains[0].backward(reward);
 			reward = 0;
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
-			// reward -= 5;
+			reward = 5;
 			window.brains[0].backward(reward);
+			reward = 0;
 		}
 		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
@@ -803,7 +806,9 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
-			// reward += 0.0001;
+			// reward = 0.0001;
+			// window.brains[0].backward(reward);
+
 			action = brains[0].forward(state);
 			console.log(action);
 			window.up[1] = false;
@@ -883,7 +888,7 @@ newNNs();
 				// 	//do nothing.
 				// 	break;
 			}
-			console.log(window.up);
+			// console.log(window.up);
 			// console.log(brains[0]);
 			if (window.heavy[0]) {
 				// slowDown = true;
