@@ -496,14 +496,14 @@
 		  out_sy: 1,
 		  out_depth: network_size
 		});
+		// layer_defs.push({
+		//   type: 'fc',
+		//   num_neurons: 20,
+		//   activation: 'relu'
+		// });
 		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 20,
-		  activation: 'relu'
-		});
-		layer_defs.push({
-		  type: 'fc',
-		  num_neurons: 20,
+		  num_neurons: 10,
 		  activation: 'relu'
 		});
 		layer_defs.push({
@@ -782,7 +782,7 @@ newNNs();
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
-			reward = 5;
+			reward = -5;
 			window.brains[0].backward(reward);
 			reward = 0;
 		}
@@ -819,6 +819,8 @@ newNNs();
 			switch (action) {
 				case 0:
 					window.up[1] = true;
+					reward = 1;
+					window.brains[0].backward(reward);
 					break;
 				case 1:
 					window.down[1] = true;
