@@ -514,13 +514,14 @@
 		net = new convnetjs.Net();
 		net.makeLayers(layer_defs);
 	  
-		trainer = new convnetjs.SGDTrainer(net, {
-		  learning_rate: 0.01,
-		  momentum: 0.9,
-		  batch_size: 5,
-		  l2_decay: 0.0
-		});
-	  
+		// trainer = new convnetjs.SGDTrainer(net, {
+		//   learning_rate: 0.01,
+		//   momentum: 0.9,
+		//   batch_size: 64,
+		//   l2_decay: 0.0
+		// });
+		var tdtrainer_options = {learning_rate:0.001, momentum:0.0, batch_size:64, l2_decay:0.01};
+		
 		window.opt = {};
 		window.opt.temporal_window = temporal_window;
 		window.opt.experience_size = 30000;
