@@ -485,7 +485,7 @@
 
 	  function newNNs() {
 		window.num_inputs = 10;
-		window.num_actions = 18;
+		window.num_actions = 5;
 		var temporal_window = 1; // amount of temporal memory. 0 = agent lives in-the-moment :)
 		var network_size = window.num_inputs * temporal_window + window.num_actions * temporal_window + window.num_inputs;
 	  
@@ -507,7 +507,7 @@
 		  activation: 'relu'
 		});
 		layer_defs.push({
-		  type: 'regression',
+		  type: 'softmax',
 		  num_neurons: window.num_actions
 		});
 	  
@@ -520,7 +520,7 @@
 		//   batch_size: 64,
 		//   l2_decay: 0.0
 		// });
-		var tdtrainer_options = {learning_rate:0.001, momentum:0.0, batch_size:64, l2_decay:0.01};
+		var tdtrainer_options = {learning_rate:0.001, momentum:0.0, batch_size:1, l2_decay:0.01};
 
 		window.opt = {};
 		window.opt.temporal_window = temporal_window;
@@ -775,13 +775,12 @@ newNNs();
 			//Player2 wins
 			this.endGame(1);
 			reward += 5;
-			reward = 0;
 			window.brains[0].backward(reward);
+			reward = 0;
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
-			reward -= 5;
-			reward = 0;
+			// reward -= 5;
 			window.brains[0].backward(reward);
 		}
 		// console.log(window.up);
@@ -804,8 +803,9 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
-			reward += 0.0001;
+			// reward += 0.0001;
 			action = brains[0].forward(state);
+			console.log(action);
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
@@ -827,61 +827,61 @@ newNNs();
 				case 4:
 					window.heavy[1] = true;
 					break;
-				case 5:
-					window.up[1] = true;
-					window.heavy[1] = true;
-					break;
-				case 6:
-					window.down[1] = true;
-					window.heavy[1] = true;
-					break;
-				case 7:
-					window.left[1] = true;
-					window.heavy[1] = true;
-					break;
-				case 8:
-					window.right[1] = true;
-					window.heavy[1] = true;
-					break;
-				case 9:
-					window.up[1] = true;
-					window.left[1] = true;
-					break;
-				case 10:
-					window.up[1] = true;
-					window.right[1] = true;
-					break;
-				case 11:
-					window.down[1] = true;
-					window.left[1] = true;
-					break;
-				case 12:
-					window.down[1] = true;
-					window.right[1] = true;
-					break;
-				case 13:
-					window.heavy[1] = true;
-					window.up[1] = true;
-					window.left[1] = true;
-					break;
-				case 14:
-					window.heavy[1] = true;
-					window.up[1] = true;
-					window.right[1] = true;
-					break;
-				case 15:
-					window.heavy[1] = true;
-					window.down[1] = true;
-					window.left[1] = true;
-					break;
-				case 16:
-					window.heavy[1] = true;
-					window.down[1] = true;
-					window.right[1] = true;
-					break;
-				case 17:
-					//do nothing.
-					break;
+				// case 5:
+				// 	window.up[1] = true;
+				// 	window.heavy[1] = true;
+				// 	break;
+				// case 6:
+				// 	window.down[1] = true;
+				// 	window.heavy[1] = true;
+				// 	break;
+				// case 7:
+				// 	window.left[1] = true;
+				// 	window.heavy[1] = true;
+				// 	break;
+				// case 8:
+				// 	window.right[1] = true;
+				// 	window.heavy[1] = true;
+				// 	break;
+				// case 9:
+				// 	window.up[1] = true;
+				// 	window.left[1] = true;
+				// 	break;
+				// case 10:
+				// 	window.up[1] = true;
+				// 	window.right[1] = true;
+				// 	break;
+				// case 11:
+				// 	window.down[1] = true;
+				// 	window.left[1] = true;
+				// 	break;
+				// case 12:
+				// 	window.down[1] = true;
+				// 	window.right[1] = true;
+				// 	break;
+				// case 13:
+				// 	window.heavy[1] = true;
+				// 	window.up[1] = true;
+				// 	window.left[1] = true;
+				// 	break;
+				// case 14:
+				// 	window.heavy[1] = true;
+				// 	window.up[1] = true;
+				// 	window.right[1] = true;
+				// 	break;
+				// case 15:
+				// 	window.heavy[1] = true;
+				// 	window.down[1] = true;
+				// 	window.left[1] = true;
+				// 	break;
+				// case 16:
+				// 	window.heavy[1] = true;
+				// 	window.down[1] = true;
+				// 	window.right[1] = true;
+				// 	break;
+				// case 17:
+				// 	//do nothing.
+				// 	break;
 			}
 			console.log(window.up);
 			// console.log(brains[0]);
