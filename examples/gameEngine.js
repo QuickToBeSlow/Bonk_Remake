@@ -532,7 +532,7 @@
 		window.opt.epsilon_min = 0.05;
 		window.opt.epsilon_test_time = 0.05;
 		window.opt.layer_defs = layer_defs;
-		// window.opt.tdtrainer_options = tdtrainer_options;
+		window.opt.tdtrainer_options = tdtrainer_options;
 		window.brains = [];
 		window.brains.push(new deepqlearn.Brain(window.num_inputs, window.num_actions, window.opt));
 		window.brains.push(new deepqlearn.Brain(window.num_inputs, window.num_actions, window.opt));
