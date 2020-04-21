@@ -819,14 +819,14 @@ newNNs();
 			switch (action) {
 				case 0:
 					window.up[1] = true;
-					reward = 1;
-					window.brains[0].backward(reward);
 					break;
 				case 1:
 					window.down[1] = true;
 					break;
 				case 2:
 					window.left[1] = true;
+					reward = 1;
+					window.brains[0].backward(reward);
 					break;
 				case 3:
 					window.right[1] = true;
