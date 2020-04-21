@@ -682,9 +682,7 @@ newNNs();
 				// console.log(onPlatform2);
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
-				reward=1;
-				window.brains[0].backward(reward);
-
+				reward+=1;
 				// console.log(onPlatform2);
 			}
 		}
@@ -776,15 +774,11 @@ newNNs();
 		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 			//Player2 wins
 			this.endGame(1);
-			reward = 5;
-			window.brains[0].backward(reward);
-			reward = 0;
+			reward += 5;
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
-			reward = -5;
-			window.brains[0].backward(reward);
-			reward = 0;
+			reward -= 5;
 		}
 		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
@@ -806,9 +800,10 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
-			// reward = 0.0001;
+			// reward += 0.0001;
 			// window.brains[0].backward(reward);
-
+			window.brains[0].backward(reward);
+			reward = 0;
 			action = brains[0].forward(state);
 			console.log(action);
 			window.up[1] = false;
@@ -825,8 +820,7 @@ newNNs();
 					break;
 				case 2:
 					window.left[1] = true;
-					reward = 1;
-					window.brains[0].backward(reward);
+					reward += 1;
 					break;
 				case 3:
 					window.right[1] = true;
