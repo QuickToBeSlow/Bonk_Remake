@@ -521,7 +521,7 @@
 		//   l2_decay: 0.0
 		// });
 		var tdtrainer_options = {learning_rate:0.001, momentum:0.0, batch_size:64, l2_decay:0.01};
-		
+
 		window.opt = {};
 		window.opt.temporal_window = temporal_window;
 		window.opt.experience_size = 30000;
@@ -775,11 +775,13 @@ newNNs();
 			//Player2 wins
 			this.endGame(1);
 			reward += 5;
+			reward = 0;
 			window.brains[0].backward(reward);
 		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 			//Player1 wins
 			this.endGame(0);
 			reward -= 5;
+			reward = 0;
 			window.brains[0].backward(reward);
 		}
 		// console.log(window.up);
@@ -1091,6 +1093,7 @@ newNNs();
 		this._lastUpdate = time;
 		if (Math.floor(delta)%10 == 0) {
 			// window.brains[0].backward(reward);
+			// reward = 0;
 		}
 		if(delta > 10)
 			delta = 1/this._fps;
