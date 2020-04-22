@@ -496,14 +496,14 @@
 		  out_sy: 1,
 		  out_depth: network_size
 		});
-		// layer_defs.push({
-		//   type: 'fc',
-		//   num_neurons: 20,
-		//   activation: 'relu'
-		// });
 		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 10,
+		  num_neurons: 20,
+		  activation: 'relu'
+		});
+		layer_defs.push({
+		  type: 'fc',
+		  num_neurons: 20,
 		  activation: 'relu'
 		});
 		layer_defs.push({
