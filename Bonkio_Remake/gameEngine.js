@@ -928,7 +928,11 @@ newNNs();
 			}
 			if (window.up[0]) {
 				if (onPlatform[0] && window.Player1.GetLinearVelocity().y < 4) {
-					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
+					// window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
+                    var newPlayer1_velocity = new b2Vec2(window.Player1.GetLinearVelocity());
+                    newPlayer1_velocity.y = 16;//upwards - don't change x velocity
+                    window.Player1.SetLinearVelocity(newPlayer1_velocity);
+                    onPlatform[0]=false;
 				}
 				window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
 			}
@@ -943,7 +947,11 @@ newNNs();
 			}
 			if (window.up[1]) {
 				if (onPlatform[1] && window.Player2.GetLinearVelocity().y < 4) {
-					window.Player2.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
+					// window.Player2.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
+                    var newPlayer2_velocity = new b2Vec2(window.Player1.GetLinearVelocity());
+                    newPlayer2_velocity.y = 16;//upwards - don't change x velocity
+                    window.Player2.SetLinearVelocity(newPlayer2_velocity);
+                    onPlatform[0]=false;
 				}
 				window.Player2.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
 			}
