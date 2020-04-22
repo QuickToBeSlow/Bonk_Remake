@@ -772,19 +772,19 @@ newNNs();
 	var action;
 	Test.prototype.step = function(delta) {
 		// console.log(window.Player1);
-		if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
-			//Player2 wins
-			this.endGame(1);
-			reward += 5;
-		} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
-			//Player1 wins
-			this.endGame(0);
-			reward -= 5;
-		}
+
 		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
-
+			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
+				//Player2 wins
+				this.endGame(1);
+				reward += 5;
+			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
+				//Player1 wins
+				this.endGame(0);
+				reward -= 5;
+			}
 			if(!this._world)
 				return;
 			this._world.ClearForces();
@@ -928,7 +928,7 @@ newNNs();
 			}
 			if (window.up[0]) {
 				if (onPlatform[0] && window.Player1.GetLinearVelocity().y < 4) {
-					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
+					window.Player1.ApplyLinearImpulse(new b2Vec2(0, 20000), window.Player1.GetPosition());
 				}
 				window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
 			}
@@ -943,7 +943,7 @@ newNNs();
 			}
 			if (window.up[1]) {
 				if (onPlatform[1] && window.Player2.GetLinearVelocity().y < 4) {
-					window.Player2.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
+					window.Player2.ApplyLinearImpulse(new b2Vec2(0, 20000), window.Player2.GetPosition());
 				}
 				window.Player2.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
 			}
