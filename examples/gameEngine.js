@@ -802,8 +802,7 @@ newNNs();
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
 			reward -= 0.0001;
-			// window.brains[0].backward(reward);
-			// window.brains[0].backward(reward);
+			window.brains[0].backward(reward);
 			reward = 0;
 			action = brains[0].forward(state);
 			console.log(action);
@@ -975,7 +974,7 @@ newNNs();
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
-		window.brains[0].backward(reward);
+		// window.brains[0].backward(reward);
 		//might comment out later.
 		window.scores[winner]++;
 		window.up = [false, false];
