@@ -735,6 +735,7 @@ newNNs();
 
 		c.fillStyle = "black";
 		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
+		c.fillText("current reward : "+reward,5,40);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
@@ -800,7 +801,7 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
-			// reward += 0.0001;
+			reward -= 0.0001;
 			// window.brains[0].backward(reward);
 			window.brains[0].backward(reward);
 			reward = 0;
@@ -820,7 +821,7 @@ newNNs();
 					break;
 				case 2:
 					window.left[1] = true;
-					reward += 1;
+					// reward += 1;
 					break;
 				case 3:
 					window.right[1] = true;
