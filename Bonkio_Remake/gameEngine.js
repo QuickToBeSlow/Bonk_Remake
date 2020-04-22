@@ -811,7 +811,7 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
-			reward += 0.001;
+			reward += 0.0001;
 			window.brains[0].backward(reward);
 			reward = 0;
 			action = brains[0].forward(state);
