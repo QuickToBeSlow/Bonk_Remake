@@ -486,7 +486,7 @@
 	  function newNNs() {
 		window.num_inputs = 10;
 		window.num_actions = 5;
-		var temporal_window = 1; // amount of temporal memory. 0 = agent lives in-the-moment :)
+		var temporal_window = 3; // amount of temporal memory. 0 = agent lives in-the-moment :)
 		var network_size = window.num_inputs * temporal_window + window.num_actions * temporal_window + window.num_inputs;
 	  
 		layer_defs = [];
