@@ -503,12 +503,17 @@
 		//   });
 		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 10,
+		  num_neurons: 5,
 		  activation: 'relu'
 		});
 		layer_defs.push({
+			type: 'fc',
+			num_neurons: 10,
+			activation: 'relu'
+		  });
+		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 20,
+		  num_neurons: 5,
 		  activation: 'relu'
 		});
 		layer_defs.push({
