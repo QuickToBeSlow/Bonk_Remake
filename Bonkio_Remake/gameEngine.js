@@ -530,7 +530,7 @@
 		window.opt.learning_steps_total = 200000;
 		window.opt.learning_steps_burnin = 3000;
 		window.opt.epsilon_min = 0.05;
-		window.opt.epsilon_test_time = 0.05;
+		window.opt.epsilon_test_time = 0.01;
 		window.opt.layer_defs = layer_defs;
 		window.opt.tdtrainer_options = tdtrainer_options;
 		window.brains = [];
