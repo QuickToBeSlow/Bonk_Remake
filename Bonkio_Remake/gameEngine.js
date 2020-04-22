@@ -497,13 +497,18 @@
 		  out_depth: network_size
 		});
 		layer_defs.push({
+			type: 'conv',
+			num_neurons: 10,
+			activation: 'relu'
+		  });
+		layer_defs.push({
 		  type: 'fc',
 		  num_neurons: 20,
 		  activation: 'relu'
 		});
 		layer_defs.push({
 		  type: 'fc',
-		  num_neurons: 20,
+		  num_neurons: 10,
 		  activation: 'relu'
 		});
 		layer_defs.push({
@@ -801,7 +806,7 @@ newNNs();
 			// state.w[7] = window.Player2.GetLinearVelocity().y;
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
-			reward -= 0.0001;
+			reward += 0.001;
 			window.brains[0].backward(reward);
 			reward = 0;
 			action = brains[0].forward(state);
