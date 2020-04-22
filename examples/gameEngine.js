@@ -778,12 +778,12 @@ newNNs();
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
-				this.endGame(1);
 				reward += 5;
+				this.endGame(1);
 			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 				//Player1 wins
-				this.endGame(0);
 				reward -= 5;
+				this.endGame(0);
 			}
 			if(!this._world)
 				return;
