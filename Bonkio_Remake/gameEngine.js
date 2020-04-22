@@ -951,7 +951,7 @@ newNNs();
                     var newPlayer2_velocity = new b2Vec2(window.Player1.GetLinearVelocity());
                     newPlayer2_velocity.y = 16;//upwards - don't change x velocity
                     window.Player2.SetLinearVelocity(newPlayer2_velocity);
-                    onPlatform[0]=false;
+                    onPlatform[1]=false;
 				}
 				window.Player2.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
 			}
