@@ -928,7 +928,7 @@ newNNs();
 			}
 			if (window.up[0]) {
 				if (onPlatform[0] && window.Player1.GetLinearVelocity().y < 4) {
-					window.Player1.ApplyLinearImpulse(new b2Vec2(0, 20000), window.Player1.GetPosition());
+					window.Player1.ApplyForce(new b2Vec2(0, 20000), window.Player1.GetPosition());
 				}
 				window.Player1.ApplyForce(new b2Vec2(0, speed), window.Player1.GetPosition());
 			}
@@ -943,7 +943,7 @@ newNNs();
 			}
 			if (window.up[1]) {
 				if (onPlatform[1] && window.Player2.GetLinearVelocity().y < 4) {
-					window.Player2.ApplyLinearImpulse(new b2Vec2(0, 20000), window.Player2.GetPosition());
+					window.Player2.ApplyForce(new b2Vec2(0, 20000), window.Player2.GetPosition());
 				}
 				window.Player2.ApplyForce(new b2Vec2(0, speed), window.Player2.GetPosition());
 			}
