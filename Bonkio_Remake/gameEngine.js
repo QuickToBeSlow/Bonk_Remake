@@ -502,7 +502,7 @@
 		// 	activation: 'relu'
 		//   });
 		layer_defs.push({
-		  type: 'fc',
+		  type: 'conv',
 		  num_neurons: 5,
 		  activation: 'relu'
 		});
