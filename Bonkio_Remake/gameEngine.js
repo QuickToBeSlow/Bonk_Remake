@@ -1,5 +1,5 @@
 (function(){
-
+	// console.log(tf);
 	var reward = 0; //for use in training the neural networks.
 
 
@@ -585,9 +585,6 @@ newNNs();
 			that._mouseDown = false;
 		};
 		this._handleKeyDown = function(e) {
-			// that._keyDown = e.code;
-			// console.log(e);
-			// console.log(e.code);
 			if (e.code == "KeyW") {
 				window.up[0] = true;
 			} else if (e.code == "KeyA") {
@@ -601,7 +598,6 @@ newNNs();
 			}
 		}
 		this._handleKeyUp = function(e) {
-			// that._keyUp = e.code;
 			if (e.code == "KeyW") {
 				window.up[0] = false;
 			} else if (e.code == "KeyA") {
@@ -685,26 +681,21 @@ newNNs();
 			// console.log(contact.GetFixtureA().GetBody().GetUserData());
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 				onPlatform[0] = true;
-				// console.log(onPlatform);
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
 				onPlatform[1]= true;
-				// console.log(onPlatform2);
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
 				reward+=1;
-				// console.log(onPlatform2);
 			}
 		}
 		listener.EndContact = function(contact) {
 			// console.log(contact.GetFixtureA().GetBody().GetUserData());
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 				onPlatform[0] = false;
-				// console.log(onPlatform);
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
 				onPlatform[1] = false;
-				// console.log(onPlatform2);
 			}
 		}
 		listener.PostSolve = function(contact, impulse) {
@@ -781,9 +772,6 @@ newNNs();
 	var state = new convnetjs.Vol(1,1,10);
 	var action;
 	Test.prototype.step = function(delta) {
-		// console.log(window.Player1);
-
-		// console.log(window.up);
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
@@ -799,7 +787,6 @@ newNNs();
 				return;
 			this._world.ClearForces();
 			// console.log(this._world.GetContactList());
-			// console.log(window.Player1.GetMass());
 			state = [window.Player1.GetPosition().x, window.Player1.GetPosition().y, window.Player1.GetLinearVelocity().x, window.Player1.GetLinearVelocity().y, window.Player2.GetPosition().x, window.Player2.GetPosition().y, window.Player2.GetLinearVelocity().x, window.Player2.GetLinearVelocity().y, window.heavy[0], window.heavy[1]];
 			// state.w[0] = window.Player1.GetPosition().x;
 			// state.w[1] = window.Player1.GetPosition().y;
@@ -815,7 +802,7 @@ newNNs();
 			window.brains[0].backward(reward);
 			reward = 0;
 			action = brains[0].forward(state);
-			console.log(action);
+			// console.log(action);
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
