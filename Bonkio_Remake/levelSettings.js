@@ -1,7 +1,6 @@
 (function(){
 
 var ctx = document.getElementById("canvas");
-console.log(ctx);
 
 var Test = function() {
 	gameEngine.__constructor.apply(this, arguments);

@@ -1,8 +1,295 @@
 (function(){
+
+// Daniel Shiffman
+// Neuro-Evolution Flappy Bird with TensorFlow.js
+// http://thecodingtrain.com
+// https://youtu.be/cdUNkwXx-I4
+// WRITTEN IN P5JS! Make sure to change accordingly!
+
+const TOTAL = 250;
+let birds = [];
+let savedBirds = [];
+let pipes = [];
+let counter = 0;
+let slider;
+
+// function keyPressed() {
+//   if (key === 'S') {
+//     let bird = birds[0];
+//     saveJSON(bird.brain, 'bird.json');
+//   }
+// }
+
+  tf.setBackend('cpu');
+  for (let i = 0; i < TOTAL; i++) {
+    birds[i] = new Bird();
+  }
+
+// function draw() {
+//   for (let n = 0; n < slider.value(); n++) {
+//     if (counter % 75 == 0) {
+//       pipes.push(new Pipe());
+//     }
+//     counter++;
+
+//     for (let i = pipes.length - 1; i >= 0; i--) {
+//       pipes[i].update();
+
+//       for (let j = birds.length - 1; j >= 0; j--) {
+//         if (pipes[i].hits(birds[j])) {
+//           savedBirds.push(birds.splice(j, 1)[0]);
+//         }
+//       }
+
+//       if (pipes[i].offscreen()) {
+//         pipes.splice(i, 1);
+//       }
+//     }
+
+//     for (let i = birds.length - 1; i >= 0; i--) {
+//       if (birds[i].offScreen()) {
+//         savedBirds.push(birds.splice(i, 1)[0]);
+//       }
+//     }
+
+//     for (let bird of birds) {
+//       bird.think(pipes);
+//       bird.update();
+//     }
+
+//     if (birds.length === 0) {
+//       counter = 0;
+//       nextGeneration();
+//       pipes = [];
+//     }
+//   }
+
+//   // All the drawing stuff
+//   background(0);
+
+//   for (let bird of birds) {
+//     bird.show();
+//   }
+
+//   for (let pipe of pipes) {
+//     pipe.show();
+//   }
+// }
+
+// Daniel Shiffman
+// Neuro-Evolution Flappy Bird with TensorFlow.js
+// http://thecodingtrain.com
+// https://youtu.be/cdUNkwXx-I4
+
+class Bird {
+	constructor(brain) {
+	  this.y = height / 2;
+	  this.x = 64;
+  
+	  this.gravity = 0.8;
+	  this.lift = -12;
+	  this.velocity = 0;
+  
+	  this.score = 0;
+	  this.fitness = 0;
+	  if (brain) {
+		this.brain = brain.copy();
+	  } else {
+		this.brain = new NeuralNetwork(5, 8, 2);
+	  }
+	}
+  
+	dispose() {
+	  this.brain.dispose();
+	}
+  
+	show() {
+	  stroke(255);
+	  fill(255, 100);
+	  ellipse(this.x, this.y, 32, 32);
+	}
+  
+	up() {
+	  this.velocity += this.lift;
+	}
+  
+	mutate() {
+	  this.brain.mutate(0.1);
+	}
+  
+	think(pipes) {
+	  // Find the closest pipe
+	  let closest = null;
+	  let closestD = Infinity;
+	  for (let i = 0; i < pipes.length; i++) {
+		let d = pipes[i].x + pipes[i].w - this.x;
+		if (d < closestD && d > 0) {
+		  closest = pipes[i];
+		  closestD = d;
+		}
+	  }
+  
+	  let inputs = [];
+	  inputs[0] = this.y / height;
+	  inputs[1] = closest.top / height;
+	  inputs[2] = closest.bottom / height;
+	  inputs[3] = closest.x / width;
+	  inputs[4] = this.velocity / 10;
+	  let output = this.brain.predict(inputs);
+	  //if (output[0] > output[1] && this.velocity >= 0) {
+	  if (output[0] > output[1]) {
+		this.up();
+	  }
+	}
+  
+	offScreen() {
+	  return this.y > height || this.y < 0;
+	}
+  
+	update() {
+	  this.score++;
+  
+	  this.velocity += this.gravity;
+	  //this.velocity *= 0.9;
+	  this.y += this.velocity;
+	}
+  }
+  
+// Daniel Shiffman
+// Neuro-Evolution Flappy Bird with TensorFlow.js
+// http://thecodingtrain.com
+// https://youtu.be/cdUNkwXx-I4
+
+class NeuralNetwork {
+	constructor(a, b, c, d) {
+	  if (a instanceof tf.Sequential) {
+		this.model = a;
+		this.input_nodes = b;
+		this.hidden_nodes = c;
+		this.output_nodes = d;
+	  } else {
+		this.input_nodes = a;
+		this.hidden_nodes = b;
+		this.output_nodes = c;
+		this.model = this.createModel();
+	  }
+	}
+  
+	copy() {
+	  return tf.tidy(() => {
+		const modelCopy = this.createModel();
+		const weights = this.model.getWeights();
+		const weightCopies = [];
+		for (let i = 0; i < weights.length; i++) {
+		  weightCopies[i] = weights[i].clone();
+		}
+		modelCopy.setWeights(weightCopies);
+		return new NeuralNetwork(
+		  modelCopy,
+		  this.input_nodes,
+		  this.hidden_nodes,
+		  this.output_nodes
+		);
+	  });
+	}
+  
+	mutate(rate) {
+	  tf.tidy(() => {
+		const weights = this.model.getWeights();
+		const mutatedWeights = [];
+		for (let i = 0; i < weights.length; i++) {
+		  let tensor = weights[i];
+		  let shape = weights[i].shape;
+		  let values = tensor.dataSync().slice();
+		  for (let j = 0; j < values.length; j++) {
+			if (random(1) < rate) {
+			  let w = values[j];
+			  values[j] = w + randomGaussian();
+			}
+		  }
+		  let newTensor = tf.tensor(values, shape);
+		  mutatedWeights[i] = newTensor;
+		}
+		this.model.setWeights(mutatedWeights);
+	  });
+	}
+  
+	dispose() {
+	  this.model.dispose();
+	}
+  
+	predict(inputs) {
+	  return tf.tidy(() => {
+		const xs = tf.tensor2d([inputs]);
+		const ys = this.model.predict(xs);
+		const outputs = ys.dataSync();
+		// console.log(outputs);
+		return outputs;
+	  });
+	}
+  
+	createModel() {
+	  const model = tf.sequential();
+	  const hidden = tf.layers.dense({
+		units: this.hidden_nodes,
+		inputShape: [this.input_nodes],
+		activation: 'sigmoid'
+	  });
+	  model.add(hidden);
+	  const output = tf.layers.dense({
+		units: this.output_nodes,
+		activation: 'softmax'
+	  });
+	  model.add(output);
+	  return model;
+	}
+  }
+
+// Daniel Shiffman
+// Neuro-Evolution Flappy Bird
+//Make sure to switch out the variables used by Daniel in his code!
+
+function nextGeneration() {
+	console.log('next generation');
+	calculateFitness();
+	for (let i = 0; i < TOTAL; i++) {
+	  birds[i] = pickOne();
+	}
+	for (let i = 0; i < TOTAL; i++) {
+	  savedBirds[i].dispose();
+	}
+	savedBirds = [];
+  }
+  
+  function pickOne() {
+	let index = 0;
+	let r = random(1);
+	while (r > 0) {
+	  r = r - savedBirds[index].fitness;
+	  index++;
+	}
+	index--;
+	let bird = savedBirds[index];
+	let child = new Bird(bird.brain);
+	child.mutate();
+	return child;
+  }
+  
+  function calculateFitness() {
+	let sum = 0;
+	for (let bird of savedBirds) {
+	  sum += bird.score;
+	}
+	for (let bird of savedBirds) {
+	  bird.fitness = bird.score / sum;
+	}
+  }
 	// console.log(tf);
 	var reward = 0; //for use in training the neural networks.
 
 	//copied code.
+	//NOTE: neural network structure and inputs must be completely reworked.
+
 	const model = tf.sequential();
 
 	// Create the hidden layer
@@ -47,14 +334,14 @@
 	});
 	
 	async function train() {
-	  for (let i = 0; i < 1000; i++) {
-		const config = {
-		  shuffle: true,
-		  epochs: 10
-		};
-		const response = await model.fit(xs, ys, config);
-		// console.log(response.history.loss[0]);
-	  }
+	//   for (let i = 0; i < 1000; i++) {
+	// 	const config = {
+	// 	  shuffle: true,
+	// 	  epochs: 10
+	// 	};
+	// 	const response = await model.fit(xs, ys, config);
+	// 	// console.log(response.history.loss[0]);
+	//   }
 	}
 	//end of copied code.
 
@@ -557,14 +844,14 @@
 		// 	num_neurons: 10,
 		// 	activation: 'relu'
 		//   });
-		layer_defs.push({
-		  type: 'conv',
-		  num_neurons: 5,
-		  activation: 'relu'
-		});
+		// layer_defs.push({
+		//   type: 'conv',
+		//   num_neurons: 5,
+		//   activation: 'relu'
+		// });
 		layer_defs.push({
 			type: 'fc',
-			num_neurons: 10,
+			num_neurons: 5,
 			activation: 'relu'
 		  });
 		layer_defs.push({
