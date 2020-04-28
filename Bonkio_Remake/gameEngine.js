@@ -1356,8 +1356,9 @@ newNNs();
 			currentNN++
 		} else {
 			currentNN = 0;
+			savedNNs = NNs.splice(0);
 			nextGeneration();
-		} 
+		}
 		console.log(currentNN);
 		// window.brains[0].backward(reward);
 		window.scores[winner]++;
