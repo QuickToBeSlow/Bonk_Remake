@@ -150,7 +150,7 @@ class NN {
 		  let shape = weights[i].shape;
 		  let values = tensor.dataSync().slice();
 		  for (let j = 0; j < values.length; j++) {
-			if (random(1) < rate) {
+			if (Math.random() < rate) {
 			  let w = values[j];
 			  values[j] = w + randomGaussian();
 			}
@@ -286,8 +286,8 @@ function nextGeneration() {
 	  index++;
 	}
 	index--;
-	let NN = savedNNs[index];
-	let child = new NN(NN.brain);
+	let NeuralN = savedNNs[index];
+	let child = new NN(NeuralN.brain);
 	child.mutate();
 	return child;
   }
