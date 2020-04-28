@@ -1,5 +1,16 @@
 (function(){
 
+//code for Gaussian
+
+function randn_bm() {
+    var u = 0, v = 0;
+    while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    return Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+}
+
+
+
 // Daniel Shiffman
 // Neuro-Evolution Flappy Bird with TensorFlow.js
 // http://thecodingtrain.com
@@ -152,7 +163,7 @@ class NN {
 		  for (let j = 0; j < values.length; j++) {
 			if (Math.random() < rate) {
 			  let w = values[j];
-			  values[j] = w + randomGaussian();
+			  values[j] = w + randn_bm();
 			}
 		  }
 		  let newTensor = tf.tensor(values, shape);
