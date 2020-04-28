@@ -12,7 +12,8 @@ savedBirds --> savedNNs (done)
 class Bird --> class NN (done)
 
 TODO (if I get stuck):
-rewrite think function of the neural network. Make sure to change the inputs namely.
+rewrite think function of the neural network. Make sure to change the inputs namely. (done)
+
 */
 
 
