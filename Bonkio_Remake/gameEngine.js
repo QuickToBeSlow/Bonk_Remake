@@ -16,13 +16,13 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 
 */
 
-
-const TOTAL = 1;
-let NNs = [];
-let savedNNs = [];
+var currentNN = 0;
+const TOTAL = 10;
+var NNs = [];
+var savedNNs = [];
 // let pipes = [];
-let counter = 0;
-let slider;
+// let counter = 0;
+// let slider;
 
 class NN {
 	constructor(brain) {
@@ -31,7 +31,10 @@ class NN {
 	//   this.gravity = 0.8;
 	//   this.lift = -12;
 	//   this.velocity = 0;
-	  this.score = 0;
+
+	//   this.score = 0;
+	//   might use score later, but right now it's useless for my purposes.
+
 	  this.fitness = 0;
 	  if (brain) {
 		this.brain = brain.copy();
@@ -224,6 +227,8 @@ class NN {
 // }
 
   tf.setBackend('cpu');
+
+//this MUST be changed later. Yes, we want multiple neural networks, but we cannot have them all running at the same time.
   for (let i = 0; i < TOTAL; i++) {
     NNs[i] = new NN();
   }
@@ -1029,6 +1034,13 @@ newNNs();
 	
 	var onPlatform = [false,false];
 	Test.prototype.createWorld = function(){
+		
+		
+		
+		reward = 0;
+
+
+
 		var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
 		var m_physScale = 1;
 		m_world.SetWarmStarting(true);
@@ -1181,7 +1193,7 @@ newNNs();
 			// state.w[9] = window.heavy[1];
 			reward += 0.0001;
 			// window.brains[0].backward(reward);
-			reward = 0;
+			// reward = 0;
 			// action = brains[0].forward(state);
 			// console.log(action);
 			window.up[1] = false;
@@ -1189,10 +1201,11 @@ newNNs();
 			window.left[1] = false;
 			window.right[1] = false;
 			window.heavy[1] = false;
-			for (let NeuralN of NNs) {
-				NeuralN.think();
-				NeuralN.update();
-			}
+			//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
+			// for (let i=0; i<NNs.length; i++) {
+				NNs[currentNN].think();
+				NNs[currentNN].update();
+			// }
 			switch (action) {
 				case 0:
 					window.up[1] = true;
@@ -1364,8 +1377,8 @@ newNNs();
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
+		currentNN = (currentNN < TOTAL) ? currentNN++ : currentNN = 0;
 		// window.brains[0].backward(reward);
-		//might comment out later.
 		window.scores[winner]++;
 		window.up = [false, false];
 		window.down = [false, false];
