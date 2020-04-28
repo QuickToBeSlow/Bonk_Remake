@@ -6,11 +6,13 @@
 // https://youtu.be/cdUNkwXx-I4
 // WRITTEN IN P5JS! Make sure to change accordingly!
 /*
-variables to change (for now):
-birds --> NNs
-savedBirds --> savedNNs
-class Bird --> class NN
+variables to change:
+birds --> NNs (done)
+savedBirds --> savedNNs (done)
+class Bird --> class NN (done)
 
+TODO (if I get stuck):
+rewrite think function of the neural network. Make sure to change the inputs namely.
 */
 
 
@@ -67,17 +69,17 @@ class NN {
 	// 	}
 	//   }
   
-	//   let inputs = [];
-	//   inputs[0] = this.y / height;
-	//   inputs[1] = closest.top / height;
-	//   inputs[2] = closest.bottom / height;
-	//   inputs[3] = closest.x / width;
-	//   inputs[4] = this.velocity / 10;
-	//   let output = this.brain.predict(inputs);
-	//   //if (output[0] > output[1] && this.velocity >= 0) {
-	//   if (output[0] > output[1]) {
-	// 	this.up();
-	//   }
+	  let inputs = [];
+	  inputs[0] = this.y / height;
+	  inputs[1] = closest.top / height;
+	  inputs[2] = closest.bottom / height;
+	  inputs[3] = closest.x / width;
+	  inputs[4] = this.velocity / 10;
+	  let output = this.brain.predict(inputs);
+	  //if (output[0] > output[1] && this.velocity >= 0) {
+	  if (output[0] > output[1]) {
+		// this.up();
+	  }
 	}
   
 	offScreen() {
@@ -85,7 +87,7 @@ class NN {
 	}
   
 	update() {
-	//   this.score++;
+	  this.score++;
   
 	//   this.velocity += this.gravity;
 	//   //this.velocity *= 0.9;
