@@ -268,7 +268,7 @@ class NN {
 
 function nextGeneration() {
 	console.log('next generation');
-	// calculateFitness();
+	calculateFitness();
 	for (let i = 0; i < TOTAL; i++) {
 	  NNs[i] = pickOne();
 	}
@@ -1351,7 +1351,7 @@ newNNs();
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
-		NNs[currentNN].fitness = reward;
+		NNs[currentNN].score = reward;
 		if (currentNN < TOTAL-1) {
 			currentNN++
 		} else {
