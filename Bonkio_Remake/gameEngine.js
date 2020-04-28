@@ -32,9 +32,7 @@ class NN {
 	//   this.lift = -12;
 	//   this.velocity = 0;
 
-	//   this.score = 0;
-	//   might use score later, but right now it's useless for my purposes.
-
+	  this.score = 0;
 	  this.fitness = 0;
 	  if (brain) {
 		this.brain = brain.copy();
@@ -52,29 +50,6 @@ class NN {
 	//   fill(255, 100);
 	//   ellipse(this.x, this.y, 32, 32);
 	}
-
-	// Consider making [1] change based on which neural network is using the code below!
-	
-	// up() {
-	// //   this.velocity += this.lift;
-	// 	window[1].up = true;
-	// }
-
-	// down() {
-	// 	window[1].down = true;
-	// }
-
-	// left() {
-	// 	window[1].left = true;
-	// }
-
-	// right() {
-	// 	window[1].right = true;
-	// }
-
-	// heavy() {
-	// 	window[1].heavy = true;
-	// }
 
 	mutate() {
 	  this.brain.mutate(0.1);
@@ -104,7 +79,6 @@ class NN {
 		inputs[8] = window.heavy[0];
 		inputs[9] = window.heavy[1];
 	  let output = this.brain.predict(inputs);
-	  //if (output[0] > output[1] && this.velocity >= 0) {
 	  if (output[0] < output[1]) {
 			window.up[1] = true;
 		}
@@ -294,7 +268,7 @@ class NN {
 
 function nextGeneration() {
 	console.log('next generation');
-	calculateFitness();
+	// calculateFitness();
 	for (let i = 0; i < TOTAL; i++) {
 	  NNs[i] = pickOne();
 	}
@@ -306,7 +280,7 @@ function nextGeneration() {
   
   function pickOne() {
 	let index = 0;
-	let r = random(1);
+	let r = Math.round(Math.random());
 	while (r > 0) {
 	  r = r - savedNNs[index].fitness;
 	  index++;
@@ -1378,7 +1352,12 @@ newNNs();
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
 		NNs[currentNN].fitness = reward;
-		(currentNN < TOTAL-1) ? (currentNN++) : (currentNN = 0);
+		if (currentNN < TOTAL-1) {
+			currentNN++
+		} else {
+			currentNN = 0;
+			nextGeneration();
+		} 
 		console.log(currentNN);
 		// window.brains[0].backward(reward);
 		window.scores[winner]++;
