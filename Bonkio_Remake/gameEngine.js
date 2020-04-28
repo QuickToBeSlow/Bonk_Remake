@@ -1377,7 +1377,7 @@ newNNs();
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
-		(currentNN < TOTAL) ? (currentNN++) : (currentNN = 0);
+		(currentNN < TOTAL-1) ? (currentNN++) : (currentNN = 0);
 		console.log(currentNN);
 		// window.brains[0].backward(reward);
 		window.scores[winner]++;
