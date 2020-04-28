@@ -16,7 +16,7 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 
 
-const TOTAL = 10;
+const TOTAL = 1;
 let NNs = [];
 let savedNNs = [];
 // let pipes = [];
@@ -1163,10 +1163,6 @@ newNNs();
 				reward -= 5;
 				this.endGame(0);
 			}
-			for (let NeuralN of NNs) {
-				NeuralN.think();
-				NeuralN.update();
-			}
 			if(!this._world)
 				return;
 			this._world.ClearForces();
@@ -1187,6 +1183,15 @@ newNNs();
 			reward = 0;
 			// action = brains[0].forward(state);
 			// console.log(action);
+			window.up[1] = false;
+			window.down[1] = false;
+			window.left[1] = false;
+			window.right[1] = false;
+			window.heavy[1] = false;
+			for (let NeuralN of NNs) {
+				NeuralN.think();
+				NeuralN.update();
+			}
 			switch (action) {
 				case 0:
 					window.up[1] = true;
@@ -1339,12 +1344,7 @@ newNNs();
 			}
 			if (window.right[1]) {
 				window.Player2.ApplyForce(new b2Vec2(speed, 0), window.Player2.GetPosition());
-			}
-			window.up[1] = false;
-			window.down[1] = false;
-			window.left[1] = false;
-			window.right[1] = false;
-			window.heavy[1] = false;
+			}		
 			//this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
 		
 			this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
