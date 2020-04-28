@@ -17,7 +17,7 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 
 var currentNN = 0;
-const TOTAL = 10;
+var TOTAL = 10;
 var NNs = [];
 var savedNNs = [];
 // let pipes = [];
@@ -1377,7 +1377,8 @@ newNNs();
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
-		currentNN = (currentNN < TOTAL) ? currentNN++ : currentNN = 0;
+		(currentNN < TOTAL) ? (currentNN++) : (currentNN = 0);
+		console.log(currentNN);
 		// window.brains[0].backward(reward);
 		window.scores[winner]++;
 		window.up = [false, false];
