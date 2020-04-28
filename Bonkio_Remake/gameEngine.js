@@ -35,7 +35,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(5, 8, 2);
+		this.brain = new NeuralNetwork(5, 11, 6);
 	  }
 	}
   
@@ -48,11 +48,30 @@ class NN {
 	//   fill(255, 100);
 	//   ellipse(this.x, this.y, 32, 32);
 	}
-  
+
+	// Consider making [1] change based on which neural network is using the code below!
+	
 	up() {
 	//   this.velocity += this.lift;
+		window[1].up = true;
 	}
-  
+
+	down() {
+		window[1].down = true;
+	}
+
+	left() {
+		window[1].left = true;
+	}
+
+	right() {
+		window[1].right = true;
+	}
+
+	heavy() {
+		window[1].heavy = true;
+	}
+
 	mutate() {
 	  this.brain.mutate(0.1);
 	}
@@ -77,8 +96,20 @@ class NN {
 	  inputs[4] = this.velocity / 10;
 	  let output = this.brain.predict(inputs);
 	  //if (output[0] > output[1] && this.velocity >= 0) {
-	  if (output[0] > output[1]) {
-		// this.up();
+	  if (output[0] < output[1]) {
+		this.up();
+	  }
+	  if (output[0] < output[2]) {
+		this.down();
+	  }
+	  if (output[0] < output[3]) {
+		this.left();
+	  }
+	  if (output[0] < output[4]) {
+		this.right();
+	  }
+	  if (output[0] < output[5]) {
+		this.heavy();
 	  }
 	}
   
@@ -1127,6 +1158,10 @@ newNNs();
 				reward -= 5;
 				this.endGame(0);
 			}
+			for (let NeuralN of NNs) {
+				NeuralN.think();
+				NeuralN.update();
+			}
 			if(!this._world)
 				return;
 			this._world.ClearForces();
@@ -1143,9 +1178,9 @@ newNNs();
 			// state.w[8] = window.heavy[0];
 			// state.w[9] = window.heavy[1];
 			reward += 0.0001;
-			window.brains[0].backward(reward);
+			// window.brains[0].backward(reward);
 			reward = 0;
-			action = brains[0].forward(state);
+			// action = brains[0].forward(state);
 			// console.log(action);
 			window.up[1] = false;
 			window.down[1] = false;
