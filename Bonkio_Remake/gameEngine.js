@@ -280,7 +280,7 @@ function nextGeneration() {
   
   function pickOne() {
 	let index = 0;
-	let r = Math.round(Math.random());
+	let r = Math.random();
 	while (r > 0) {
 	  r = r - savedNNs[index].fitness;
 	  index++;
