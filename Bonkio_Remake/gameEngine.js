@@ -1377,6 +1377,7 @@ newNNs();
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
+		NNs[currentNN].fitness = reward;
 		(currentNN < TOTAL-1) ? (currentNN++) : (currentNN = 0);
 		console.log(currentNN);
 		// window.brains[0].backward(reward);
