@@ -51,26 +51,26 @@ class NN {
 
 	// Consider making [1] change based on which neural network is using the code below!
 	
-	up() {
-	//   this.velocity += this.lift;
-		window[1].up = true;
-	}
+	// up() {
+	// //   this.velocity += this.lift;
+	// 	window[1].up = true;
+	// }
 
-	down() {
-		window[1].down = true;
-	}
+	// down() {
+	// 	window[1].down = true;
+	// }
 
-	left() {
-		window[1].left = true;
-	}
+	// left() {
+	// 	window[1].left = true;
+	// }
 
-	right() {
-		window[1].right = true;
-	}
+	// right() {
+	// 	window[1].right = true;
+	// }
 
-	heavy() {
-		window[1].heavy = true;
-	}
+	// heavy() {
+	// 	window[1].heavy = true;
+	// }
 
 	mutate() {
 	  this.brain.mutate(0.1);
@@ -102,20 +102,20 @@ class NN {
 	  let output = this.brain.predict(inputs);
 	  //if (output[0] > output[1] && this.velocity >= 0) {
 	  if (output[0] < output[1]) {
-		this.up();
-	  }
+			window.up[1] = true;
+		}
 	  if (output[0] < output[2]) {
-		this.down();
-	  }
+		window.down[1] = true;
+		}
 	  if (output[0] < output[3]) {
-		this.left();
-	  }
+		window.left[1] = true;
+		}
 	  if (output[0] < output[4]) {
-		this.right();
-	  }
+		window.right[1] = true;
+		}
 	  if (output[0] < output[5]) {
-		this.heavy();
-	  }
+		window.heavy[1] = true;
+		}
 	}
   
 	offScreen() {
