@@ -5,15 +5,23 @@
 // http://thecodingtrain.com
 // https://youtu.be/cdUNkwXx-I4
 // WRITTEN IN P5JS! Make sure to change accordingly!
+/*
+variables to change (for now):
+birds --> NNs
+savedBirds --> savedNNs
+class Bird --> class NN
 
-const TOTAL = 250;
-let birds = [];
-let savedBirds = [];
-let pipes = [];
+*/
+
+
+const TOTAL = 10;
+let NNs = [];
+let savedNNs = [];
+// let pipes = [];
 let counter = 0;
 let slider;
 
-class Bird {
+class NN {
 	constructor(brain) {
 	//   this.y = height / 2;
 	//   this.x = 64;
@@ -171,14 +179,14 @@ class Bird {
 
 // function keyPressed() {
 //   if (key === 'S') {
-//     let bird = birds[0];
-//     saveJSON(bird.brain, 'bird.json');
+//     let NN = NNs[0];
+//     saveJSON(NN.brain, 'NN.json');
 //   }
 // }
 
   tf.setBackend('cpu');
   for (let i = 0; i < TOTAL; i++) {
-    birds[i] = new Bird();
+    NNs[i] = new NN();
   }
 
 // function draw() {
@@ -191,9 +199,9 @@ class Bird {
 //     for (let i = pipes.length - 1; i >= 0; i--) {
 //       pipes[i].update();
 
-//       for (let j = birds.length - 1; j >= 0; j--) {
-//         if (pipes[i].hits(birds[j])) {
-//           savedBirds.push(birds.splice(j, 1)[0]);
+//       for (let j = NNs.length - 1; j >= 0; j--) {
+//         if (pipes[i].hits(NNs[j])) {
+//           savedNNs.push(NNs.splice(j, 1)[0]);
 //         }
 //       }
 
@@ -202,18 +210,18 @@ class Bird {
 //       }
 //     }
 
-//     for (let i = birds.length - 1; i >= 0; i--) {
-//       if (birds[i].offScreen()) {
-//         savedBirds.push(birds.splice(i, 1)[0]);
+//     for (let i = NNs.length - 1; i >= 0; i--) {
+//       if (NNs[i].offScreen()) {
+//         savedNNs.push(NNs.splice(i, 1)[0]);
 //       }
 //     }
 
-//     for (let bird of birds) {
-//       bird.think(pipes);
-//       bird.update();
+//     for (let NN of NNs) {
+//       NN.think(pipes);
+//       NN.update();
 //     }
 
-//     if (birds.length === 0) {
+//     if (NNs.length === 0) {
 //       counter = 0;
 //       nextGeneration();
 //       pipes = [];
@@ -223,8 +231,8 @@ class Bird {
 //   // All the drawing stuff
 //   background(0);
 
-//   for (let bird of birds) {
-//     bird.show();
+//   for (let NN of NNs) {
+//     NN.show();
 //   }
 
 //   for (let pipe of pipes) {
@@ -244,35 +252,35 @@ function nextGeneration() {
 	console.log('next generation');
 	calculateFitness();
 	for (let i = 0; i < TOTAL; i++) {
-	  birds[i] = pickOne();
+	  NNs[i] = pickOne();
 	}
 	for (let i = 0; i < TOTAL; i++) {
-	  savedBirds[i].dispose();
+		savedNNs[i].dispose();
 	}
-	savedBirds = [];
+	savedNNs = [];
   }
   
   function pickOne() {
 	let index = 0;
 	let r = random(1);
 	while (r > 0) {
-	  r = r - savedBirds[index].fitness;
+	  r = r - savedNNs[index].fitness;
 	  index++;
 	}
 	index--;
-	let bird = savedBirds[index];
-	let child = new Bird(bird.brain);
+	let NN = savedNNs[index];
+	let child = new NN(NN.brain);
 	child.mutate();
 	return child;
   }
   
   function calculateFitness() {
 	let sum = 0;
-	for (let bird of savedBirds) {
-	  sum += bird.score;
+	for (let NN of savedNNs) {
+	  sum += NN.score;
 	}
-	for (let bird of savedBirds) {
-	  bird.fitness = bird.score / sum;
+	for (let NN of savedNNs) {
+		NN.fitness = NN.score / sum;
 	}
   }
 	// console.log(tf);
@@ -281,59 +289,59 @@ function nextGeneration() {
 	//copied code.
 	//NOTE: neural network structure and inputs must be completely reworked.
 
-	const model = tf.sequential();
+	// const model = tf.sequential();
 
-	// Create the hidden layer
-	// dense is a "full connected layer"
-	const hidden = tf.layers.dense({
-	  units: 4, // number of nodes
-	  inputShape: [2], // input shape
-	  activation: 'sigmoid'
-	});
-	// Add the layer
-	model.add(hidden);
+	// // Create the hidden layer
+	// // dense is a "full connected layer"
+	// const hidden = tf.layers.dense({
+	//   units: 4, // number of nodes
+	//   inputShape: [2], // input shape
+	//   activation: 'sigmoid'
+	// });
+	// // Add the layer
+	// model.add(hidden);
 	
-	// Creat another layer
-	const output = tf.layers.dense({
-	  units: 1,
-	  // here the input shape is "inferred from the previous layer"
-	  activation: 'sigmoid'
-	});
-	model.add(output);
+	// // Creat another layer
+	// const output = tf.layers.dense({
+	//   units: 1,
+	//   // here the input shape is "inferred from the previous layer"
+	//   activation: 'sigmoid'
+	// });
+	// model.add(output);
 	
-	// An optimizer using gradient descent
-	const sgdOpt = tf.train.sgd(0.1);
+	// // An optimizer using gradient descent
+	// const sgdOpt = tf.train.sgd(0.1);
 	
-	// I'm done configuring the model so compile it
-	model.compile({
-	  optimizer: sgdOpt,
-	  loss: tf.losses.meanSquaredError
-	});
+	// // I'm done configuring the model so compile it
+	// model.compile({
+	//   optimizer: sgdOpt,
+	//   loss: tf.losses.meanSquaredError
+	// });
 	
-	const xs = tf.tensor2d([
-	  [0, 0],
-	  [0.5, 0.5],
-	  [1, 1]
-	]);
+	// const xs = tf.tensor2d([
+	//   [0, 0],
+	//   [0.5, 0.5],
+	//   [1, 1]
+	// ]);
 	
-	const ys = tf.tensor2d([[1], [0.5], [0]]);
+	// const ys = tf.tensor2d([[1], [0.5], [0]]);
 	
-	train().then(() => {
-	  let outputs = model.predict(xs);
-	  outputs.print();
-	  console.log('training complete');
-	});
+	// train().then(() => {
+	//   let outputs = model.predict(xs);
+	//   outputs.print();
+	//   console.log('training complete');
+	// });
 	
-	async function train() {
-	//   for (let i = 0; i < 1000; i++) {
-	// 	const config = {
-	// 	  shuffle: true,
-	// 	  epochs: 10
-	// 	};
-	// 	const response = await model.fit(xs, ys, config);
-	// 	// console.log(response.history.loss[0]);
-	//   }
-	}
+	// async function train() {
+	// //   for (let i = 0; i < 1000; i++) {
+	// // 	const config = {
+	// // 	  shuffle: true,
+	// // 	  epochs: 10
+	// // 	};
+	// // 	const response = await model.fit(xs, ys, config);
+	// // 	// console.log(response.history.loss[0]);
+	// //   }
+	// }
 	//end of copied code.
 
 
