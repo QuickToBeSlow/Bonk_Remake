@@ -35,7 +35,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(5, 11, 6);
+		this.brain = new NeuralNetwork(10, 17, 6);
 	  }
 	}
   
@@ -88,12 +88,17 @@ class NN {
 	// 	}
 	//   }
   
-	  let inputs = [];
-	  inputs[0] = this.y / height;
-	  inputs[1] = closest.top / height;
-	  inputs[2] = closest.bottom / height;
-	  inputs[3] = closest.x / width;
-	  inputs[4] = this.velocity / 10;
+		let inputs = [];
+		inputs[0] = window.Player1.GetPosition().x;
+		inputs[1] = window.Player1.GetPosition().y;
+		inputs[2] = window.Player1.GetLinearVelocity().x;
+		inputs[3] = window.Player1.GetLinearVelocity().y;
+		inputs[4] = window.Player2.GetPosition().x;
+		inputs[5] = window.Player2.GetPosition().y;
+		inputs[6] = window.Player2.GetLinearVelocity().x;
+		inputs[7] = window.Player2.GetLinearVelocity().y;
+		inputs[8] = window.heavy[0];
+		inputs[9] = window.heavy[1];
 	  let output = this.brain.predict(inputs);
 	  //if (output[0] > output[1] && this.velocity >= 0) {
 	  if (output[0] < output[1]) {
