@@ -189,12 +189,14 @@ class NN {
   
 	createModel() {
 	  const model = tf.sequential();
-	  const hidden = tf.layers.dense({
-		units: this.hidden_nodes,
-		inputShape: [this.input_nodes],
-		activation: 'sigmoid'
-	  });
-	  model.add(hidden);
+	  for (let i=0; i<this.hidden_nodes.length; i++) {
+		const hidden = tf.layers.dense({
+			units: this.hidden_nodes[i],
+			inputShape: [this.input_nodes],
+			activation: 'sigmoid'
+		});
+		model.add(hidden);
+		}
 	  const output = tf.layers.dense({
 		units: this.output_nodes,
 		activation: 'softmax'
