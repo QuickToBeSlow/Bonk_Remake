@@ -165,13 +165,13 @@ class NN {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
 				inputShape: [this.input_nodes],
-				activation: 'sigmoid'
+				activation: 'relu'
 			});
 			model.add(hidden);
 		} else {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
-				activation: 'sigmoid'
+				activation: 'relu'
 			});
 			model.add(hidden);
 		}
@@ -437,8 +437,8 @@ function nextGeneration() {
 				onPlatform[1]= true;
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2' || contact.GetFixtureA().GetBody().GetUserData() == 'Player2' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
-				reward+=1;
-				reward2+=1;
+				reward+=(window.heavy[1] == true) ? 2 : 1;
+				reward2+=(window.heavy[0] == true) ? 2 : 1;
 			}
 		}
 		listener.EndContact = function(contact) {
@@ -533,13 +533,13 @@ function nextGeneration() {
 			if (steps > 10000) {this.endGame(-1)}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
-				reward += 5;
-				reward2 -= 5;
+				reward += 1;
+				reward2 -= 1;
 				this.endGame(1);
 			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 				//Player1 wins
-				reward -= 5;
-				reward2 += 5;
+				reward -= 1;
+				reward2 += 1;
 				this.endGame(0);
 			}
 			if(!this._world)
