@@ -16,7 +16,7 @@ function randn_bm() {
 // http://thecodingtrain.com
 // https://youtu.be/cdUNkwXx-I4
 // The base of the neural network handling was written by this awesome dude. Props to him!
-// I simply changed out some code and omitted that which is unnecessary for my purposes.
+// I simply changed out some code and omitted the unnecessary bits for my purposes.
 
 /*
 variables to change:
@@ -28,12 +28,13 @@ TODO (if I get stuck):
 rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 
 */
-
+var controlPlayer1 = true;
 var currentNN = 0;
 var TOTAL = 10;
 var NNs = [];
 var savedNNs = [];
 var reward = 0;
+var reward2 = 0;
 var supaSpeed =1; //set supaSpeed to 1 when the page is loaded.
 
 class NN {
@@ -55,7 +56,7 @@ class NN {
 	  this.brain.mutate(0.1);
 	}
   
-	think() {
+	think(i) {
 		let inputs = [];
 		inputs[0] = window.Player1.GetPosition().x;
 		inputs[1] = window.Player1.GetPosition().y;
@@ -69,19 +70,19 @@ class NN {
 		inputs[9] = window.heavy[1];
 	  let output = this.brain.predict(inputs);
 	  if (output[0] < output[1]) {
-			window.up[1] = true;
+			window.up[i] = true;
 		}
 	  if (output[0] < output[2]) {
-		window.down[1] = true;
+		window.down[i] = true;
 		}
 	  if (output[0] < output[3]) {
-		window.left[1] = true;
+		window.left[i] = true;
 		}
 	  if (output[0] < output[4]) {
-		window.right[1] = true;
+		window.right[i] = true;
 		}
 	  if (output[0] < output[5]) {
-		window.heavy[1] = true;
+		window.heavy[i] = true;
 		}
 	}
   
@@ -394,6 +395,7 @@ function nextGeneration() {
 		
 		
 		reward = 0;
+		reward2 = 0;
 
 
 
@@ -436,6 +438,7 @@ function nextGeneration() {
 			}
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2' || contact.GetFixtureA().GetBody().GetUserData() == 'Player2' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
 				reward+=1;
+				reward2+=1;
 			}
 		}
 		listener.EndContact = function(contact) {
@@ -485,9 +488,10 @@ function nextGeneration() {
 
 		c.fillStyle = "black";
 		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
-		c.fillText("current reward : "+Math.round(reward*1000)/1000,5,40);
+		c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000,5,40);
+		c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000,5,57.5);
         c.fillText("generation : "+Math.floor((window.scores[0]+window.scores[1])/TOTAL),250,40);
-		c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,60);
+		c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,75);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
@@ -526,21 +530,25 @@ function nextGeneration() {
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 			steps++;
-			if (steps > 10000) {this.endGame(0)}
+			if (steps > 10000) {this.endGame(-1)}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
 				reward += 5;
+				reward2 -= 5;
 				this.endGame(1);
 			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 				//Player1 wins
 				reward -= 5;
+				reward2 += 5;
 				this.endGame(0);
 			}
 			if(!this._world)
 				return;
 			this._world.ClearForces();
 			reward -= 0.0001;
-			reward += (300-Math.abs(window.Player2.GetPosition().x-300))/1000000;
+			reward2 -= 0.0001;
+			reward += (150-Math.abs(30-window.Player2.GetPosition().x))/2500000;
+			reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/2500000;
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
@@ -548,8 +556,12 @@ function nextGeneration() {
 			window.heavy[1] = false;
 			//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 			// for (let i=0; i<NNs.length; i++) {
-				NNs[currentNN].think();
-				NNs[currentNN].update();
+			NNs[currentNN].think(1);
+			NNs[currentNN].update();
+			if (controlPlayer1 == true) {
+				NNs[currentNN+1].think(0);
+				NNs[currentNN+1].update();
+			}
 			// }
 			if (window.heavy[0]) {
 				// slowDown = true;
@@ -646,19 +658,25 @@ function nextGeneration() {
 	}
 	
 	window.scores = [0,0];
+	var activeNNs = 1;
 	Test.prototype.endGame = function (winner) {
 		steps = 0;
 		NNs[currentNN].score = reward;
-		if (currentNN < TOTAL-1) {
-			currentNN++
+		if (controlPlayer1 == true) {
+			NNs[currentNN+1].score = reward2;
+		}
+		if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
+		if (currentNN < TOTAL-activeNNs) {
+			(controlPlayer1) ? currentNN+=2 : currentNN++;
 		} else {
 			currentNN = 0;
 			savedNNs = NNs.splice(0);
 			nextGeneration();
 		}
 		console.log(currentNN);
-		// window.brains[0].backward(reward);
-		window.scores[winner]++;
+		if (winner != -1) {
+			window.scores[winner]++;
+		}
 		window.up = [false, false];
 		window.down = [false, false];
 		window.left = [false, false];
@@ -777,7 +795,6 @@ function nextGeneration() {
 		delta = (time - this._lastUpdate) / 1000;
 		this._lastUpdate = time;
 		if (Math.floor(delta)%10 == 0) {
-			// window.brains[0].backward(reward);
 			// reward = 0;
 		}
 		if(delta > 10)
