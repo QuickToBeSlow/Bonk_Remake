@@ -1114,7 +1114,9 @@ newNNs();
 
 		c.fillStyle = "black";
 		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
-		c.fillText("current reward : "+reward,5,40);
+		c.fillText("current reward : "+Math.round(reward*1000)/1000,5,40);
+        c.fillText("generation : "+Math.floor((window.scores[0]+window.scores[1])/TOTAL),250,40);
+        c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,60);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
