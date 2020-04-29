@@ -487,7 +487,7 @@ function nextGeneration() {
 		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
 		c.fillText("current reward : "+Math.round(reward*1000)/1000,5,40);
         c.fillText("generation : "+Math.floor((window.scores[0]+window.scores[1])/TOTAL),250,40);
-        c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,60);
+		c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,60);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
@@ -521,9 +521,12 @@ function nextGeneration() {
 	var regrowth = 0.01; 						//constant
 	var slowDown = false;
 	var action;
+	var steps = 0;
 	Test.prototype.step = function(delta) {
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
+			steps++;
+			if (steps > 10000) {this.endGame(0)}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
 				reward += 5;
@@ -722,6 +725,7 @@ function nextGeneration() {
 	
 	window.scores = [0,0];
 	Test.prototype.endGame = function (winner) {
+		steps = 0;
 		NNs[currentNN].score = reward;
 		if (currentNN < TOTAL-1) {
 			currentNN++
