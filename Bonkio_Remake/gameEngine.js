@@ -540,10 +540,7 @@ function nextGeneration() {
 				return;
 			this._world.ClearForces();
 			reward -= 0.0001;
-			// window.brains[0].backward(reward);
-			// reward = 0;
-			// action = brains[0].forward(state);
-			// console.log(action);
+			reward += (300-Math.abs(window.Player2.GetPosition().x-300))/1000000;
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
@@ -554,81 +551,6 @@ function nextGeneration() {
 				NNs[currentNN].think();
 				NNs[currentNN].update();
 			// }
-			switch (action) {
-				case 0:
-					window.up[1] = true;
-					break;
-				case 1:
-					window.down[1] = true;
-					break;
-				case 2:
-					window.left[1] = true;
-					// reward += 1;
-					break;
-				case 3:
-					window.right[1] = true;
-					break;
-				case 4:
-					window.heavy[1] = true;
-					break;
-				// case 5:
-				// 	window.up[1] = true;
-				// 	window.heavy[1] = true;
-				// 	break;
-				// case 6:
-				// 	window.down[1] = true;
-				// 	window.heavy[1] = true;
-				// 	break;
-				// case 7:
-				// 	window.left[1] = true;
-				// 	window.heavy[1] = true;
-				// 	break;
-				// case 8:
-				// 	window.right[1] = true;
-				// 	window.heavy[1] = true;
-				// 	break;
-				// case 9:
-				// 	window.up[1] = true;
-				// 	window.left[1] = true;
-				// 	break;
-				// case 10:
-				// 	window.up[1] = true;
-				// 	window.right[1] = true;
-				// 	break;
-				// case 11:
-				// 	window.down[1] = true;
-				// 	window.left[1] = true;
-				// 	break;
-				// case 12:
-				// 	window.down[1] = true;
-				// 	window.right[1] = true;
-				// 	break;
-				// case 13:
-				// 	window.heavy[1] = true;
-				// 	window.up[1] = true;
-				// 	window.left[1] = true;
-				// 	break;
-				// case 14:
-				// 	window.heavy[1] = true;
-				// 	window.up[1] = true;
-				// 	window.right[1] = true;
-				// 	break;
-				// case 15:
-				// 	window.heavy[1] = true;
-				// 	window.down[1] = true;
-				// 	window.left[1] = true;
-				// 	break;
-				// case 16:
-				// 	window.heavy[1] = true;
-				// 	window.down[1] = true;
-				// 	window.right[1] = true;
-				// 	break;
-				// case 17:
-				// 	//do nothing.
-				// 	break;
-			}
-			// console.log(window.up);
-			// console.log(brains[0]);
 			if (window.heavy[0]) {
 				// slowDown = true;
 				window.PFixture1.SetDensity(strengths[0]);
