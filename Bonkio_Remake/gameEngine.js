@@ -166,13 +166,14 @@ class NN {
 				inputShape: [this.input_nodes],
 				activation: 'sigmoid'
 			});
+			model.add(hidden);
 		} else {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
 				activation: 'sigmoid'
 			});
+			model.add(hidden);
 		}
-		model.add(hidden);
 		}
 	  const output = tf.layers.dense({
 		units: this.output_nodes,
