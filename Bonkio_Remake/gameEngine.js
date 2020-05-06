@@ -203,7 +203,8 @@ class NN {
 
 function nextGeneration() {
 	console.log('next generation');
-	calculateFitness();
+	calculateFitness(0);
+	calculateFitness(1);
 	for (let i = 0; i < TOTAL; i++) {
 	  NNs[0][i] = pickOne(0);
 	  if (controlPlayer1) {
@@ -224,8 +225,8 @@ function nextGeneration() {
 	let r = Math.random();
 	// console.log(savedNNs);
 	while (r > 0) {
-		// console.log(savedNNs[i][index]); 
-		// console.log(r);
+		console.log(savedNNs[i][index]); 
+		console.log(r);
 		r = r - savedNNs[i][index].fitness;
 	  index++;
 	}
@@ -236,20 +237,20 @@ function nextGeneration() {
 	return child;
   }
   
-  function calculateFitness() {
-	let sum = [0, 0];
-	for (let NN of savedNNs[0]) {
-		sum[0] += NN.score;
+  function calculateFitness(i) {
+	let sum = 0;
+	for (let NN of savedNNs[i]) {
+		sum += NN.score;
 	}
-	for (let NN of savedNNs[0]) {
-		NN.fitness = NN.score / sum[0];
+	for (let NN of savedNNs[i]) {
+		NN.fitness = NN.score / sum;
 	}
-	for (let NN of savedNNs[1]) {
-		sum[1] += NN.score;
-	  }
-	for (let NN of savedNNs[1]) {
-		NN.fitness = NN.score / sum[1];
-	}
+	// for (let NN of savedNNs[1]) {
+	// 	sum[1] += NN.score;
+	//   }
+	// for (let NN of savedNNs[1]) {
+	// 	NN.fitness = NN.score / sum[1];
+	// }
 	console.log(sum);
   }
 
