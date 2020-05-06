@@ -31,8 +31,8 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 var controlPlayer1 = true;
 var currentNN = 0;
 var TOTAL = 10;
-var NNs = [];
-var savedNNs = [];
+var NNs = [[],[]];
+var savedNNs = [[],[]];
 var reward = 0;
 var reward2 = 0;
 var supaSpeed =1; //set supaSpeed to 1 when the page is loaded.
@@ -216,7 +216,7 @@ function nextGeneration() {
 			savedNNs[1][i].dispose();
 		}
 	}
-	savedNNs = [];
+	savedNNs = [[], []];
   }
   
   function pickOne(i) {
