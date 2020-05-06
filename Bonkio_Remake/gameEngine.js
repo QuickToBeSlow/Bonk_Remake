@@ -195,30 +195,39 @@ class NN {
   tf.setBackend('cpu');
 
   for (let i = 0; i < TOTAL; i++) {
-    NNs[i] = new NN();
+	NNs[0][i] = new NN();
+	if (controlPlayer1) {
+		NNs[1][i] = new NN();
+	}
   }
 
 function nextGeneration() {
 	console.log('next generation');
 	calculateFitness();
 	for (let i = 0; i < TOTAL; i++) {
-	  NNs[i] = pickOne();
+	  NNs[0][i] = pickOne(0);
+	  if (controlPlayer1) {
+	  	NNs[1][i] = pickOne(1);
+	  }
 	}
 	for (let i = 0; i < TOTAL; i++) {
-		savedNNs[i].dispose();
+		savedNNs[0][i].dispose();
+		if (controlPlayer1) {
+			savedNNs[1][i].dispose();
+		}
 	}
 	savedNNs = [];
   }
   
-  function pickOne() {
+  function pickOne(i) {
 	let index = 0;
 	let r = Math.random();
 	while (r > 0) {
-	  r = r - savedNNs[index].fitness;
+	  r = r - savedNNs[i][index].fitness;
 	  index++;
 	}
 	index--;
-	let NeuralN = savedNNs[index];
+	let NeuralN = savedNNs[i][index];
 	let child = new NN(NeuralN.brain);
 	child.mutate();
 	return child;
@@ -556,11 +565,11 @@ function nextGeneration() {
 			window.heavy[1] = false;
 			//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 			// for (let i=0; i<NNs.length; i++) {
-			NNs[currentNN].think(1);
-			NNs[currentNN].update();
+			NNs[0][currentNN].think(1);
+			NNs[0][currentNN].update();
 			if (controlPlayer1 == true) {
-				NNs[currentNN+1].think(0);
-				NNs[currentNN+1].update();
+				NNs[1][currentNN].think(0);
+				NNs[1][currentNN].update();
 			}
 			// }
 			if (window.heavy[0]) {
@@ -661,13 +670,14 @@ function nextGeneration() {
 	var activeNNs = 1;
 	Test.prototype.endGame = function (winner) {
 		steps = 0;
-		NNs[currentNN].score = reward;
+		NNs[0][currentNN].score = reward;
 		if (controlPlayer1 == true) {
-			NNs[currentNN+1].score = reward2;
+			NNs[1][currentNN].score = reward2;
 		}
 		if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
-		if (currentNN < TOTAL-activeNNs) {
-			(controlPlayer1) ? currentNN+=2 : currentNN++;
+		if (currentNN < TOTAL-1) {
+			// (controlPlayer1) ? currentNN+=2 : currentNN++;
+			currentNN++;
 		} else {
 			currentNN = 0;
 			savedNNs = NNs.splice(0);
