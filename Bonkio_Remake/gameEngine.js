@@ -222,8 +222,11 @@ function nextGeneration() {
   function pickOne(i) {
 	let index = 0;
 	let r = Math.random();
+	// console.log(savedNNs);
 	while (r > 0) {
-	  r = r - savedNNs[i][index].fitness;
+		// console.log(savedNNs[i][index]); 
+		// console.log(r);
+		r = r - savedNNs[i][index].fitness;
 	  index++;
 	}
 	index--;
@@ -234,13 +237,20 @@ function nextGeneration() {
   }
   
   function calculateFitness() {
-	let sum = 0;
-	for (let NN of savedNNs) {
-	  sum += NN.score;
+	let sum = [0, 0];
+	for (let NN of savedNNs[0]) {
+		sum[0] += NN.score;
 	}
-	for (let NN of savedNNs) {
-		NN.fitness = NN.score / sum;
+	for (let NN of savedNNs[0]) {
+		NN.fitness = NN.score / sum[0];
 	}
+	for (let NN of savedNNs[1]) {
+		sum[1] += NN.score;
+	  }
+	for (let NN of savedNNs[1]) {
+		NN.fitness = NN.score / sum[1];
+	}
+	console.log(sum);
   }
 
 	var Test = function() {
@@ -680,7 +690,10 @@ function nextGeneration() {
 			currentNN++;
 		} else {
 			currentNN = 0;
-			savedNNs = NNs.splice(0);
+			// console.log(savedNNs);
+			savedNNs = [...NNs];
+			// console.log(NNs);
+			// console.log(savedNNs);
 			nextGeneration();
 		}
 		console.log(currentNN);
