@@ -458,7 +458,7 @@ function nextGeneration() {
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
 				onPlatform[1]= true;
 			}
-			if (contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2' || contact.GetFixtureA().GetBody().GetUserData() == 'Player2' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+			if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureA().GetBody().GetUserData() == 'Player2' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1')) {
 				reward+=(window.heavy[1] == true) ? strengths[1]/5 : 1;
 				reward2+=(window.heavy[0] == true) ? strengths[0]/5 : 1;
 			}
