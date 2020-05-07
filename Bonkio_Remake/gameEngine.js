@@ -558,7 +558,6 @@ function nextGeneration() {
 			steps++;
 			if (steps > 10000) {this.endGame(-1)}
 			playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
-			console.log(playerDistance);
 			if (playerDistance<100) {canColReward = false;} else {canColReward = true;}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
