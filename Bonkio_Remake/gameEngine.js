@@ -211,27 +211,27 @@ function nextGeneration() {
 	  	NNs[1][i] = pickOne(1);
 	  }
 	}
-	for (let i = 0; i < TOTAL; i++) {
-		savedNNs[0][i].dispose();
-		if (controlPlayer1) {
-			savedNNs[1][i].dispose();
-		}
-	}
+	// for (let i = 0; i < TOTAL; i++) {
+	// 	savedNNs[0][i].dispose();
+	// 	if (controlPlayer1) {
+	// 		savedNNs[1][i].dispose();
+	// 	}
+	// }
 	savedNNs = [[], []];
   }
   
-  function pickOne(i) {
+  function pickOne(ind) {
 	let index = 0;
 	let r = Math.random();
 	// console.log(savedNNs);
 	while (r > 0) {
-		console.log(savedNNs[i][index]); 
-		console.log(r);
-		r = r - savedNNs[i][index].fitness;
+		// console.log(savedNNs[i][index].fitness); 
+		// console.log(r);
+		r = r - NNFitnesses[ind][index];
 	  index++;
 	}
 	index--;
-	let NeuralN = savedNNs[i][index];
+	let NeuralN = savedNNs[ind][index];
 	let child = new NN(NeuralN.brain);
 	child.mutate();
 	return child;
@@ -239,12 +239,14 @@ function nextGeneration() {
   
   function calculateFitness(i) {
 	let sum = 0;
-	for (let NN of savedNNs[i]) {
-		sum += NN.score;
+	for (let score of NNScores[i]) {
+		sum += score;
+		// console.log(NN.score);
 	}
-	for (let NN of savedNNs[i]) {
-		NN.fitness = NN.score / sum;
+	for (let j=0; j<TOTAL; j++) {
+		NNFitnesses[i].push(NNScores[i][j] / sum);
 	}
+	console.log(NNFitnesses);
 	// for (let NN of savedNNs[1]) {
 	// 	sum[1] += NN.score;
 	//   }
@@ -576,10 +578,10 @@ function nextGeneration() {
 			window.heavy[1] = false;
 			//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 			// for (let i=0; i<NNs.length; i++) {
-			NNs[0][currentNN].think(1);
+			NNs[0][currentNN].think(0);
 			NNs[0][currentNN].update();
-			if (controlPlayer1 == true) {
-				NNs[1][currentNN].think(0);
+			if (controlPlayer1) {
+				NNs[1][currentNN].think(1);
 				NNs[1][currentNN].update();
 			}
 			// }
@@ -679,10 +681,15 @@ function nextGeneration() {
 	
 	window.scores = [0,0];
 	var activeNNs = 1;
+	var NNScores = [[], []];
+	var NNFitnesses = [[], []];
+
 	Test.prototype.endGame = function (winner) {
 		steps = 0;
+		NNScores[0].push(reward);
 		NNs[0][currentNN].score = reward;
-		if (controlPlayer1 == true) {
+		if (controlPlayer1) {
+			NNScores[1].push(reward2);
 			NNs[1][currentNN].score = reward2;
 		}
 		if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
@@ -691,13 +698,19 @@ function nextGeneration() {
 			currentNN++;
 		} else {
 			currentNN = 0;
-			// console.log(savedNNs);
+			console.log(NNScores);
 			savedNNs = [...NNs];
+			// for (let i=0; i<activeNNs; i++) {
+			// 	for (let j=0; j<TOTAL; j++) {
+			// 		savedNNs[i][j].score = NNScores[i][j];
+			// 	}
+			// }
 			// console.log(NNs);
-			// console.log(savedNNs);
+			console.log(savedNNs);
 			nextGeneration();
+			NNScores = [[],[]];
+			NNFitnesses = [[],[]];
 		}
-		console.log(currentNN);
 		if (winner != -1) {
 			window.scores[winner]++;
 		}
