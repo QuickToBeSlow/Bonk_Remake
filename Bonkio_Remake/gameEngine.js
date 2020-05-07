@@ -575,10 +575,10 @@ function nextGeneration() {
 			if(!this._world)
 				return;
 			this._world.ClearForces();
-			reward -= 0.0002;
-			reward2 -= 0.0002;
-			reward += (150-Math.abs(30-window.Player2.GetPosition().x))/1000000;
-			reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/1000000;
+			reward -= 0.002;
+			reward2 -= 0.002;
+			reward += (150-Math.abs(30-window.Player2.GetPosition().x))/90000;
+			reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/90000;
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
