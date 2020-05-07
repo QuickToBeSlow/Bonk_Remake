@@ -37,6 +37,7 @@ var reward = 0;
 var reward2 = 0;
 var supaSpeed =1; //set supaSpeed to 1 when the page is loaded.
 var canColReward = true;
+var hasCollided = false;
 
 class NN {
 	constructor(brain) {
@@ -460,6 +461,7 @@ function nextGeneration() {
 				onPlatform[1]= true;
 			}
 			if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
+				hasCollided = true;
 				if (canColReward) {
 					reward += (window.heavy[1] == true) ? strengths[1]/5 : 1;
 					reward2 += (window.heavy[0] == true) ? strengths[0]/5 : 1;
@@ -558,7 +560,7 @@ function nextGeneration() {
 			steps++;
 			if (steps > 10000) {this.endGame(-1)}
 			playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
-			if (playerDistance<100) {canColReward = false;} else {canColReward = true;}
+			if (playerDistance<100 && hasCollided == true) {canColReward = false;} else {canColReward = true; hasCollided = false;}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
 				reward += 10;
