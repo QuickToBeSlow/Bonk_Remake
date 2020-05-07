@@ -563,22 +563,22 @@ function nextGeneration() {
 			if (playerDistance<100 && hasCollided == true) {canColReward = false;} else {canColReward = true; hasCollided = false;}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
-				reward += 10;
-				reward2 -= 10;
+				reward += 5;
+				reward2 -= 5;
 				this.endGame(1);
 			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 				//Player1 wins
-				reward -= 10;
-				reward2 += 10;
+				reward -= 5;
+				reward2 += 5;
 				this.endGame(0);
 			}
 			if(!this._world)
 				return;
 			this._world.ClearForces();
-			reward -= 0.002;
-			reward2 -= 0.002;
-			reward += (150-Math.abs(30-window.Player2.GetPosition().x))/90000;
-			reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/90000;
+			reward -= 0.001;
+			reward2 -= 0.001;
+			reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
+			reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
