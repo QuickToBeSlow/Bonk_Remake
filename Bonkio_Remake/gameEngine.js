@@ -30,7 +30,7 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 var controlPlayer1 = true;
 var currentNN = 0;
-var TOTAL = 10;
+var TOTAL = 25;
 var NNs = [[],[]];
 var savedNNs = [[],[]];
 var reward = 0;
@@ -555,13 +555,13 @@ function nextGeneration() {
 			if (steps > 10000) {this.endGame(-1)}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
-				reward += 1;
-				reward2 -= 1;
+				reward += 10;
+				reward2 -= 10;
 				this.endGame(1);
 			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 				//Player1 wins
-				reward -= 1;
-				reward2 += 1;
+				reward -= 10;
+				reward2 += 10;
 				this.endGame(0);
 			}
 			if(!this._world)
