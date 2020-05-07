@@ -204,7 +204,7 @@ class NN {
   }
 
 function nextGeneration() {
-	console.log('next generation');
+	// console.log('next generation');
 	calculateFitness(0);
 	calculateFitness(1);
 	for (let i = 0; i < TOTAL; i++) {
@@ -248,14 +248,12 @@ function nextGeneration() {
 	for (let j=0; j<TOTAL; j++) {
 		NNFitnesses[i].push(NNScores[i][j] / sum);
 	}
-	console.log(NNFitnesses);
 	// for (let NN of savedNNs[1]) {
 	// 	sum[1] += NN.score;
 	//   }
 	// for (let NN of savedNNs[1]) {
 	// 	NN.fitness = NN.score / sum[1];
 	// }
-	console.log(sum);
   }
 
 	var Test = function() {
@@ -558,7 +556,7 @@ function nextGeneration() {
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 			steps++;
-			if (steps > 10000) {this.endGame(-1)}
+			if (steps > 5000) {this.endGame(-1)}
 			playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
 			if (playerDistance<100 && hasCollided == true) {canColReward = false;} else {canColReward = true; hasCollided = false;}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
@@ -706,7 +704,6 @@ function nextGeneration() {
 			currentNN++;
 		} else {
 			currentNN = 0;
-			console.log(NNScores);
 			savedNNs = [...NNs];
 			// for (let i=0; i<activeNNs; i++) {
 			// 	for (let j=0; j<TOTAL; j++) {
@@ -714,7 +711,7 @@ function nextGeneration() {
 			// 	}
 			// }
 			// console.log(NNs);
-			console.log(savedNNs);
+			// console.log(savedNNs);
 			nextGeneration();
 			NNScores = [[],[]];
 			NNFitnesses = [[],[]];
