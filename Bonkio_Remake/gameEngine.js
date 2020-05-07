@@ -36,6 +36,7 @@ var savedNNs = [[],[]];
 var reward = 0;
 var reward2 = 0;
 var supaSpeed =1; //set supaSpeed to 1 when the page is loaded.
+var canColReward = true;
 
 class NN {
 	constructor(brain) {
@@ -458,9 +459,11 @@ function nextGeneration() {
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
 				onPlatform[1]= true;
 			}
-			if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureA().GetBody().GetUserData() == 'Player2' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1')) {
-				reward+=(window.heavy[1] == true) ? strengths[1]/5 : 1;
-				reward2+=(window.heavy[0] == true) ? strengths[0]/5 : 1;
+			if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
+				if (canColReward) {
+					reward += (window.heavy[1] == true) ? strengths[1]/5 : 1;
+					reward2 += (window.heavy[0] == true) ? strengths[0]/5 : 1;
+				}
 			}
 		}
 		listener.EndContact = function(contact) {
@@ -548,11 +551,14 @@ function nextGeneration() {
 	var slowDown = false;
 	var action;
 	var steps = 0;
+	var playerDistance = 0;
 	Test.prototype.step = function(delta) {
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 			steps++;
 			if (steps > 10000) {this.endGame(-1)}
+			playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
+			if (playerDistance>100) {canColReward = true;}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
 				reward += 10;
