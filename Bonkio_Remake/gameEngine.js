@@ -59,7 +59,7 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.1);
+	  this.brain.mutate(0.01);
 	}
   
 	think(i) {
@@ -174,7 +174,7 @@ class NN {
 		return outputs;
 	  });
 	}
-	
+
 	createModel() {
 	const model = tf.sequential();
 	for (let i=0; i<this.hidden_nodes.length; i++) {
