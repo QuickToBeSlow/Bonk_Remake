@@ -30,7 +30,7 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 var controlPlayer1 = true;
 var currentNN = 0;
-var TOTAL = 32;
+var TOTAL = 128;
 var NNs = [[],[]];
 var savedNNs = [[],[]];
 var winnerList = [];
@@ -174,7 +174,7 @@ class NN {
 		return outputs;
 	  });
 	}
-  
+	
 	createModel() {
 	const model = tf.sequential();
 	for (let i=0; i<this.hidden_nodes.length; i++) {
@@ -182,13 +182,13 @@ class NN {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
 				inputShape: [this.input_nodes],
-				activation: 'relu6'
+				activation: 'selu'
 			});
 			model.add(hidden);
 		} else if (i%2 == 0) {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
-				activation: 'relu6'
+				activation: 'selu'
 			});
 			model.add(hidden);
 		} else {
@@ -201,7 +201,7 @@ class NN {
 	}
 	  const output = tf.layers.dense({
 		units: this.output_nodes,
-		activation: 'softmax'
+		activation: 'selu'
 	  });
 	  model.add(output);
 	  return model;
