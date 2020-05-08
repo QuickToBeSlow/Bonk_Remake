@@ -64,14 +64,25 @@ class NN {
   
 	think(i) {
 		let inputs = [];
-		inputs[0] = window.Player1.GetPosition().x;
-		inputs[1] = window.Player1.GetPosition().y;
-		inputs[2] = window.Player1.GetLinearVelocity().x;
-		inputs[3] = window.Player1.GetLinearVelocity().y;
-		inputs[4] = window.Player2.GetPosition().x;
-		inputs[5] = window.Player2.GetPosition().y;
-		inputs[6] = window.Player2.GetLinearVelocity().x;
-		inputs[7] = window.Player2.GetLinearVelocity().y;
+		if (i==0) {
+			inputs[0] = window.Player1.GetPosition().x;
+			inputs[1] = window.Player1.GetPosition().y;
+			inputs[2] = window.Player1.GetLinearVelocity().x;
+			inputs[3] = window.Player1.GetLinearVelocity().y;
+			inputs[4] = window.Player2.GetPosition().x;
+			inputs[5] = window.Player2.GetPosition().y;
+			inputs[6] = window.Player2.GetLinearVelocity().x;
+			inputs[7] = window.Player2.GetLinearVelocity().y;
+		} else {
+			inputs[0] = window.Player2.GetPosition().x;
+			inputs[1] = window.Player2.GetPosition().y;
+			inputs[2] = window.Player2.GetLinearVelocity().x;
+			inputs[3] = window.Player2.GetLinearVelocity().y;
+			inputs[4] = window.Player1.GetPosition().x;
+			inputs[5] = window.Player1.GetPosition().y;
+			inputs[6] = window.Player1.GetLinearVelocity().x;
+			inputs[7] = window.Player1.GetLinearVelocity().y;
+		}
 		inputs[8] = window.heavy[0];
 		inputs[9] = window.heavy[1];
 	  let output = this.brain.predict(inputs);
