@@ -179,7 +179,7 @@ class NN {
 		} else {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
-				activation: 'softmax'
+				activation: 'relu'
 			});
 			model.add(hidden);
 		}
