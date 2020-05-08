@@ -30,9 +30,13 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 var controlPlayer1 = true;
 var currentNN = 0;
-var TOTAL = 50;
+var TOTAL = 32;
 var NNs = [[],[]];
 var savedNNs = [[],[]];
+var winnerList = [];
+for (let j=0; j<TOTAL*2; j++) {
+	winnerList.push(j);
+}
 var reward = 0;
 var reward2 = 0;
 var supaSpeed =1; //set supaSpeed to 1 when the page is loaded.
@@ -55,7 +59,7 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.01);
+	  this.brain.mutate(0.1);
 	}
   
 	think(i) {
@@ -590,11 +594,13 @@ function nextGeneration() {
 			window.heavy[1] = false;
 			//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 			// for (let i=0; i<NNs.length; i++) {
-			NNs[0][currentNN].think(0);
-			NNs[0][currentNN].update();
+			let index = winnerList[currentNN];
+			let index2 = winnerList[currentNN+1];
+			NNs[Math.floor(index/TOTAL)][index%TOTAL].think(0);
+			NNs[Math.floor(index/TOTAL)][index%TOTAL].update();
 			if (controlPlayer1) {
-				NNs[1][currentNN].think(1);
-				NNs[1][currentNN].update();
+				NNs[Math.floor(index2/TOTAL)][index2%TOTAL].think(1);
+				NNs[Math.floor(index2/TOTAL)][index2%TOTAL].update();
 			}
 			// }
 			if (window.heavy[0]) {
@@ -694,33 +700,47 @@ function nextGeneration() {
 	window.scores = [0,0];
 	var activeNNs = 1;
 	var NNScores = [[], []];
+	for (let i=0; i<TOTAL; i++) {
+		NNScores[0].push(i);
+		NNScores[1].push(i);
+	}
 	var NNFitnesses = [[], []];
 
 	Test.prototype.endGame = function (winner) {
 		steps = 0;
-		NNScores[0].push(reward);
-		NNs[0][currentNN].score = reward;
+		let index = winnerList[currentNN];
+		let index2 = winnerList[currentNN+1];
+		NNScores[Math.floor(index/TOTAL)][index%TOTAL] += reward;
 		if (controlPlayer1) {
-			NNScores[1].push(reward2);
-			NNs[1][currentNN].score = reward2;
+			NNScores[Math.floor(index2/TOTAL)][index2%TOTAL] += reward2;
+		}
+		if (reward > reward2) {
+			winnerList.splice(currentNN, 1);
+		} else {
+			winnerList.splice(currentNN+1, 1);
 		}
 		if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
-		if (currentNN < TOTAL-1) {
+		if (currentNN < winnerList.length-1) {
 			// (controlPlayer1) ? currentNN+=2 : currentNN++;
 			currentNN++;
+			// console.log(winnerList);
 		} else {
 			currentNN = 0;
-			savedNNs = [...NNs];
-			// for (let i=0; i<activeNNs; i++) {
-			// 	for (let j=0; j<TOTAL; j++) {
-			// 		savedNNs[i][j].score = NNScores[i][j];
-			// 	}
-			// }
-			// console.log(NNs);
-			// console.log(savedNNs);
-			nextGeneration();
-			NNScores = [[],[]];
-			NNFitnesses = [[],[]];
+			// console.log(winnerList);
+			if (winnerList.length == 1) {
+				savedNNs = [...NNs];
+				nextGeneration();
+				NNScores = [[],[]];
+				for (let i=0; i<TOTAL; i++) {
+					NNScores[0].push(i);
+					NNScores[1].push(i);
+				}
+				NNFitnesses = [[],[]];
+				winnerList = [];
+				for (let j=0; j<TOTAL*2; j++) {
+					winnerList.push(j);
+				}
+			}
 		}
 		if (winner != -1) {
 			window.scores[winner]++;
