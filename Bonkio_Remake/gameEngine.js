@@ -171,19 +171,19 @@ class NN {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
 				inputShape: [this.input_nodes],
-				activation: 'relu'
+				activation: 'relu6'
 			});
 			model.add(hidden);
 		} else if (i%2 == 0) {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
-				activation: 'relu'
+				activation: 'relu6'
 			});
 			model.add(hidden);
 		} else {
 			const hidden = tf.layers.dense({
 				units: this.hidden_nodes[i],
-				activation: 'relu'
+				activation: 'selu'
 			});
 			model.add(hidden);
 		}
