@@ -50,7 +50,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(10, [4, 4, 4], 6);
+		this.brain = new NeuralNetwork(10, [4, 4, 4], 5);
 	  }
 	}
   
@@ -86,19 +86,19 @@ class NN {
 		inputs[8] = window.heavy[0];
 		inputs[9] = window.heavy[1];
 	  let output = this.brain.predict(inputs);
-	  if (output[0] < output[1]) {
+	  if (1 < output[0]) {
 			window.up[i] = true;
 		}
-	  if (output[0] < output[2]) {
+	  if (1 < output[1]) {
 		window.down[i] = true;
 		}
-	  if (output[0] < output[3]) {
+	  if (1 < output[2]) {
 		window.left[i] = true;
 		}
-	  if (output[0] < output[4]) {
+	  if (1 < output[3]) {
 		window.right[i] = true;
 		}
-	  if (output[0] < output[5]) {
+	  if (1 < output[4]) {
 		window.heavy[i] = true;
 		}
 	}
@@ -741,6 +741,7 @@ function nextGeneration() {
 			currentNN = 0;
 			// console.log(winnerList);
 			if (winnerList.length == 1) {
+				NNScores[Math.floor(winnersList[0]/TOTAL)][winnersList[0]] += TOTAL; //large reward for tournament winner.
 				savedNNs = [...NNs];
 				nextGeneration();
 				NNScores = [[],[]];
