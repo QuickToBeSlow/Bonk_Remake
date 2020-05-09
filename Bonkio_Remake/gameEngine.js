@@ -741,7 +741,7 @@ function nextGeneration() {
 			currentNN = 0;
 			// console.log(winnerList);
 			if (winnerList.length == 1) {
-				NNScores[Math.floor(winnersList[0]/TOTAL)][winnersList[0]] += TOTAL; //large reward for tournament winner.
+				NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 				savedNNs = [...NNs];
 				nextGeneration();
 				NNScores = [[],[]];
