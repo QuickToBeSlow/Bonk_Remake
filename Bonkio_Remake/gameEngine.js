@@ -42,6 +42,7 @@ var reward2 = 0;
 var supaSpeed =1; //set supaSpeed to 1 when the page is loaded.
 var canColReward = true;
 var hasCollided = false;
+var generation = 0;
 
 class NN {
 	constructor(brain) {
@@ -536,7 +537,7 @@ function nextGeneration() {
 		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
 		c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000,5,40);
 		c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000,5,57.5);
-        c.fillText("generation : "+Math.floor((window.scores[0]+window.scores[1])/TOTAL),250,40);
+        c.fillText("generation : "+generation,250,40);
 		c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,75);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
@@ -741,6 +742,7 @@ function nextGeneration() {
 			currentNN = 0;
 			// console.log(winnerList);
 			if (winnerList.length == 1) {
+				generation++;
 				NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 				savedNNs = [...NNs];
 				nextGeneration();
