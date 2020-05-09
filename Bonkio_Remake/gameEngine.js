@@ -201,7 +201,7 @@ class NN {
 	}
 	  const output = tf.layers.dense({
 		units: this.output_nodes,
-		activation: 'selu'
+		activation: 'linear'
 	  });
 	  model.add(output);
 	  return model;
