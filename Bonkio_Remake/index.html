@@ -135,6 +135,9 @@
 	<button id="step" >single step</button>
 	<button id="supaSpeedDown" >speed down</button>
 	<button id="supaSpeedUp" >speed up</button>
+	<button id="saveLeftNN" >save left neural network</button>
+	<button id="saveRightNN" >save right neural network</button>
+	<button id="saveTournamentWinner" >save tournament winning neural network</button>
 	<hr>
 
 	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
@@ -215,7 +218,18 @@
 			runner.supaSpeedDown();
 		});
 		
+		$('#saveLeftNN').click(function(){
+			window.saveLeftNN = true;
+		});
 		
+		$('#saveRightNN').click(function(){
+			window.saveRightNN = true;
+		});
+
+		$('#saveTournamentWinner').click(function(){
+			window.saveTourneyWinner = true;
+		});
+
 	});
 
 	</script>
