@@ -37,6 +37,7 @@ var winnerList = [];
 window.saveTourneyWinner = false;
 window.saveLeftNN = false;
 window.saveRightNN = false;
+var secondBest;
 
 for (let j=0; j<TOTAL; j++) {
 	winnerList.push(j);
@@ -235,9 +236,9 @@ function nextGeneration() {
 	calculateFitness(0);
 	calculateFitness(1);
 	for (let i = 0; i < TOTAL; i++) {
-	  NNs[0][i] = pickOne(0);
+	  NNs[0][i] = pickOne(0, i, 0);
 	  if (controlPlayer1) {
-	  	NNs[1][i] = pickOne(1);
+	  	NNs[1][i] = pickOne(1, i, 1);
 	  }
 	}
 	// for (let i = 0; i < TOTAL; i++) {
@@ -249,7 +250,7 @@ function nextGeneration() {
 	savedNNs = [[], []];
   }
   
-  function pickOne(ind) {
+  function pickOne(ind, pos, group) {
 	let index = 0;
 	let r = Math.random();
 	// console.log(savedNNs);
@@ -261,12 +262,17 @@ function nextGeneration() {
 	}
 	index--;
 	let child;
-	if (index != 1) {
+	if (pos != 0) {
 		let NeuralN = savedNNs[ind][index];
 		child = new NN(NeuralN.brain);
 		child.mutate();
 	} else {
-		let NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
+		let NeuralN;
+		if (group == 0) {
+			NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
+		} else {
+			NeuralN = secondBest;
+		}
 		child = new NN(NeuralN.brain);
 	}
 	return child;
@@ -742,8 +748,10 @@ function nextGeneration() {
 			NNScores[Math.floor(index2/TOTAL)][index2%TOTAL] += reward2;
 		}
 		if (reward > reward2) {
+			if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/TOTAL)][index%TOTAL];}
 			winnerList.splice(currentNN, 1);
 		} else {
+			if (winnerList.length == 2) {secondBest = NNs[Math.floor(index2/TOTAL)][index2%TOTAL];}
 			winnerList.splice(currentNN+1, 1);
 		}
 		
@@ -765,12 +773,11 @@ function nextGeneration() {
 			currentNN = 0;
 			if (winnerList.length == 1) {
 				if (window.saveTourneyWinner == true) {
-					console.log(NNs[0][0]);
 					const savedNN = NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("downloads://savedModel");
 					window.saveTourneyWinner = false;
 				}
 				generation++;
-				// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
+				NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 				savedNNs = [...NNs];
 				nextGeneration();
 				NNScores = [[],[]];
