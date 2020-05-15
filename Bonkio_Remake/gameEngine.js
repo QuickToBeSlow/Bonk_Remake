@@ -58,7 +58,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(10, [8, 8, 8], 5);
+		this.brain = new NeuralNetwork(10, [5, 5, 5], 5);
 	  }
 	}
   
@@ -264,19 +264,19 @@ function nextGeneration() {
 	}
 	index--;
 	let child;
-	if (pos != 0) {
+	// if (pos != 0) {
 		let NeuralN = savedNNs[ind][index];
 		child = new NN(NeuralN.brain);
 		child.mutate();
-	} else {
-		let NeuralN;
-		if (ind == 0) {
-			NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
-		} else {
-			NeuralN = secondBest;
-		}
-		child = new NN(NeuralN.brain);
-	}
+	// } else {
+	// 	let NeuralN;
+	// 	// if (ind == 0) {
+	// 	// 	NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
+	// 	// } else {
+	// 	// 	NeuralN = secondBest;
+	// 	// }
+	// 	child = new NN(NeuralN.brain);
+	// }
 	return child;
   }
   
