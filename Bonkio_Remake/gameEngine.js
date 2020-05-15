@@ -238,9 +238,9 @@ function nextGeneration() {
 	calculateFitness(0);
 	calculateFitness(1);
 	for (let i = 0; i < TOTAL; i++) {
-	  NNs[0][i] = pickOne(0, i, 0);
+	  NNs[0][i] = pickOne(0, i);
 	  if (controlPlayer1) {
-	  	NNs[1][i] = pickOne(1, i, 1);
+	  	NNs[1][i] = pickOne(1, i);
 	  }
 	}
 	// for (let i = 0; i < TOTAL; i++) {
@@ -252,7 +252,7 @@ function nextGeneration() {
 	savedNNs = [[], []];
   }
   
-  function pickOne(ind, pos, group) {
+  function pickOne(ind, pos) {
 	let index = 0;
 	let r = Math.random();
 	// console.log(savedNNs);
@@ -270,7 +270,7 @@ function nextGeneration() {
 		child.mutate();
 	} else {
 		let NeuralN;
-		if (group == 0) {
+		if (ind == 0) {
 			NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
 		} else {
 			NeuralN = secondBest;
