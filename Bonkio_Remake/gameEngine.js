@@ -35,8 +35,8 @@ var NNs = [[],[]];
 var savedNNs = [[],[]];
 var winnerList = [];
 window.saveTourneyWinner = false;
-window.saveLeftNN = false;
-window.saveRightNN = false;
+window.saveRedNN = false;
+window.saveBlueNN = false;
 var secondBest;
 
 for (let j=0; j<TOTAL; j++) {
@@ -563,6 +563,21 @@ function nextGeneration() {
 			c.fillText("FPS: " + this._fpsAchieved, 5, 15);
 			c.fillText("speed:" + supaSpeed,5, 30);
 		}
+		c.fillStyle = "rgb("+(240)+","+(64)+","+(64)+")";
+		// c.strokeStyle = "rgb(255,255,255)";
+		c.beginPath();
+		c.lineWidth = 1;
+		c.arc(window.Player1.GetPosition().x*12.5,-window.Player1.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
+		c.fill();
+		c.fillStyle = "rgb(0,0,0)";
+
+		c.fillStyle = "rgb("+(64)+","+(64)+","+(240)+")";
+		// c.strokeStyle = "rgb(255,255,255)";
+		c.beginPath();
+		c.lineWidth = 1;
+		c.arc(window.Player2.GetPosition().x*12.5,-window.Player2.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
+		c.fill();
+		c.fillStyle = "rgb(0,0,0)";
 		if (window.heavy[0]) {
 			c.strokeStyle = "rgb("+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+")";
 			// c.strokeStyle = "rgb(255,255,255)";
@@ -755,13 +770,13 @@ function nextGeneration() {
 			winnerList.splice(currentNN+1, 1);
 		}
 		
-		if (window.saveLeftNN) {
+		if (window.saveRedNN) {
 			const savedNN = NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("downloads://savedModel");
-			window.saveLeftNN = false;
+			window.saveRedNN = false;
 		}
-		if (window.saveRightNN) {
+		if (window.saveBlueNN) {
 			const savedNN = NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("downloads://savedModel");
-			window.saveRightNN = false;
+			window.saveBlueNN = false;
 		}
 
 		if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}

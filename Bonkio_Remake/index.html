@@ -135,8 +135,8 @@
 	<button id="step" >single step</button>
 	<button id="supaSpeedDown" >speed down</button>
 	<button id="supaSpeedUp" >speed up</button>
-	<button id="saveLeftNN" >save left neural network</button>
-	<button id="saveRightNN" >save right neural network</button>
+	<button id="saveLeftNN" >save red neural network</button>
+	<button id="saveRightNN" >save blue neural network</button>
 	<button id="saveTournamentWinner" >save tournament winning neural network</button>
 	<hr>
 
@@ -219,11 +219,11 @@
 		});
 		
 		$('#saveLeftNN').click(function(){
-			window.saveLeftNN = true;
+			window.saveRedNN = true;
 		});
 		
 		$('#saveRightNN').click(function(){
-			window.saveRightNN = true;
+			window.saveBlueNN = true;
 		});
 
 		$('#saveTournamentWinner').click(function(){
