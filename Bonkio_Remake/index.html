@@ -139,7 +139,7 @@
 	<button id="saveBlueNN" >save blue player</button>
 	<button id="saveTournamentWinner" >save tournament winner</button>
 	<button id="toggleTestingMode" >toggle testing mode</button>
-
+	<button id="loadModel" >load model (testing only)</button>
 	<hr>
 
 	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
@@ -240,6 +240,14 @@
 			}
 			window.testingChange = true;
 		});
+		$('#loadModel').click(function(){
+			window.path = prompt("Please enter file path to the neural network", "localstorage://savedModel");
+			getModel();
+		});
+		async function getModel() {
+			window.testModel = await tf.loadLayersModel(window.path);
+			console.log(window.testModel);
+		}
 	});
 
 	</script>

@@ -67,7 +67,7 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.05);
+	  this.brain.mutate(0.025);
 	}
   
 	think(i) {
@@ -93,7 +93,7 @@ class NN {
 		}
 		inputs[8] = window.heavy[0];
 		inputs[9] = window.heavy[1];
-	  let output = this.brain.predict(inputs);
+		let output = this.brain.predict(inputs);
 	  if (1 < output[0]) {
 			window.up[i] = true;
 		}
@@ -111,9 +111,9 @@ class NN {
 		}
 	}
   
-	update() {
-	  this.score++;
-	}
+	// update() {
+	//   this.score++;
+	// }
   }
   class NeuralNetwork {
 	constructor(a, b, c, d) {
@@ -662,10 +662,58 @@ function nextGeneration() {
 				let index = winnerList[currentNN];
 				let index2 = winnerList[currentNN+1];
 				NNs[Math.floor(index/TOTAL)][index%TOTAL].think(0);
-				NNs[Math.floor(index/TOTAL)][index%TOTAL].update();
+				// NNs[Math.floor(index/TOTAL)][index%TOTAL].update();
 				if (controlPlayer1) {
 					NNs[Math.floor(index2/TOTAL)][index2%TOTAL].think(1);
-					NNs[Math.floor(index2/TOTAL)][index2%TOTAL].update();
+					// NNs[Math.floor(index2/TOTAL)][index2%TOTAL].update();
+				}
+			} else if (window.testModel != undefined) {
+				let inputs = [];
+				if (i==0) {
+					inputs[0] = window.Player1.GetPosition().x;
+					inputs[1] = window.Player1.GetPosition().y;
+					inputs[2] = window.Player1.GetLinearVelocity().x;
+					inputs[3] = window.Player1.GetLinearVelocity().y;
+					inputs[4] = window.Player2.GetPosition().x;
+					inputs[5] = window.Player2.GetPosition().y;
+					inputs[6] = window.Player2.GetLinearVelocity().x;
+					inputs[7] = window.Player2.GetLinearVelocity().y;
+				} else {
+					inputs[0] = window.Player2.GetPosition().x;
+					inputs[1] = window.Player2.GetPosition().y;
+					inputs[2] = window.Player2.GetLinearVelocity().x;
+					inputs[3] = window.Player2.GetLinearVelocity().y;
+					inputs[4] = window.Player1.GetPosition().x;
+					inputs[5] = window.Player1.GetPosition().y;
+					inputs[6] = window.Player1.GetLinearVelocity().x;
+					inputs[7] = window.Player1.GetLinearVelocity().y;
+				}
+				inputs[8] = window.heavy[0];
+				inputs[9] = window.heavy[1];
+				let output = predict();
+				function predict() {
+				return tf.tidy(() => {
+					const xs = tf.tensor2d([inputs]);
+					const ys = window.testModel.predict(xs);
+					const outputs = ys.dataSync();
+					// console.log(outputs);
+					return outputs;
+				  });
+				}
+			  if (1 < output[0]) {
+					window.up[1] = true;
+				}
+			  if (1 < output[1]) {
+				window.down[1] = true;
+				}
+			  if (1 < output[2]) {
+				window.left[1] = true;
+				}
+			  if (1 < output[3]) {
+				window.right[1] = true;
+				}
+			  if (1 < output[4]) {
+				window.heavy[1] = true;
 				}
 			}
 			// }
@@ -792,11 +840,12 @@ function nextGeneration() {
 			}
 			
 			if (window.saveRedNN) {
-				const savedNN = NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("downloads://savedModel");
+				console.log(NNs[0][0]);
+				const savedNN = NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("localstorage://savedModel");
 				window.saveRedNN = false;
 			}
 			if (window.saveBlueNN) {
-				const savedNN = NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("downloads://savedModel");
+				const savedNN = NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("localstorage://savedModel");
 				window.saveBlueNN = false;
 			}
 
@@ -809,7 +858,7 @@ function nextGeneration() {
 				currentNN = 0;
 				if (winnerList.length == 1) {
 					if (window.saveTourneyWinner == true) {
-						const savedNN = NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("downloads://savedModel");
+						const savedNN = NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("localstorage://savedModel");
 						window.saveTourneyWinner = false;
 					}
 					generation++;
