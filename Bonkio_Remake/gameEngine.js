@@ -38,6 +38,8 @@ window.saveTourneyWinner = false;
 window.saveRedNN = false;
 window.saveBlueNN = false;
 var secondBest;
+window.testingMode = false;
+window.testingChange = false;
 
 for (let j=0; j<TOTAL; j++) {
 	winnerList.push(j);
@@ -389,29 +391,33 @@ function nextGeneration() {
 			that._mouseDown = false;
 		};
 		this._handleKeyDown = function(e) {
-			if (e.code == "KeyW") {
-				window.up[0] = true;
-			} else if (e.code == "KeyA") {
-				window.left[0] = true;
-			} else if (e.code == "KeyS") {
-				window.down[0] = true;
-			} else if (e.code == "KeyD") {
-				window.right[0] = true;
-			} else if (e.code == "Space") {
-				window.heavy[0] = true;
+			if (window.testingMode) {
+				if (e.code == "KeyW") {
+					window.up[0] = true;
+				} else if (e.code == "KeyA") {
+					window.left[0] = true;
+				} else if (e.code == "KeyS") {
+					window.down[0] = true;
+				} else if (e.code == "KeyD") {
+					window.right[0] = true;
+				} else if (e.code == "Space") {
+					window.heavy[0] = true;
+				}
 			}
 		}
 		this._handleKeyUp = function(e) {
-			if (e.code == "KeyW") {
-				window.up[0] = false;
-			} else if (e.code == "KeyA") {
-				window.left[0] = false;
-			} else if (e.code == "KeyS") {
-				window.down[0] = false;
-			} else if (e.code == "KeyD") {
-				window.right[0] = false;
-			} else if (e.code == "Space") {
-				window.heavy[0] = false;
+			if (window.testingMode) {
+				if (e.code == "KeyW") {
+					window.up[0] = false;
+				} else if (e.code == "KeyA") {
+					window.left[0] = false;
+				} else if (e.code == "KeyS") {
+					window.down[0] = false;
+				} else if (e.code == "KeyD") {
+					window.right[0] = false;
+				} else if (e.code == "Space") {
+					window.heavy[0] = false;
+				}
 			}
 		}
 		// see _updateUserInteraction
@@ -499,7 +505,7 @@ function nextGeneration() {
 			}
 			if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
 				hasCollided = true;
-				if (canColReward) {
+				if (canColReward && !window.testingMode) {
 					reward += (window.heavy[1] == true) ? strengths[1]/5 : 1;
 					reward2 += (window.heavy[0] == true) ? strengths[0]/5 : 1;
 				}
@@ -607,32 +613,44 @@ function nextGeneration() {
 	var steps = 0;
 	var playerDistance = 0;
 	Test.prototype.step = function(delta) {
+		if (window.testingChange) {
+			window.testingChange = false;
+			this.endGame(-1);
+		}
 		var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
 		for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
-			steps++;
-			if (steps > 5000) {this.endGame(-1)}
+			if (!window.testingMode) {
+				steps++;
+				if (steps > 5000) {this.endGame(-1)}
+			}
 			playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
 			if (playerDistance<100 && hasCollided == true) {canColReward = false;} else {canColReward = true; hasCollided = false;}
 			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
 				//Player2 wins
-				reward += 5;
-				reward2 -= 5;
+				if (!window.testingMode) {
+					reward += 5;
+					reward2 -= 5;
+				}
 				this.endGame(1);
 			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
 				//Player1 wins
-				reward -= 5;
-				reward2 += 5;
+				if (!window.testingMode) {
+					reward -= 5;
+					reward2 += 5;
+				}
 				this.endGame(0);
 			}
 			if(!this._world)
 				return;
 			this._world.ClearForces();
-			reward -= 0.001;
-			reward2 -= 0.001;
-			reward += Math.abs(window.Player1.GetLinearVelocity().x)/5000;
-			reward2 += Math.abs(window.Player2.GetLinearVelocity().x)/5000;
-			reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
-			reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
+			if (!window.testingMode) {
+				reward -= 0.001;
+				reward2 -= 0.001;
+				reward += Math.abs(window.Player1.GetLinearVelocity().x)/5000;
+				reward2 += Math.abs(window.Player2.GetLinearVelocity().x)/5000;
+				reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
+				reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
+			}
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
@@ -640,13 +658,15 @@ function nextGeneration() {
 			window.heavy[1] = false;
 			//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 			// for (let i=0; i<NNs.length; i++) {
-			let index = winnerList[currentNN];
-			let index2 = winnerList[currentNN+1];
-			NNs[Math.floor(index/TOTAL)][index%TOTAL].think(0);
-			NNs[Math.floor(index/TOTAL)][index%TOTAL].update();
-			if (controlPlayer1) {
-				NNs[Math.floor(index2/TOTAL)][index2%TOTAL].think(1);
-				NNs[Math.floor(index2/TOTAL)][index2%TOTAL].update();
+			if (!window.testingMode) {
+				let index = winnerList[currentNN];
+				let index2 = winnerList[currentNN+1];
+				NNs[Math.floor(index/TOTAL)][index%TOTAL].think(0);
+				NNs[Math.floor(index/TOTAL)][index%TOTAL].update();
+				if (controlPlayer1) {
+					NNs[Math.floor(index2/TOTAL)][index2%TOTAL].think(1);
+					NNs[Math.floor(index2/TOTAL)][index2%TOTAL].update();
+				}
 			}
 			// }
 			if (window.heavy[0]) {
@@ -755,58 +775,61 @@ function nextGeneration() {
 	Test.prototype.endGame = function (winner) {
 		// console.log(winnerList);
 		// console.log(winnerList.length);
-		steps = 0;
-		let index = winnerList[currentNN];
-		let index2 = winnerList[currentNN+1];
-		NNScores[Math.floor(index/TOTAL)][index%TOTAL] += reward;
-		if (controlPlayer1) {
-			NNScores[Math.floor(index2/TOTAL)][index2%TOTAL] += reward2;
-		}
-		if (reward > reward2) {
-			if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/TOTAL)][index%TOTAL];}
-			winnerList.splice(currentNN, 1);
-		} else {
-			if (winnerList.length == 2) {secondBest = NNs[Math.floor(index2/TOTAL)][index2%TOTAL];}
-			winnerList.splice(currentNN+1, 1);
-		}
-		
-		if (window.saveRedNN) {
-			const savedNN = NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("downloads://savedModel");
-			window.saveRedNN = false;
-		}
-		if (window.saveBlueNN) {
-			const savedNN = NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("downloads://savedModel");
-			window.saveBlueNN = false;
-		}
+		if (!window.testingMode) {
+			steps = 0;
+			let index = winnerList[currentNN];
+			let index2 = winnerList[currentNN+1];
+			NNScores[Math.floor(index/TOTAL)][index%TOTAL] += reward;
+			if (controlPlayer1) {
+				NNScores[Math.floor(index2/TOTAL)][index2%TOTAL] += reward2;
+			}
+			if (reward > reward2) {
+				if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/TOTAL)][index%TOTAL];}
+				winnerList.splice(currentNN, 1);
+			} else {
+				if (winnerList.length == 2) {secondBest = NNs[Math.floor(index2/TOTAL)][index2%TOTAL];}
+				winnerList.splice(currentNN+1, 1);
+			}
+			
+			if (window.saveRedNN) {
+				const savedNN = NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("downloads://savedModel");
+				window.saveRedNN = false;
+			}
+			if (window.saveBlueNN) {
+				const savedNN = NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("downloads://savedModel");
+				window.saveBlueNN = false;
+			}
 
-		if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
-		if (currentNN < winnerList.length-1) {
-			// (controlPlayer1) ? currentNN+=2 : currentNN++;
-			currentNN++;
-			// console.log(winnerList);
-		} else {
-			currentNN = 0;
-			if (winnerList.length == 1) {
-				if (window.saveTourneyWinner == true) {
-					const savedNN = NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("downloads://savedModel");
-					window.saveTourneyWinner = false;
-				}
-				generation++;
-				NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
-				savedNNs = [...NNs];
-				nextGeneration();
-				NNScores = [[],[]];
-				for (let i=0; i<TOTAL; i++) {
-					NNScores[0].push(i);
-					NNScores[1].push(i);
-				}
-				NNFitnesses = [[],[]];
-				winnerList = [];
-				for (let j=0; j<TOTAL; j++) {
-					winnerList.push(j);
+			if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
+			if (currentNN < winnerList.length-1) {
+				// (controlPlayer1) ? currentNN+=2 : currentNN++;
+				currentNN++;
+				// console.log(winnerList);
+			} else {
+				currentNN = 0;
+				if (winnerList.length == 1) {
+					if (window.saveTourneyWinner == true) {
+						const savedNN = NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("downloads://savedModel");
+						window.saveTourneyWinner = false;
+					}
+					generation++;
+					NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
+					savedNNs = [...NNs];
+					nextGeneration();
+					NNScores = [[],[]];
+					for (let i=0; i<TOTAL; i++) {
+						NNScores[0].push(i);
+						NNScores[1].push(i);
+					}
+					NNFitnesses = [[],[]];
+					winnerList = [];
+					for (let j=0; j<TOTAL; j++) {
+						winnerList.push(j);
+					}
 				}
 			}
 		}
+
 		if (winner != -1) {
 			window.scores[winner]++;
 		}

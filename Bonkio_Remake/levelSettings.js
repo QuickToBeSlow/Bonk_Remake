@@ -69,15 +69,15 @@ Test.prototype.createWorld = function() {
 	bd.type = b2Body.b2_dynamicBody;
 	bd.userData = "Player1";
 	bd.isBullet = true;
-	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
-	// bd.position.Set(200/m_physScale, 120/m_physScale);
+	// bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set(200/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
-	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
-	// bd.position.Set(400/m_physScale, 120/m_physScale);
+	// bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set(400/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
 	window.PFixture2 = window.Player2.CreateFixture(fd);
