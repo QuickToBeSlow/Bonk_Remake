@@ -89,8 +89,8 @@ class NN {
             // inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
             // inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
 		// }
-		inputs[7] = window.strengths[0];
-		inputs[8] = window.strengths[1];
+		inputs[7] = strengths[0];
+		inputs[8] = strengths[1];
 		let output = this.brain.predict(inputs);
 	  if (1 < output[0]) {
 			window.up[i] = true;
@@ -684,8 +684,8 @@ function nextGeneration() {
 					// inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
 					// inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
 				// }
-				inputs[7] = window.strengths[0];
-				inputs[8] = window.strengths[1];
+				inputs[7] = strengths[0];
+				inputs[8] = strengths[1];
 				let output = predict();
 				function predict() {
 				return tf.tidy(() => {
