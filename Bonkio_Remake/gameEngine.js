@@ -58,7 +58,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(10, [5, 5, 5], 5);
+		this.brain = new NeuralNetwork(9, [5, 5, 5], 5);
 	  }
 	}
   
@@ -72,27 +72,25 @@ class NN {
   
 	think(i) {
 		let inputs = [];
-		if (i==0) {
+		// if (i==0) {
 			inputs[0] = window.Player1.GetPosition().x;
 			inputs[1] = window.Player1.GetPosition().y;
-			inputs[2] = window.Player1.GetLinearVelocity().x;
-			inputs[3] = window.Player1.GetLinearVelocity().y;
-			inputs[4] = window.Player2.GetPosition().x;
-			inputs[5] = window.Player2.GetPosition().y;
-			inputs[6] = window.Player2.GetLinearVelocity().x;
-			inputs[7] = window.Player2.GetLinearVelocity().y;
-		} else {
-			inputs[0] = window.Player2.GetPosition().x;
-			inputs[1] = window.Player2.GetPosition().y;
-			inputs[2] = window.Player2.GetLinearVelocity().x;
-			inputs[3] = window.Player2.GetLinearVelocity().y;
-			inputs[4] = window.Player1.GetPosition().x;
-			inputs[5] = window.Player1.GetPosition().y;
-			inputs[6] = window.Player1.GetLinearVelocity().x;
-			inputs[7] = window.Player1.GetLinearVelocity().y;
-		}
-		inputs[8] = window.heavy[0];
-		inputs[9] = window.heavy[1];
+            inputs[2] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
+            inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
+            inputs[4] = Math.atan((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/(window.Player1.GetPosition().x-window.Player2.GetPosition().x)); //direction from me to opponent.
+            inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
+            inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
+		// } else {
+			// inputs[0] = window.Player2.GetPosition().x;
+			// inputs[1] = window.Player2.GetPosition().y;
+            // inputs[2] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
+            // inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
+            // inputs[4] = Math.atan((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/(window.Player1.GetPosition().x-window.Player2.GetPosition().x)); //direction from me to opponent.
+            // inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
+            // inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
+		// }
+		inputs[7] = window.strength[0];
+		inputs[8] = window.strength[1];
 		let output = this.brain.predict(inputs);
 	  if (1 < output[0]) {
 			window.up[i] = true;
@@ -669,27 +667,25 @@ function nextGeneration() {
 				}
 			} else if (window.testModel != undefined) {
 				let inputs = [];
-				if (i==0) {
+				// if (i==0) {
 					inputs[0] = window.Player1.GetPosition().x;
 					inputs[1] = window.Player1.GetPosition().y;
-					inputs[2] = window.Player1.GetLinearVelocity().x;
-					inputs[3] = window.Player1.GetLinearVelocity().y;
-					inputs[4] = window.Player2.GetPosition().x;
-					inputs[5] = window.Player2.GetPosition().y;
-					inputs[6] = window.Player2.GetLinearVelocity().x;
-					inputs[7] = window.Player2.GetLinearVelocity().y;
-				} else {
-					inputs[0] = window.Player2.GetPosition().x;
-					inputs[1] = window.Player2.GetPosition().y;
-					inputs[2] = window.Player2.GetLinearVelocity().x;
-					inputs[3] = window.Player2.GetLinearVelocity().y;
-					inputs[4] = window.Player1.GetPosition().x;
-					inputs[5] = window.Player1.GetPosition().y;
-					inputs[6] = window.Player1.GetLinearVelocity().x;
-					inputs[7] = window.Player1.GetLinearVelocity().y;
-				}
-				inputs[8] = window.heavy[0];
-				inputs[9] = window.heavy[1];
+					inputs[2] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
+					inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
+					inputs[4] = Math.atan((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/(window.Player1.GetPosition().x-window.Player2.GetPosition().x)); //direction from me to opponent.
+					inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
+					inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
+				// } else {
+					// inputs[0] = window.Player2.GetPosition().x;
+					// inputs[1] = window.Player2.GetPosition().y;
+					// inputs[2] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
+					// inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
+					// inputs[4] = Math.atan((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/(window.Player1.GetPosition().x-window.Player2.GetPosition().x)); //direction from me to opponent.
+					// inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
+					// inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
+				// }
+				inputs[7] = window.strength[0];
+				inputs[8] = window.strength[1];
 				let output = predict();
 				function predict() {
 				return tf.tidy(() => {
