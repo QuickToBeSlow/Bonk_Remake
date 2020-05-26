@@ -558,17 +558,30 @@ function nextGeneration() {
 		}
 
 		c.fillStyle = "black";
-		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 22.5);
-		c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000,5,40);
-		c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000,5,57.5);
-        c.fillText("generation : "+generation,250,40);
-		c.fillText("KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250,75);
+		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 15);
+		c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
+		c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
+        c.fillText("generation : "+generation, 250, 30);
+		c.fillText("KD : " + Math.round(window.scores[0]/window.scores[1]*1000)/1000,250, 45);
+		let tourneyStatus = "";
+		if (winnerList.length > 16) {
+			tourneyStatus = "Qualifying";
+		} else if (winnerList.length > 8) {
+			tourneyStatus = "Eighth-Finals";
+		} else if (winnerList.length > 4) {
+			tourneyStatus = "Quarter Finals";
+		} else if (winnerList.length > 2) {
+			tourneyStatus = "Semi Finals";
+		} else {
+			tourneyStatus = "Finals";
+		}
+		c.fillText("Tourney status: "+tourneyStatus, 5, 75);
+
+		c.fillText("speed:" + supaSpeed,5, 30);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
-			c.fillText("speed:" + supaSpeed,5, 30);
 		} else {
 			c.fillText("FPS: " + this._fpsAchieved, 5, 15);
-			c.fillText("speed:" + supaSpeed,5, 30);
 		}
 		c.fillStyle = "rgb("+(240)+","+(64)+","+(64)+")";
 		// c.strokeStyle = "rgb(255,255,255)";
@@ -652,6 +665,11 @@ function nextGeneration() {
 				reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
 				reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
 			}
+			window.up[0] = false;
+			window.down[0] = false;
+			window.left[0] = false;
+			window.right[0] = false;
+			window.heavy[0] = false;
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
