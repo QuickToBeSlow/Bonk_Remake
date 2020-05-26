@@ -458,14 +458,18 @@ function nextGeneration() {
 	
 	
 	var onPlatform = [false,false];
-	Test.prototype.createWorld = function(){
+	Test.prototype.createWorld = function() {
 		
 		
 		
 		reward = 0;
 		reward2 = 0;
 
-
+		window.up[0] = false;
+		window.down[0] = false;
+		window.left[0] = false;
+		window.right[0] = false;
+		window.heavy[0] = false;
 
 		var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
 		var m_physScale = 1;
@@ -666,11 +670,6 @@ function nextGeneration() {
 				reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
 				reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
 			}
-			window.up[0] = false;
-			window.down[0] = false;
-			window.left[0] = false;
-			window.right[0] = false;
-			window.heavy[0] = false;
 			window.up[1] = false;
 			window.down[1] = false;
 			window.left[1] = false;
