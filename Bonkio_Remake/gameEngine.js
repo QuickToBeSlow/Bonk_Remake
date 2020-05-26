@@ -58,7 +58,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(9, [5, 5, 5], 5);
+		this.brain = new NeuralNetwork(9, [11, 11, 11], 5);
 	  }
 	}
   
@@ -76,7 +76,7 @@ class NN {
 			inputs[0] = window.Player1.GetPosition().x;
 			inputs[1] = window.Player1.GetPosition().y;
             inputs[2] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
-            inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
+            inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().y); //opponent's direction of momentum
             inputs[4] = Math.atan((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/(window.Player1.GetPosition().x-window.Player2.GetPosition().x)); //direction from me to opponent.
             inputs[5] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
             inputs[6] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
@@ -86,7 +86,7 @@ class NN {
 			inputs[0] = window.Player2.GetPosition().x;
 			inputs[1] = window.Player2.GetPosition().y;
             inputs[3] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
-            inputs[2] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
+            inputs[2] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().y); //opponent's direction of momentum
             inputs[4] = Math.atan((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/(window.Player2.GetPosition().x-window.Player1.GetPosition().x)); //direction from me to opponent.
             inputs[6] = (Math.abs(window.Player1.GetLinearVelocity().x) + Math.abs(window.Player1.GetLinearVelocity().y) )/2 //curent speed
             inputs[5] = (Math.abs(window.Player2.GetLinearVelocity().x) + Math.abs(window.Player2.GetLinearVelocity().y) )/2 //opponent's speed
