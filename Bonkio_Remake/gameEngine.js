@@ -576,6 +576,7 @@ function nextGeneration() {
 			tourneyStatus = "Finals";
 		}
 		c.fillText("Tourney status: "+tourneyStatus, 5, 75);
+		c.fillText("Round: "+(TOTAL-winnerList.length+1), 5, 90);
 
 		c.fillText("speed:" + supaSpeed,5, 30);
 		if(this._paused) {
