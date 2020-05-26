@@ -689,8 +689,8 @@ function nextGeneration() {
 			} else if (window.testModel != undefined) {
 				let inputs = [];
 				if (i==0) {
-					inputs[0] = window.Player1.GetPosition().x;
-					inputs[1] = window.Player1.GetPosition().y;
+					inputs[0] = window.Player1.GetPosition().x/10; //makes position less important to the initial neural network.
+					inputs[1] = window.Player1.GetPosition().y/10; //makes position less important to the initial neural network.
 					inputs[2] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
 					inputs[3] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
 					inputs[4] = Math.atan((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/(window.Player1.GetPosition().x-window.Player2.GetPosition().x)); //direction from me to opponent.
@@ -699,8 +699,8 @@ function nextGeneration() {
 					inputs[7] = strengths[0];
 					inputs[8] = strengths[1];
 				} else {
-					inputs[0] = window.Player2.GetPosition().x;
-					inputs[1] = window.Player2.GetPosition().y;
+					inputs[0] = window.Player2.GetPosition().x/10; //makes position less important to the initial neural network.
+					inputs[1] = window.Player2.GetPosition().y/10; //makes position less important to the initial neural network.
 					inputs[3] = Math.atan(window.Player1.GetLinearVelocity().y/window.Player1.GetLinearVelocity().x); //my direction of momentum
 					inputs[2] = Math.atan(window.Player2.GetLinearVelocity().y/window.Player2.GetLinearVelocity().x); //opponent's direction of momentum
 					inputs[4] = Math.atan((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/(window.Player2.GetPosition().x-window.Player1.GetPosition().x)); //direction from me to opponent.
