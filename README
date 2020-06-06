@@ -1,3 +1,2 @@
-Currently I'm repurposing code from https://github.com/HBehrens/box2d.js. The plan is to convert one of their programs
-into a remake of the popular io game bonk2.io. In addition, I plan to add in machine learning so that I can train bots to
-eventually play the game for me.
+I repurposed the code from https://github.com/HBehrens/box2d.js and converted it into a neural network trainer via a genetic algorithm.
+The game is fashioned from the popular IO game bonk.io, and if all goes well it may be used to generate AIs for the game.
