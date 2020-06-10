@@ -723,7 +723,7 @@ function nextGeneration() {
 					window.up[1] = true;
 				}
 			  if (output[1] < (1/3)) {
-					window.left[i] = true;
+					window.left[1] = true;
 				} else if (output[1] > (2/3)) {
 					window.right[1] = true;
 				}
