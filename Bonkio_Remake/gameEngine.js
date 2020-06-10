@@ -58,7 +58,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(9, [11, 11, 11], 5);
+		this.brain = new NeuralNetwork(9, [11, 11, 11], 3);
 	  }
 	}
   
@@ -95,20 +95,18 @@ class NN {
 		}
 
 		let output = this.brain.predict(inputs);
-	  if (1 < output[0]) {
+	  if (output[0] < (1/3)) {
+			window.down[i] = true;
+		} else if (output[0] > (2/3)) {
 			window.up[i] = true;
 		}
-	  if (1 < output[1]) {
-		window.down[i] = true;
+	  if (output[1] < (1/3)) {
+			window.down[i] = true;
+		} else if (output[1] > (2/3)) {
+			window.up[i] = true;
 		}
 	  if (1 < output[2]) {
-		window.left[i] = true;
-		}
-	  if (1 < output[3]) {
-		window.right[i] = true;
-		}
-	  if (1 < output[4]) {
-		window.heavy[i] = true;
+			window.heavy[i] = true;
 		}
 	}
   
@@ -210,8 +208,8 @@ class NN {
 	}
 	  const output = tf.layers.dense({
 		units: this.output_nodes,
-		activation: 'linear'
-	  });
+		activation: 'sigmoid'
+	  }); //might want to use linear, but sigmoid in this instance might be for the best.
 	  model.add(output);
 	  return model;
 	}
@@ -719,20 +717,18 @@ function nextGeneration() {
 					return outputs;
 				  });
 				}
-			  if (1 < output[0]) {
-					window.up[1] = true;
+			  if (output[0] < (1/3)) {
+					window.down[i] = true;
+				} else if (output[0] > (2/3)) {
+					window.up[i] = true;
 				}
-			  if (1 < output[1]) {
-				window.down[1] = true;
+			  if (output[1] < (1/3)) {
+					window.down[i] = true;
+				} else if (output[1] > (2/3)) {
+					window.up[i] = true;
 				}
 			  if (1 < output[2]) {
-				window.left[1] = true;
-				}
-			  if (1 < output[3]) {
-				window.right[1] = true;
-				}
-			  if (1 < output[4]) {
-				window.heavy[1] = true;
+					window.heavy[i] = true;
 				}
 			}
 			// }
