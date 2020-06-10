@@ -718,17 +718,17 @@ function nextGeneration() {
 				  });
 				}
 			  if (output[0] < (1/3)) {
-					window.down[i] = true;
+					window.down[1] = true;
 				} else if (output[0] > (2/3)) {
-					window.up[i] = true;
+					window.up[1] = true;
 				}
 			  if (output[1] < (1/3)) {
 					window.left[i] = true;
 				} else if (output[1] > (2/3)) {
-					window.right[i] = true;
+					window.right[1] = true;
 				}
 			  if (0.5 < output[2]) {
-					window.heavy[i] = true;
+					window.heavy[1] = true;
 				}
 			}
 			// }
