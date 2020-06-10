@@ -105,7 +105,7 @@ class NN {
 		} else if (output[1] > (2/3)) {
 			window.right[i] = true;
 		}
-	  if (1 < output[2]) {
+	  if (0.5 < output[2]) {
 			window.heavy[i] = true;
 		}
 	}
@@ -727,7 +727,7 @@ function nextGeneration() {
 				} else if (output[1] > (2/3)) {
 					window.right[i] = true;
 				}
-			  if (1 < output[2]) {
+			  if (0.5 < output[2]) {
 					window.heavy[i] = true;
 				}
 			}
