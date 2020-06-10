@@ -101,9 +101,9 @@ class NN {
 			window.up[i] = true;
 		}
 	  if (output[1] < (1/3)) {
-			window.down[i] = true;
+			window.left[i] = true;
 		} else if (output[1] > (2/3)) {
-			window.up[i] = true;
+			window.right[i] = true;
 		}
 	  if (1 < output[2]) {
 			window.heavy[i] = true;
@@ -723,9 +723,9 @@ function nextGeneration() {
 					window.up[i] = true;
 				}
 			  if (output[1] < (1/3)) {
-					window.down[i] = true;
+					window.left[i] = true;
 				} else if (output[1] > (2/3)) {
-					window.up[i] = true;
+					window.right[i] = true;
 				}
 			  if (1 < output[2]) {
 					window.heavy[i] = true;
