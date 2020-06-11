@@ -551,8 +551,8 @@ function nextGeneration() {
 	}
 	
 	Test.prototype.draw = function() {
-		if (!this._canvas == null)
-		
+		if (this._canvas == null)
+			return;
 		var c = this._canvas.getContext("2d");
 		
 		this._dbgDraw.SetSprite(c);
