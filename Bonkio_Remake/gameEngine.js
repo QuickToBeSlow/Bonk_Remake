@@ -551,8 +551,7 @@ function nextGeneration() {
 	}
 	
 	Test.prototype.draw = function() {
-		if (this._canvas == null)
-		    return;
+		if (!this._canvas == null)
 		
 		var c = this._canvas.getContext("2d");
 		
