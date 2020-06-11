@@ -665,8 +665,8 @@ function nextGeneration() {
 			if (!window.testingMode) {
 				reward -= 0.001;
 				reward2 -= 0.001;
-				reward += Math.abs(window.Player2.GetLinearVelocity().x)/5000;
-				reward2 += Math.abs(window.Player1.GetLinearVelocity().x)/5000;
+				reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
+				reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
 				reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
 				reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
 			}
