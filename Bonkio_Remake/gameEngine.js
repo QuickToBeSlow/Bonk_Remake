@@ -67,7 +67,7 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.01);
+	  this.brain.mutate(0.005);
 	}
   
 	think(i) {
