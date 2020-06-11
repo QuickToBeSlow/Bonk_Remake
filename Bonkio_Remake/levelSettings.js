@@ -73,9 +73,9 @@ Test.prototype.createWorld = function() {
 	bd.userData = "Player1";
 	bd.isBullet = true;
 	if (randPos == 0) {
-		bd.position.Set(275/m_physScale, 120/m_physScale);
+		bd.position.Set(225/m_physScale, 120/m_physScale);
 	} else {
-		bd.position.Set(325/m_physScale, 120/m_physScale);
+		bd.position.Set(375/m_physScale, 120/m_physScale);
 	}
 // 	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
@@ -85,9 +85,9 @@ Test.prototype.createWorld = function() {
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
 	if (randPos == 1) {
-		bd.position.Set(275/m_physScale, 120/m_physScale);
+		bd.position.Set(225/m_physScale, 120/m_physScale);
 	} else {
-		bd.position.Set(325/m_physScale, 120/m_physScale);
+		bd.position.Set(375/m_physScale, 120/m_physScale);
 	}
 // 	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
