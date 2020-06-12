@@ -862,11 +862,11 @@ function nextGeneration() {
 			
 			if (window.saveRedNN) {
 				console.log(NNs[0][0]);
-				const savedNN = NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("localstorage://savedModel");
+				NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("localstorage://savedModel");
 				window.saveRedNN = false;
 			}
 			if (window.saveBlueNN) {
-				const savedNN = NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("localstorage://savedModel");
+				NNs[Math.floor(index2/TOTAL)][index2%TOTAL].brain.model.save("localstorage://savedModel");
 				window.saveBlueNN = false;
 			}
 
@@ -879,7 +879,7 @@ function nextGeneration() {
 				currentNN = 0;
 				if (winnerList.length == 1) {
 					if (window.saveTourneyWinner == true) {
-						const savedNN = NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("localstorage://savedModel");
+						NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("localstorage://savedModel");
 						window.saveTourneyWinner = false;
 					}
 					generation++;
