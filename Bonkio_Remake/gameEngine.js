@@ -888,6 +888,7 @@ function nextGeneration() {
 				}
 				// console.log(winnerList);
 			} else if (round >= roundCap+1) {
+				round = 0;
 				currentNN = 0;
 				if (winnerList.length == 1) {
 					if (window.saveTourneyWinner == true) {
