@@ -30,7 +30,7 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 var controlPlayer1 = true;
 var round = 0;
-var roundCap = 3;
+var roundCap = 5;
 var currentNN = 0;
 var TOTAL = 128;
 var NNs = [[],[]];
@@ -589,8 +589,8 @@ function nextGeneration() {
 			tourneyStatus = "Finals";
 		}
 		c.fillText("Tourney status: "+tourneyStatus, 5, 75);
-		c.fillText("Round: "+(TOTAL-winnerList.length+1), 5, 90);
-		c.fillText("Part: "+(round), 5, 90);
+		c.fillText("Match: "+(TOTAL-winnerList.length+1), 5, 90);
+		c.fillText("Round: "+(round), 5, 90);
 
 		c.fillText("speed:" + supaSpeed,5, 30);
 		if(this._paused) {
