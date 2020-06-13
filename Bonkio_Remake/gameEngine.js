@@ -851,6 +851,7 @@ function nextGeneration() {
 
 	Test.prototype.endGame = function (winner) {
 		round++;
+		console.log(round);
 		// console.log(winnerList);
 		// console.log(winnerList.length);
 		if (!window.testingMode) {
@@ -884,6 +885,7 @@ function nextGeneration() {
 			if (currentNN < winnerList.length-1) {
 				// (controlPlayer1) ? currentNN+=2 : currentNN++;
 				if (round >= roundCap+1) {
+					round = 0;
 					currentNN++;
 				}
 				// console.log(winnerList);
