@@ -695,7 +695,8 @@ function nextGeneration() {
 				}
 			} else if (window.testModel != undefined) {
 				let inputs = [];
-				if (i==0) {
+				let color = "blue";
+				if (color == "red") {
 					inputs[0] = window.Player1.GetPosition().x/10; //makes position less important to the initial neural network.
 					inputs[1] = window.Player1.GetPosition().y/10; //makes position less important to the initial neural network.
 					inputs[2] = window.Player1.GetLinearVelocity().x;
