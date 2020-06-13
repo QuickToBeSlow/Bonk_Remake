@@ -29,6 +29,8 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 
 */
 var controlPlayer1 = true;
+var round = 0;
+var roundCap = 3;
 var currentNN = 0;
 var TOTAL = 128;
 var NNs = [[],[]];
@@ -848,6 +850,7 @@ function nextGeneration() {
 	var NNFitnesses = [[], []];
 
 	Test.prototype.endGame = function (winner) {
+		round++;
 		// console.log(winnerList);
 		// console.log(winnerList.length);
 		if (!window.testingMode) {
@@ -858,14 +861,15 @@ function nextGeneration() {
 			if (controlPlayer1) {
 				NNScores[Math.floor(index2/TOTAL)][index2%TOTAL] += reward2;
 			}
-			if (reward > reward2) {
-				if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/TOTAL)][index%TOTAL];}
-				winnerList.splice(currentNN, 1);
-			} else {
-				if (winnerList.length == 2) {secondBest = NNs[Math.floor(index2/TOTAL)][index2%TOTAL];}
-				winnerList.splice(currentNN+1, 1);
+			if (round >= roundCap+1) {
+				if (reward > reward2) {
+					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/TOTAL)][index%TOTAL];}
+					winnerList.splice(currentNN, 1);
+				} else {
+					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index2/TOTAL)][index2%TOTAL];}
+					winnerList.splice(currentNN+1, 1);
+				}
 			}
-			
 			if (window.saveRedNN) {
 				console.log(NNs[0][0]);
 				NNs[Math.floor(index/TOTAL)][index%TOTAL].brain.model.save("localstorage://savedModel");
@@ -879,9 +883,11 @@ function nextGeneration() {
 			if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
 			if (currentNN < winnerList.length-1) {
 				// (controlPlayer1) ? currentNN+=2 : currentNN++;
-				currentNN++;
+				if (round >= roundCap+1) {
+					currentNN++;
+				}
 				// console.log(winnerList);
-			} else {
+			} else if (round >= roundCap+1) {
 				currentNN = 0;
 				if (winnerList.length == 1) {
 					if (window.saveTourneyWinner == true) {
