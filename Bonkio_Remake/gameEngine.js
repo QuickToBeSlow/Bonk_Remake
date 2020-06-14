@@ -274,7 +274,6 @@ function nextGeneration() {
 		NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
 		child = new NN(NeuralN.brain);
 	} else if (pos == (TOTAL-1) && window.prevWinner != undefined) {
-		alert("working");
 		let NeuralN;
 		NeuralN = window.prevWinner;
 		child = new NN(NeuralN.brain);
@@ -900,8 +899,7 @@ function nextGeneration() {
 						NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("localstorage://savedModel");
 						window.saveTourneyWinner = false;
 					}
-					winner.prevWinner = window.winner;
-					console.log(window.prevWinner);
+					window.prevWinner = window.winner;
 					window.winner = winnerList[0];
 					generation++;
 					// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
