@@ -42,6 +42,8 @@ window.saveBlueNN = false;
 var secondBest;
 window.testingMode = false;
 window.testingChange = false;
+window.winner = undefined;
+window.prevWinner = undefined;
 
 for (let j=0; j<TOTAL; j++) {
 	winnerList.push(j);
@@ -898,7 +900,7 @@ function nextGeneration() {
 						NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("localstorage://savedModel");
 						window.saveTourneyWinner = false;
 					}
-					winner.prevWinner = (window.winner == undefined) ? undefined : window.winner;
+					winner.prevWinner = window.winner;
 					console.log(window.prevWinner);
 					window.winner = winnerList[0];
 					generation++;
