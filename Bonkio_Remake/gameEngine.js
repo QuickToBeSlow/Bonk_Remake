@@ -853,7 +853,6 @@ function nextGeneration() {
 
 	Test.prototype.endGame = function (winner) {
 		round++;
-		console.log(round);
 		// console.log(winnerList);
 		// console.log(winnerList.length);
 		if (!window.testingMode) {
@@ -900,6 +899,7 @@ function nextGeneration() {
 						window.saveTourneyWinner = false;
 					}
 					winner.prevWinner = (window.winner == undefined) ? undefined : window.winner;
+					console.log(window.prevWinner);
 					window.winner = winnerList[0];
 					generation++;
 					// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
