@@ -230,7 +230,7 @@ class NN {
 
   tf.setBackend('cpu');
 
-  for (let i = 0; i < TOTAL; i++) {
+  for (let i = 0; i < TOTAL/2; i++) {
 	NNs[0][i] = new NN();
 	if (controlPlayer1) {
 		NNs[1][i] = new NN();
@@ -242,7 +242,7 @@ function nextGeneration() {
 	// console.log('next generation');
 	calculateFitness(0);
 	calculateFitness(1);
-	for (let i = 0; i < TOTAL; i++) {
+	for (let i = 0; i < TOTAL/2; i++) {
 	  NNs[0][i] = pickOne(0, i);
 	  if (controlPlayer1) {
 	  	NNs[1][i] = pickOne(1, i);
@@ -291,7 +291,7 @@ function nextGeneration() {
 		sum += score;
 		// console.log(NN.score);
 	}
-	for (let j=0; j<TOTAL; j++) {
+	for (let j=0; j<TOTAL/2; j++) {
 		NNFitnesses[i].push(NNScores[i][j] / sum);
 	}
 	// for (let NN of savedNNs[1]) {
@@ -846,7 +846,7 @@ function nextGeneration() {
 	window.scores = [0,0];
 	var activeNNs = 1;
 	var NNScores = [[], []];
-	for (let i=0; i<TOTAL; i++) {
+	for (let i=0; i<TOTAL/2; i++) {
 		NNScores[0].push(i);
 		NNScores[1].push(i);
 	}
@@ -906,7 +906,7 @@ function nextGeneration() {
 					savedNNs = [...NNs];
 					nextGeneration();
 					NNScores = [[],[]];
-					for (let i=0; i<TOTAL; i++) {
+					for (let i=0; i<TOTAL/2; i++) {
 						NNScores[0].push(i);
 						NNScores[1].push(i);
 					}
