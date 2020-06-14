@@ -32,7 +32,7 @@ var controlPlayer1 = true;
 var round = 0;
 var roundCap = 5;
 var currentNN = 0;
-var TOTAL = 128;
+var TOTAL = 256;
 var NNs = [[],[]];
 var savedNNs = [[],[]];
 var winnerList = [];
@@ -71,7 +71,7 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.01);
+	  this.brain.mutate(0.0075);
 	}
   
 	think(i) {
