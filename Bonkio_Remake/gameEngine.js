@@ -267,18 +267,18 @@ function nextGeneration() {
 	}
 	index--;
 	let child;
-	if (pos != 0) {
+	if (pos == 0) {
+		let NeuralN;
+		NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
+		child = new NN(NeuralN.brain);
+	} else if (pos == 1 && window.prevWinner != undefined) {
+		let NeuralN;
+		NeuralN = window.prevWinner;
+		child = new NN(NeuralN.brain);
+	} else {
 		let NeuralN = savedNNs[ind][index];
 		child = new NN(NeuralN.brain);
 		child.mutate();
-	} else {
-		let NeuralN;
-// 		if (ind == 0) {
-			NeuralN = savedNNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]];
-// 		} else {
-			NeuralN = secondBest;
-// 		}
-		child = new NN(NeuralN.brain);
 	}
 	return child;
   }
@@ -898,6 +898,8 @@ function nextGeneration() {
 						NNs[Math.floor(winnerList[0]/TOTAL)][winnerList[0]%TOTAL].brain.model.save("localstorage://savedModel");
 						window.saveTourneyWinner = false;
 					}
+					winner.prevWinner = (window.winner == undefined) ? undefined : window.winner;
+					window.winner = winnerList[0];
 					generation++;
 					// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 					savedNNs = [...NNs];
