@@ -400,13 +400,24 @@ function nextGeneration() {
 			if (window.testingMode) {
 				if (e.code == "KeyW") {
 					window.up[0] = true;
-				} else if (e.code == "KeyA") {
+				} if (e.code == "KeyA") {
 					window.left[0] = true;
-				} else if (e.code == "KeyS") {
+				} if (e.code == "KeyS") {
 					window.down[0] = true;
-				} else if (e.code == "KeyD") {
+				} if (e.code == "KeyD") {
 					window.right[0] = true;
-				} else if (e.code == "Space") {
+				} if (e.code == "Space") {
+					window.heavy[0] = true;
+				}
+				if (e.code == "ArrowUp") {
+					window.up[0] = true;
+				} if (e.code == "ArrowLeft") {
+					window.left[0] = true;
+				} if (e.code == "ArrowDown") {
+					window.down[0] = true;
+				} if (e.code == "ArrowRight") {
+					window.right[0] = true;
+				} if (e.code == "KeyX") {
 					window.heavy[0] = true;
 				}
 			}
@@ -422,6 +433,17 @@ function nextGeneration() {
 				} else if (e.code == "KeyD") {
 					window.right[0] = false;
 				} else if (e.code == "Space") {
+					window.heavy[0] = false;
+				}
+				if (e.code == "ArrowUp") {
+					window.up[0] = false;
+				} if (e.code == "ArrowLeft") {
+					window.left[0] = false;
+				} if (e.code == "ArrowDown") {
+					window.down[0] = false;
+				} if (e.code == "ArrowRight") {
+					window.right[0] = false;
+				} if (e.code == "KeyX") {
 					window.heavy[0] = false;
 				}
 			}
