@@ -252,7 +252,7 @@
 		}
 		$('#downloadModel').click(function(){
 			window.fileName = prompt("Please enter the desired file name", "savedModel");
-			window.testModel.brain.model.save("downloads://"+window.fileName+".json");
+			window.testModel.model.save("downloads://"+window.fileName+".json");
 		});
 	});
 
