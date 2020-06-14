@@ -274,7 +274,7 @@ function nextGeneration() {
 		let NeuralN;
 		NeuralN = savedNNs[Math.floor(winnerList[0]/(TOTAL/2))][winnerList[0]];
 		child = new NN(NeuralN.brain);
-	} else if (pos == (TOTAL-1) && window.prevWinner != undefined) {
+	} else if (pos == (TOTAL/2-1) && window.prevWinner != undefined) {
 		let NeuralN;
 		NeuralN = window.prevWinner;
 		child = new NN(NeuralN.brain);
