@@ -62,7 +62,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(10, [11, 11, 11], 3);
+		this.brain = new NeuralNetwork(10, [15, 15], 3);
 	  }
 	}
   
