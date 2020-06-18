@@ -257,7 +257,7 @@
 		}
 		$('#downloadModel').click(function(){
 			window.fileName = prompt("Please enter the desired file name", "savedModel");
-			window.testModel.model.save("downloads://"+window.fileName+".json");
+			window.testModel.model.save("downloads://"+window.fileName);
 		});
 		$('#loadPretrained').click(function(){
 			window.path = "https://quicktobeslow.github.io/Bonk_Remake/Bonkio_Remake/PTModel.json";
