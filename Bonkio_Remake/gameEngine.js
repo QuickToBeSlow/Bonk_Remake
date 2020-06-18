@@ -890,7 +890,7 @@ function nextGeneration() {
 			if (controlPlayer1) {
 				NNScores[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)] += reward2;
 			}
-			if (round >= roundCap-1) {
+			if (round >= roundCap) {
 				if (reward > reward2) {
 					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)];}
 					winnerList.splice(currentNN, 1);
@@ -912,12 +912,12 @@ function nextGeneration() {
 			if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
 			if (currentNN < winnerList.length-1) {
 				// (controlPlayer1) ? currentNN+=2 : currentNN++;
-				if (round >= roundCap-1) {
+				if (round >= roundCap) {
 					round = 0;
 					currentNN++;
 				}
 				// console.log(winnerList);
-			} else if (round >= roundCap-1) {
+			} else if (round >= roundCap) {
 				round = 0;
 				currentNN = 0;
 				if (winnerList.length == 1) {
