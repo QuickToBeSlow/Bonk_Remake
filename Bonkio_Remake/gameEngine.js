@@ -912,12 +912,12 @@ function nextGeneration() {
 			if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
 			if (currentNN < winnerList.length-1) {
 				// (controlPlayer1) ? currentNN+=2 : currentNN++;
-				if (round >= roundCap+1) {
+				if (round >= roundCap-1) {
 					round = 0;
 					currentNN++;
 				}
 				// console.log(winnerList);
-			} else if (round >= roundCap+1) {
+			} else if (round >= roundCap-1) {
 				round = 0;
 				currentNN = 0;
 				if (winnerList.length == 1) {
