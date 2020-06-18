@@ -615,7 +615,7 @@ function nextGeneration() {
 		}
 		c.fillText("Tourney status: "+tourneyStatus, 5, 75);
 		c.fillText("Match: "+(TOTAL-winnerList.length+1), 5, 90);
-		c.fillText("Round: "+(round), 5, 105);
+		c.fillText("Round: "+(round+1), 5, 105);
 
 		c.fillText("speed:" + supaSpeed,5, 30);
 		if(this._paused) {
@@ -889,7 +889,7 @@ function nextGeneration() {
 			if (controlPlayer1) {
 				NNScores[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)] += reward2;
 			}
-			if (round >= roundCap+1) {
+			if (round >= roundCap) {
 				if (reward > reward2) {
 					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)];}
 					winnerList.splice(currentNN, 1);
