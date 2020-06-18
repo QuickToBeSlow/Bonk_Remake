@@ -29,7 +29,7 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 
 */
 var controlPlayer1 = true;
-var round = 0;
+var round = 1;
 var roundCap = 3;
 var currentNN = 0;
 var TOTAL = 512;
@@ -615,7 +615,7 @@ function nextGeneration() {
 		}
 		c.fillText("Tourney status: "+tourneyStatus, 5, 75);
 		c.fillText("Match: "+(TOTAL-winnerList.length+1), 5, 90);
-		c.fillText("Round: "+(round+1), 5, 105);
+		c.fillText("Round: "+(round), 5, 105);
 
 		c.fillText("speed:" + supaSpeed,5, 30);
 		if(this._paused) {
@@ -912,12 +912,12 @@ function nextGeneration() {
 			if (currentNN < winnerList.length-1) {
 				// (controlPlayer1) ? currentNN+=2 : currentNN++;
 				if (round >= roundCap+1) {
-					round = 0;
+					round = 1;
 					currentNN++;
 				}
 				// console.log(winnerList);
 			} else if (round >= roundCap+1) {
-				round = 0;
+				round = 1;
 				currentNN = 0;
 				if (winnerList.length == 1) {
 					if (window.saveTourneyWinner == true) {
