@@ -130,7 +130,7 @@
 	<hr>
 	<!-- <button id="prev" >&lt;-- previous simulation</button>
 	<button id="next" >next simulation --&gt;</button> -->
-	<button id="reset">reset simulation</button>
+	<!-- <button id="reset">reset simulation</button> -->
 	<button id="resume" >resume</button>
 	<button id="pause" >pause</button>
 <!-- 	<button id="step" >single step</button> -->
@@ -142,6 +142,7 @@
 	<button id="toggleTestingMode" >toggle testing mode</button>
 	<button id="loadModel" >load model (testing only)</button>
 	<button id="downloadModel" >download model</button>
+	<button id="loadPretrained" >Load Pretrained Model</button>
 	<hr>
 
 	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
@@ -253,6 +254,10 @@
 		$('#downloadModel').click(function(){
 			window.fileName = prompt("Please enter the desired file name", "savedModel");
 			window.testModel.model.save("downloads://"+window.fileName+".json");
+		});
+		$('#loadPretrained').click(function(){
+			window.path = "file:///PTModel.json";
+			getModel();
 		});
 	});
 
