@@ -62,7 +62,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(10, [10, 10], 3);
+		this.brain = new NeuralNetwork(10, [13, 13], 3);
 	  }
 	}
   
@@ -71,7 +71,7 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.01);
+	  this.brain.mutate(0.0075);
 	}
   
 	think(i) {
