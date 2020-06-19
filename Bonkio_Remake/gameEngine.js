@@ -30,9 +30,9 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 var controlPlayer1 = true;
 var round = 0;
-var roundCap = 5;
+var roundCap = 7;
 var currentNN = 0;
-var TOTAL = 256;
+var TOTAL = 512;
 var NNs = [[],[]];
 var savedNNs = [[],[]];
 var winnerList = [];
