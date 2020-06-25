@@ -77,22 +77,22 @@
 		think(i) {
 			let inputs = [];
 			if (i==0) {
-				inputs[0] = window.Player1.GetPosition().x/10; //makes position less important to the initial neural network.
-				inputs[1] = window.Player1.GetPosition().y/10; //makes position less important to the initial neural network.
+				inputs[0] = (window.Player1.GetPosition().x-30); //makes position less important to the initial neural network.
+				inputs[1] = (window.Player1.GetPosition().y); //makes position less important to the initial neural network.
 				inputs[2] = window.Player1.GetLinearVelocity().x;
 				inputs[3] = window.Player1.GetLinearVelocity().y;
-				inputs[4] = window.Player2.GetPosition().x;
+				inputs[4] = (window.Player2.GetPosition().x-30);
 				inputs[5] = window.Player2.GetPosition().y;
 				inputs[6] = window.Player2.GetLinearVelocity().x;
 				inputs[7] = window.Player2.GetLinearVelocity().y;
 				inputs[8] = strengths[0];
 				inputs[9] = strengths[1];
 			} else {
-				inputs[0] = window.Player2.GetPosition().x/10; //makes position less important to the initial neural network.
-				inputs[1] = window.Player2.GetPosition().y/10; //makes position less important to the initial neural network.
+				inputs[0] = (window.Player2.GetPosition().x-30); //makes position less important to the initial neural network.
+				inputs[1] = window.Player2.GetPosition().y; //makes position less important to the initial neural network.
 				inputs[2] = window.Player2.GetLinearVelocity().x;
 				inputs[3] = window.Player2.GetLinearVelocity().y;
-				inputs[4] = window.Player1.GetPosition().x;
+				inputs[4] = (window.Player1.GetPosition().x-30);
 				inputs[5] = window.Player1.GetPosition().y;
 				inputs[6] = window.Player1.GetLinearVelocity().x;
 				inputs[7] = window.Player1.GetLinearVelocity().y;
