@@ -30,9 +30,10 @@ rewrite think function of the neural network. Make sure to change the inputs nam
 */
 var controlPlayer1 = true;
 var round = 0;
-var roundCap = 7;
+var roundCap = 101;
+var leadTolerance = 7;
 var currentNN = 0;
-var TOTAL = 512;
+var TOTAL = 32;
 var NNs = [[],[]];
 var savedNNs = [[],[]];
 var winnerList = [];
@@ -62,7 +63,7 @@ class NN {
 	  if (brain) {
 		this.brain = brain.copy();
 	  } else {
-		this.brain = new NeuralNetwork(10, [13, 13], 3);
+		this.brain = new NeuralNetwork(5, [5, 5, 5], 3);
 	  }
 	}
   
@@ -71,47 +72,37 @@ class NN {
 	}
 
 	mutate() {
-	  this.brain.mutate(0.0075);
+	  this.brain.mutate(0.001);
 	}
   
 	think(i) {
 		let inputs = [];
 		if (i==0) {
-			inputs[0] = window.Player1.GetPosition().x/10; //makes position less important to the initial neural network.
-			inputs[1] = window.Player1.GetPosition().y/10; //makes position less important to the initial neural network.
-			inputs[2] = window.Player1.GetLinearVelocity().x;
-			inputs[3] = window.Player1.GetLinearVelocity().y;
-			inputs[4] = window.Player2.GetPosition().x;
-			inputs[5] = window.Player2.GetPosition().y;
-			inputs[6] = window.Player2.GetLinearVelocity().x;
-			inputs[7] = window.Player2.GetLinearVelocity().y;
-			inputs[8] = strengths[0];
-			inputs[9] = strengths[1];
+			inputs[0] = window.Player1.GetPosition().x-window.Player2.GetPosition().x;//relative x position.
+			inputs[1] = strengths[0]-strengths[1]; //relative strengths.
+			inputs[2] = window.Player1.GetPosition().x-30; //p1 x position relative to the center of the map.
+			inputs[3] = Math.abs(Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x)-(Math.atan2((window.Player1.GetPosition().y-window.Player2.GetPosition().y),(window.Player1.GetPosition().x-window.Player2.GetPosition().x)))); //basically this is PI when player1 is pointed exactly at player 2, otherwise it gets more context from the first input.
+			inputs[4] = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)) / Math.sqrt(Math.pow(window.Player2.GetLinearVelocity().x,2)+Math.pow(window.Player2.GetLinearVelocity().y,2));//speed ratio.
 		} else {
-			inputs[0] = window.Player2.GetPosition().x/10; //makes position less important to the initial neural network.
-			inputs[1] = window.Player2.GetPosition().y/10; //makes position less important to the initial neural network.
-			inputs[2] = window.Player2.GetLinearVelocity().x;
-			inputs[3] = window.Player2.GetLinearVelocity().y;
-			inputs[4] = window.Player1.GetPosition().x;
-			inputs[5] = window.Player1.GetPosition().y;
-			inputs[6] = window.Player1.GetLinearVelocity().x;
-			inputs[7] = window.Player1.GetLinearVelocity().y;
-			inputs[8] = strengths[1];
-			inputs[9] = strengths[0];
+			inputs[0] = window.Player2.GetPosition().x-window.Player1.GetPosition().x;
+			inputs[1] = strengths[1]-strengths[0];
+			inputs[2] = window.Player2.GetPosition().x-30;
+			inputs[3] = Math.abs(Math.atan2(window.Player2.GetLinearVelocity().y,window.Player2.GetLinearVelocity().x)-(Math.atan2((window.Player2.GetPosition().y-window.Player1.GetPosition().y),(window.Player2.GetPosition().x-window.Player1.GetPosition().x)))); //basically this is PI when player2 is pointed exactly at player 1.
+			inputs[4] = Math.sqrt(Math.pow(window.Player2.GetLinearVelocity().x,2)+Math.pow(window.Player2.GetLinearVelocity().y,2)) / Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2));//speed ratio.
 		}
-
+		
 		let output = this.brain.predict(inputs);
-	  if (output[0] < (1/3)) {
-			window.down[i] = true;
-		} else if (output[0] > (2/3)) {
-			window.up[i] = true;
-		}
-	  if (output[1] < (1/3)) {
+			if (output[0] < (8/19)) { // 1/3
+				window.down[i] = true;
+			} else if (output[0] > (9/19)) { // 2/3
+				window.up[i] = true;
+			}
+		if (output[1] < (8/19)) {
 			window.left[i] = true;
-		} else if (output[1] > (2/3)) {
+		} else if (output[1] > (9/19)) {
 			window.right[i] = true;
 		}
-	  if (0.5 < output[2]) {
+		if (0.5 < output[2]) {
 			window.heavy[i] = true;
 		}
 	}
@@ -240,6 +231,7 @@ class NN {
 
 
 function nextGeneration() {
+	
 	// console.log('next generation');
 	calculateFitness(0);
 	calculateFitness(1);
@@ -503,7 +495,7 @@ function nextGeneration() {
 		window.right[1] = false;
 		window.heavy[1] = false;
 
-		var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
+		var m_world = new b2World(new b2Vec2(0, -9.81*3.25), true);
 		var m_physScale = 1;
 		m_world.SetWarmStarting(true);
 		
@@ -540,13 +532,13 @@ function nextGeneration() {
 			if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
 				onPlatform[1]= true;
 			}
-			if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
-				hasCollided = true;
-				if (canColReward && !window.testingMode) {
-					reward += (window.heavy[1] == true) ? strengths[1]/5 : 1;
-					reward2 += (window.heavy[0] == true) ? strengths[0]/5 : 1;
-				}
-			}
+			//if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
+			//	hasCollided = true;
+			//	if (canColReward && !window.testingMode) {
+			//		reward += (window.heavy[1] == true) ? strengths[1]/5 : 1;
+			//		reward2 += (window.heavy[0] == true) ? strengths[0]/5 : 1;
+			//	}
+			//}
 		}
 		listener.EndContact = function(contact) {
 			// console.log(contact.GetFixtureA().GetBody().GetUserData());
@@ -596,27 +588,46 @@ function nextGeneration() {
 		}
 
 		c.fillStyle = "black";
-		c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 15);
-		c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
-		c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
+		c.fillText("Game points : red "+window.scores[0]+" - blue "+window.scores[1], 250, 15);
+		//c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
+		//c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
         c.fillText("generation : "+generation, 250, 30);
-		c.fillText("KD : " + Math.round(window.scores[0]/window.scores[1]*1000)/1000,250, 45);
-		let tourneyStatus = "";
-		if (winnerList.length > 16) {
-			tourneyStatus = "Qualifying";
-		} else if (winnerList.length > 8) {
-			tourneyStatus = "Eighth-Finals";
-		} else if (winnerList.length > 4) {
-			tourneyStatus = "Quarter Finals";
-		} else if (winnerList.length > 2) {
-			tourneyStatus = "Semi Finals";
-		} else {
-			tourneyStatus = "Finals";
-		}
-		c.fillText("Tourney status: "+tourneyStatus, 5, 75);
-		c.fillText("Match: "+(TOTAL-winnerList.length+1), 5, 90);
+		c.fillText("RED  KD : " + Math.round(window.scores[0]/window.scores[1]*1000)/1000,250, 45);
+		c.fillText("BLUE KD : " + Math.round(window.scores[1]/window.scores[0]*1000)/1000,250, 60);
+		//let tourneyStatus = "";
+		//if (winnerList.length > 16) {
+		//	tourneyStatus = "Qualifying";
+		//} else if (winnerList.length > 8) {
+		//	tourneyStatus = "Eighth-Finals";
+		//} else if (winnerList.length > 4) {
+		//	tourneyStatus = "Quarter Finals";
+		//} else if (winnerList.length > 2) {
+		//	tourneyStatus = "Semi Finals";
+		//} else {
+		//	tourneyStatus = "Finals";
+		//}
+		//c.fillText("Tourney status: "+tourneyStatus, 5, 75);
+		c.fillText("Game: "+(TOTAL-winnerList.length+1)+" of "+(TOTAL-1), 5, 90);
+		//c.fillText("winnerList.length: "+(winnerList.length), 5, 190);
 		c.fillText("Round: "+(round+1), 5, 105);
-
+		
+		c.fillText("relative x :" + (window.Player1.GetPosition().x-window.Player2.GetPosition().x),window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+630);
+		//c.fillText("relative y :" + (window.Player1.GetPosition().y-window.Player2.GetPosition().y),window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+640);
+		c.fillText("relative strength :" + (strengths[0]-strengths[1]),window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+640);
+		c.fillText("p1 dist to center :" + (window.Player1.GetPosition().x-30),window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+650);
+		
+		//c.fillText("p1 direction :" + (Math.atan2(window.Player1.GetLinearVelocity().y , window.Player1.GetLinearVelocity().x))*180/Math.PI ,window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+670);
+		//c.fillText("direction to p2:" + (Math.atan2( (window.Player1.GetPosition().y-window.Player2.GetPosition().y),(window.Player1.GetPosition().x-window.Player2.GetPosition().x) ))*180/Math.PI ,window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+680);
+		c.fillText("p1 dir offset:" +  Math.abs(Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x)-(Math.atan2((window.Player1.GetPosition().y-window.Player2.GetPosition().y),(window.Player1.GetPosition().x-window.Player2.GetPosition().x)))),window.Player1.GetPosition().x*12.5,(window.Player1.GetPosition().y*-12.5)+660);
+		
+		c.fillText("p2 dir offset:" +  Math.abs(Math.atan2(window.Player2.GetLinearVelocity().y,window.Player2.GetLinearVelocity().x)-(Math.atan2((window.Player2.GetPosition().y-window.Player1.GetPosition().y),(window.Player2.GetPosition().x-window.Player1.GetPosition().x)))),window.Player1.GetPosition().x*12.5,(window.Player1.GetPosition().y*-12.5)+670);
+		c.fillText("p2 dir offset:" +  Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)) / Math.sqrt(Math.pow(window.Player2.GetLinearVelocity().x,2)+Math.pow(window.Player2.GetLinearVelocity().y,2)),window.Player1.GetPosition().x*12.5,(window.Player1.GetPosition().y*-12.5)+680);
+		//Math.toDegrees(Math.atan2(vy, vx))
+		//c.fillText("p2 dist to center :" + (30-window.Player2.GetPosition().x),window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+670);
+		//c.fillText("p1 strength :" + strengths[0],window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+680);
+		//c.fillText("p1 x velocity :" + window.Player1.GetLinearVelocity().x,window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+690);
+		//c.fillText("p1 y velocity :" + window.Player1.GetLinearVelocity().y,window.Player1.GetPosition().x*12.5, (window.Player1.GetPosition().y*-12.5)+700);
+		
 		c.fillText("speed:" + supaSpeed,5, 30);
 		if(this._paused) {
 			c.fillText("paused", 5, 15);
@@ -641,7 +652,7 @@ function nextGeneration() {
 		if (window.heavy[0]) {
 			c.strokeStyle = "rgb("+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+")";
 			// c.strokeStyle = "rgb(255,255,255)";
-			c.beginPath();
+			c.beginPath();	
 			c.lineWidth = 3;
 			c.arc(window.Player1.GetPosition().x*12.5,-window.Player1.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
 			c.stroke();
@@ -677,33 +688,41 @@ function nextGeneration() {
 				steps++;
 				if (steps > 5000) {this.endGame(-1)}
 			}
-			playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
-			if (playerDistance<100 && hasCollided == true) {canColReward = false;} else {canColReward = true; hasCollided = false;}
-			if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
-				//Player2 wins
+			playerDistance = Math.sqrt(Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2));
+			
+			//if (playerDistance<10 && hasCollided == true) {
+			//	canColReward = false;
+			//} else {
+			//	canColReward = true;
+			//	hasCollided = false;
+			//}
+			let p1Lead = window.scores[0]-window.scores[1];
+			let p2Lead = window.scores[1]-window.scores[0];
+			if (window.Player1.GetPosition().x < -20 || window.Player1.GetPosition().x > 80 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
+				//if red is offscreen
 				if (!window.testingMode) {
-					reward += 5;
-					reward2 -= 5;
+					reward  += 10; //blue's reward
+					reward2 -= 10; //red's reward
 				}
 				this.endGame(1);
-			} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
-				//Player1 wins
+			} else if (window.Player2.GetPosition().x < -20 || window.Player2.GetPosition().x > 80 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
+				//if blue is offscreen
 				if (!window.testingMode) {
-					reward -= 5;
-					reward2 += 5;
+					reward  -= 10; //blue's reward
+					reward2 += 10; //red's reward
 				}
 				this.endGame(0);
 			}
-			if(!this._world)
+			if(!this._world)	
 				return;
 			this._world.ClearForces();
 			if (!window.testingMode) {
-				reward -= 0.001;
-				reward2 -= 0.001;
-				reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
-				reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
-				reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
-				reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
+				//reward -= 0.001;
+				//reward2 -= 0.001;
+				//reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
+				//reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
+				//reward += (150-Math.abs(30-window.Player2.GetPosition().x))/180000;
+				//reward2 += (150-Math.abs(30-window.Player1.GetPosition().x))/180000;
 			}
 			window.up[1] = false;
 			window.down[1] = false;
@@ -857,7 +876,10 @@ function nextGeneration() {
 	}
 	
 	Test.prototype.supaSpeedUp = function () {
-		supaSpeed*=2; //increase iterations
+		if (supaSpeed<256) { //increase iterations only if under 256, we don't want this._world.Step() to get called too many times and crash...
+			supaSpeed*=2; //increase iterations
+		}
+		
 	}
 	
 	Test.prototype.supaSpeedDown = function () {
@@ -865,6 +887,7 @@ function nextGeneration() {
 			supaSpeed/=2;
 		}
 	}
+	
 	
 	window.scores = [0,0];
 	var activeNNs = 1;
@@ -891,6 +914,7 @@ function nextGeneration() {
 				NNScores[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)] += reward2;
 			}
 			if (round >= roundCap) {
+				window.scores = [0,0];
 				if (reward > reward2) {
 					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)];}
 					winnerList.splice(currentNN, 1);
@@ -928,7 +952,7 @@ function nextGeneration() {
 					window.prevWinner = window.winner;
 					window.winner = winnerList[0];
 					generation++;
-					// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
+					NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += 9999999; //large reward for tournament winner.
 					savedNNs = [...NNs];
 					nextGeneration();
 					NNScores = [[],[]];
