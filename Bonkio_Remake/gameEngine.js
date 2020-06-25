@@ -33,8 +33,8 @@ var round = 0;
 var roundCap = 7;
 var currentNN = 0;
 var TOTAL = 512;
-var NNs = [[],[]];
-var savedNNs = [[],[]];
+var NNs = [];
+var savedNNs = [];
 var winnerList = [];
 window.saveTourneyWinner = false;
 window.saveRedNN = false;
@@ -230,24 +230,25 @@ class NN {
 
   tf.setBackend('cpu');
 
-  for (let i = 0; i < TOTAL/2; i++) {
-	NNs[0][i] = new NN();
-	if (controlPlayer1) {
-		NNs[1][i] = new NN();
-	}
+  for (let i = 0; i < TOTAL; i++) {
+	// NNs[0][i] = new NN();
+	// if (controlPlayer1) {
+	// 	NNs[1][i] = new NN();
+	// }
+	NNs[i] = new NN();
   }
 	console.log(NNs);
 
 
 function nextGeneration() {
 	// console.log('next generation');
-	calculateFitness(0);
-	calculateFitness(1);
-	for (let i = 0; i < TOTAL/2; i++) {
-	  NNs[0][i] = pickOne(0, i);
-	  if (controlPlayer1) {
-	  	NNs[1][i] = pickOne(1, i);
-	  }
+	calculateFitness();
+	for (let i = 0; i < TOTAL; i++) {
+	//   NNs[0][i] = pickOne(0, i);
+	//   if (controlPlayer1) {
+	//   	NNs[1][i] = pickOne(1, i);
+	//   }
+	NNs[i] = pickOne(i);
 	}
 	// for (let i = 0; i < TOTAL; i++) {
 	// 	savedNNs[0][i].dispose();
@@ -255,45 +256,45 @@ function nextGeneration() {
 	// 		savedNNs[1][i].dispose();
 	// 	}
 	// }
-	savedNNs = [[], []];
+	savedNNs = [];
   }
   
-  function pickOne(ind, pos) {
+  function pickOne(pos) {
 	let index = 0;
 	let r = Math.random();
 	// console.log(savedNNs);
 	while (r > 0) {
 		// console.log(savedNNs[i][index].fitness); 
 		// console.log(r);
-		r = r - NNFitnesses[ind][index];
+		r = r - NNFitnesses[index];
 	  index++;
 	}
 	index--;
 	let child;
 	if (pos == 0) {
 		let NeuralN;
-		NeuralN = savedNNs[Math.floor(winnerList[0]/(TOTAL/2))][winnerList[0]%(TOTAL/2)];
+		NeuralN = savedNNs[winnerList[0]];
 		child = new NN(NeuralN.brain);
-	} else if (pos == (TOTAL/2-1) && window.prevWinner != undefined) {
+	} else if (pos == (TOTAL-1) && window.prevWinner != undefined) {
 		let NeuralN;
 		NeuralN = window.prevWinner;
 		child = new NN(NeuralN.brain);
 	} else {
-		let NeuralN = savedNNs[ind][index];
+		let NeuralN = savedNNs[index];
 		child = new NN(NeuralN.brain);
 		child.mutate();
 	}
 	return child;
   }
   
-  function calculateFitness(i) {
+  function calculateFitness() {
 	let sum = 0;
-	for (let score of NNScores[i]) {
+	for (let score of NNScores) {
 		sum += score;
 		// console.log(NN.score);
 	}
-	for (let j=0; j<TOTAL/2; j++) {
-		NNFitnesses[i].push(NNScores[i][j] / sum);
+	for (let j=0; j<TOTAL; j++) {
+		NNFitnesses.push(NNScores[j] / sum);
 	}
 	// for (let NN of savedNNs[1]) {
 	// 	sum[1] += NN.score;
@@ -717,9 +718,9 @@ function nextGeneration() {
 				let index2 = winnerList[currentNN+1];
 // 				console.log(Math.floor(index/(TOTAL/2)));
 // 				console.log(index%(TOTAL/2));
-				NNs[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)].think(0);
+				NNs[index].think(0);
 				if (controlPlayer1) {
-					NNs[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)].think(1);
+					NNs[index2].think(1);
 				}
 			} else if (window.testModel != undefined) {
 				let inputs = [];
@@ -868,12 +869,13 @@ function nextGeneration() {
 	
 	window.scores = [0,0];
 	var activeNNs = 1;
-	var NNScores = [[], []];
-	for (let i=0; i<TOTAL/2; i++) {
-		NNScores[0].push(i);
-		NNScores[1].push(i);
+	var NNScores = [];
+	for (let i=0; i<TOTAL; i++) {
+		// NNScores[0].push(i);
+		// NNScores[1].push(i);
+		NNScores.push(i);
 	}
-	var NNFitnesses = [[], []];
+	var NNFitnesses = [];
 
 	Test.prototype.endGame = function (winner) {
 		if (!window.testingMode) {
@@ -886,26 +888,26 @@ function nextGeneration() {
 			steps = 0;
 			let index = winnerList[currentNN];
 			let index2 = winnerList[currentNN+1];
-			NNScores[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)] += reward;
+			NNScores[index] += reward;
 			if (controlPlayer1) {
-				NNScores[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)] += reward2;
+				NNScores[index2] += reward2;
 			}
 			if (round >= roundCap) {
 				if (reward > reward2) {
-					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)];}
+					if (winnerList.length == 2) {secondBest = NNs[index];}
 					winnerList.splice(currentNN, 1);
 				} else {
-					if (winnerList.length == 2) {secondBest = NNs[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)];}
+					if (winnerList.length == 2) {secondBest = NNs[index2];}
 					winnerList.splice(currentNN+1, 1);
 				}
 			}
 			if (window.saveRedNN) {
 				console.log(NNs[0][0]);
-				NNs[Math.floor(index/(TOTAL/2))][index%(TOTAL/2)].brain.model.save("localstorage://savedModel");
+				NNs[index].brain.model.save("localstorage://savedModel");
 				window.saveRedNN = false;
 			}
 			if (window.saveBlueNN) {
-				NNs[Math.floor(index2/(TOTAL/2))][index2%(TOTAL/2)].brain.model.save("localstorage://savedModel");
+				NNs[index2].brain.model.save("localstorage://savedModel");
 				window.saveBlueNN = false;
 			}
 
@@ -922,7 +924,7 @@ function nextGeneration() {
 				currentNN = 0;
 				if (winnerList.length == 1) {
 					if (window.saveTourneyWinner == true) {
-						NNs[Math.floor(winnerList[0]/(TOTAL/2))][winnerList[0]%(TOTAL/2)].brain.model.save("localstorage://savedModel");
+						NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
 						window.saveTourneyWinner = false;
 					}
 					window.prevWinner = window.winner;
@@ -931,12 +933,13 @@ function nextGeneration() {
 					// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 					savedNNs = [...NNs];
 					nextGeneration();
-					NNScores = [[],[]];
-					for (let i=0; i<TOTAL/2; i++) {
-						NNScores[0].push(i);
-						NNScores[1].push(i);
+					NNScores = [];
+					for (let i=0; i<TOTAL; i++) {
+						// NNScores[0].push(i);
+						// NNScores[1].push(i);
+						NNScores.push(i);
 					}
-					NNFitnesses = [[],[]];
+					NNFitnesses = [];
 					winnerList = [];
 					for (let j=0; j<TOTAL; j++) {
 						winnerList.push(j);
