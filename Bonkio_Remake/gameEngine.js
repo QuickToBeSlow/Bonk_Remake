@@ -965,7 +965,7 @@
 				}
 			}
 	
-			if (winner != -1) {
+			if (winner != -1 && !window.testingMode) {
 				window.scores[winner]++;
 			}
 			window.up = [false, false];
