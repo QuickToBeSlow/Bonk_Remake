@@ -62,7 +62,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(10, [8, 8], 3);
+			this.brain = new NeuralNetwork(12, [10, 10], 3);
 		  }
 		}
 	  
@@ -87,6 +87,8 @@
 				inputs[7] = window.Player2.GetLinearVelocity().y;
 				inputs[8] = strengths[0];
 				inputs[9] = strengths[1];
+				inputs[10] = window.Player1.GetPosition().x-window.Player2.GetPosition().x;
+				inputs[11] = window.Player1.GetPosition().y-window.Player2.GetPosition().y;
 			} else {
 				inputs[0] = (window.Player2.GetPosition().x-30); //makes position less important to the initial neural network.
 				inputs[1] = window.Player2.GetPosition().y; //makes position less important to the initial neural network.
@@ -98,6 +100,8 @@
 				inputs[7] = window.Player1.GetLinearVelocity().y;
 				inputs[8] = strengths[1];
 				inputs[9] = strengths[0];
+				inputs[10] = window.Player2.GetPosition().x-window.Player1.GetPosition().x;
+				inputs[11] = window.Player2.GetPosition().y-window.Player1.GetPosition().y;
 			}
 	
 			let output = this.brain.predict(inputs);
@@ -493,16 +497,17 @@
 			reward = 0;
 			reward2 = 0;
 	
-			window.up[0] = false;
-			window.down[0] = false;
-			window.left[0] = false;
-			window.right[0] = false;
-			window.heavy[0] = false;
-			window.up[1] = false;
-			window.down[1] = false;
-			window.left[1] = false;
-			window.right[1] = false;
-			window.heavy[1] = false;
+			// window.up[0] = false;
+			// window.down[0] = false;
+			// window.left[0] = false;
+			// window.right[0] = false;
+			// window.heavy[0] = false;
+			// window.up[1] = false;
+			// window.down[1] = false;
+			// window.left[1] = false;
+			// window.right[1] = false;
+			// window.heavy[1] = false;
+			// window.onPlatform = [false,false];
 	
 			var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
 			var m_physScale = 1;
@@ -736,6 +741,8 @@
 						inputs[7] = window.Player2.GetLinearVelocity().y;
 						inputs[8] = strengths[0];
 						inputs[9] = strengths[1];
+						inputs[10] = window.Player1.GetPosition().x-window.Player2.GetPosition().x;
+						inputs[11] = window.Player1.GetPosition().y-window.Player2.GetPosition().y;
 					} else {
 						inputs[0] = (window.Player2.GetPosition().x-30); //makes position less important to the initial neural network.
 						inputs[1] = window.Player2.GetPosition().y; //makes position less important to the initial neural network.
@@ -747,6 +754,8 @@
 						inputs[7] = window.Player1.GetLinearVelocity().y;
 						inputs[8] = strengths[1];
 						inputs[9] = strengths[0];
+						inputs[10] = window.Player2.GetPosition().x-window.Player1.GetPosition().x;
+						inputs[11] = window.Player2.GetPosition().y-window.Player1.GetPosition().y;
 					}
 					let output = predict();
 					function predict() {
@@ -957,6 +966,8 @@
 			window.right = [false, false];
 			window.space = [false, false];
 			strengths = [maxStrengths[0],maxStrengths[1]];
+			window.onPlatform = [false,false];
+
 			if(window.runner) {
 				window.wasPaused = runner.isPaused();
 				window.runner.destroy();
