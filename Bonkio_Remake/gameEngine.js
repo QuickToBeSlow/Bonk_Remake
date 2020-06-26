@@ -31,6 +31,7 @@
 	var controlPlayer1 = true;
 	var round = 0;
 	var roundCap = 7;
+	var leadTolerance = 4;
 	var currentNN = 0;
 	var TOTAL = 512;
 	var NNs = [];
@@ -684,19 +685,25 @@
 					if (steps > 5000) {this.endGame(-1)}
 				}
 				playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
-				if (playerDistance<100 && hasCollided == true) {canColReward = false;} else {canColReward = true; hasCollided = false;}
-				if (window.Player1.GetPosition().x < -100 || window.Player1.GetPosition().x > 1000 || window.Player1.GetPosition().y < 0) {
-					//Player2 wins
+				if (playerDistance<10 && hasCollided == true) {
+					canColReward = false;
+				} else {
+					canColReward = true; hasCollided = false;
+				}
+				let p1Lead = window.scores[0]-window.scores[1];
+				let p2Lead = window.scores[1]-window.scores[0];
+				if (window.Player1.GetPosition().x < -20 || window.Player1.GetPosition().x > 80 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
+					//if red is offscreen
 					if (!window.testingMode) {
-						reward += 5;
-						reward2 -= 5;
+						reward  += 10; //blue's reward
+						reward2 -= 10; //red's reward
 					}
 					this.endGame(1);
-				} else if (window.Player2.GetPosition().x < -100 || window.Player2.GetPosition().x > 1000 || window.Player2.GetPosition().y < 0) {
-					//Player1 wins
+				} else if (window.Player2.GetPosition().x < -20 || window.Player2.GetPosition().x > 80 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
+					//if blue is offscreen
 					if (!window.testingMode) {
-						reward -= 5;
-						reward2 += 5;
+						reward  -= 10; //blue's reward
+						reward2 += 10; //red's reward
 					}
 					this.endGame(0);
 				}
