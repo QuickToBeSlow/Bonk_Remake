@@ -956,6 +956,7 @@
 			window.left = [false, false];
 			window.right = [false, false];
 			window.space = [false, false];
+			strengths = [maxStrengths[0],maxStrengths[1]];
 			if(window.runner) {
 				window.wasPaused = runner.isPaused();
 				window.runner.destroy();
