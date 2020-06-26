@@ -909,6 +909,7 @@
 					NNScores[index2] += reward2;
 				}
 				if (round >= roundCap) {
+					window.scores = [0,0];
 					if (reward > reward2) {
 						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN, 1);
