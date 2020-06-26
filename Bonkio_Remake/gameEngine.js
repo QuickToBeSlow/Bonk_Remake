@@ -62,7 +62,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(10, [13, 13], 3);
+			this.brain = new NeuralNetwork(10, [8, 8], 3);
 		  }
 		}
 	  
