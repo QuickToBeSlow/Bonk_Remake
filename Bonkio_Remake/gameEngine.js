@@ -497,17 +497,17 @@
 			reward = 0;
 			reward2 = 0;
 	
-			// window.up[0] = false;
-			// window.down[0] = false;
-			// window.left[0] = false;
-			// window.right[0] = false;
-			// window.heavy[0] = false;
-			// window.up[1] = false;
-			// window.down[1] = false;
-			// window.left[1] = false;
-			// window.right[1] = false;
-			// window.heavy[1] = false;
-			// window.onPlatform = [false,false];
+			window.up[0] = false;
+			window.down[0] = false;
+			window.left[0] = false;
+			window.right[0] = false;
+			window.heavy[0] = false;
+			window.up[1] = false;
+			window.down[1] = false;
+			window.left[1] = false;
+			window.right[1] = false;
+			window.heavy[1] = false;
+			window.onPlatform = [false,false];
 	
 			var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
 			var m_physScale = 1;
