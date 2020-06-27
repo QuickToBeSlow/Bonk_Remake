@@ -9,8 +9,11 @@
 		return (Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ))-0.5;
 	}
 	
-	
-	
+	function sigmoid(value) {
+		return Math.pow(Math.E(), value)/Math.pow(1+Math.E(), value);
+	}
+	//converts inputs to sigmoid values (this is used for the inputs!)
+
 	// Daniel Shiffman
 	// Neuro-Evolution Flappy Bird with TensorFlow.js
 	// http://thecodingtrain.com
@@ -78,31 +81,31 @@
 		think(i) {
 			let inputs = [];
 			if (i==0) {
-				inputs[0] = (window.Player1.GetPosition().x-30)/5; //makes position less important to the initial neural network.
-				inputs[1] = (window.Player1.GetPosition().y)/5; //makes position less important to the initial neural network.
-				inputs[2] = window.Player1.GetLinearVelocity().x/5;
-				inputs[3] = window.Player1.GetLinearVelocity().y/5;
-				inputs[4] = (window.Player2.GetPosition().x-30)/5;
-				inputs[5] = window.Player2.GetPosition().y/5;
-				inputs[6] = window.Player2.GetLinearVelocity().x/5;
-				inputs[7] = window.Player2.GetLinearVelocity().y/5;
-				inputs[8] = strengths[0]/5;
-				inputs[9] = strengths[1]/5;
-				inputs[10] = (window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5;
-				inputs[11] = (window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5;
+				inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+				inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
+				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[4] = sigmoid((window.Player2.GetPosition().x-30)/5);
+				inputs[5] = sigmoid(window.Player2.GetPosition().y/5);
+				inputs[6] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[7] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[8] = sigmoid(strengths[0]/5);
+				inputs[9] = sigmoid(strengths[1]/5);
+				inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+				inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
 			} else {
-				inputs[0] = (window.Player2.GetPosition().x-30)/5; //makes position less important to the initial neural network.
-				inputs[1] = window.Player2.GetPosition().y/5; //makes position less important to the initial neural network.
-				inputs[2] = window.Player2.GetLinearVelocity().x/5;
-				inputs[3] = window.Player2.GetLinearVelocity().y/5;
-				inputs[4] = (window.Player1.GetPosition().x-30)/5;
-				inputs[5] = window.Player1.GetPosition().y/5;
-				inputs[6] = window.Player1.GetLinearVelocity().x/5;
-				inputs[7] = window.Player1.GetLinearVelocity().y/5;
-				inputs[8] = strengths[1]/5;
-				inputs[9] = strengths[0]/5;
-				inputs[10] = (window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5;
-				inputs[11] = (window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5;
+				inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+				inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
+				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[4] = sigmoid((window.Player1.GetPosition().x-30)/5);
+				inputs[5] = sigmoid(window.Player1.GetPosition().y/5);
+				inputs[6] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[8] = sigmoid(strengths[1]/5);
+				inputs[9] = sigmoid(strengths[0]/5);
+				inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+				inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
 			}
 	
 			let output = this.brain.predict(inputs);
@@ -738,31 +741,31 @@
 					let inputs = [];
 					let color = "blue";
 					if (color == "red") {
-						inputs[0] = (window.Player1.GetPosition().x-30)/5; //makes position less important to the initial neural network.
-						inputs[1] = (window.Player1.GetPosition().y)/5; //makes position less important to the initial neural network.
-						inputs[2] = window.Player1.GetLinearVelocity().x/5;
-						inputs[3] = window.Player1.GetLinearVelocity().y/5;
-						inputs[4] = (window.Player2.GetPosition().x-30)/5;
-						inputs[5] = window.Player2.GetPosition().y/5;
-						inputs[6] = window.Player2.GetLinearVelocity().x/5;
-						inputs[7] = window.Player2.GetLinearVelocity().y/5;
-						inputs[8] = strengths[0]/5;
-						inputs[9] = strengths[1]/5;
-						inputs[10] = (window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5;
-						inputs[11] = (window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5;
+						inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+						inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
+						inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+						inputs[4] = sigmoid((window.Player2.GetPosition().x-30)/5);
+						inputs[5] = sigmoid(window.Player2.GetPosition().y/5);
+						inputs[6] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+						inputs[7] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+						inputs[8] = sigmoid(strengths[0]/5);
+						inputs[9] = sigmoid(strengths[1]/5);
+						inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+						inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
 					} else {
-						inputs[0] = (window.Player2.GetPosition().x-30)/5; //makes position less important to the initial neural network.
-						inputs[1] = window.Player2.GetPosition().y/5; //makes position less important to the initial neural network.
-						inputs[2] = window.Player2.GetLinearVelocity().x/5;
-						inputs[3] = window.Player2.GetLinearVelocity().y/5;
-						inputs[4] = (window.Player1.GetPosition().x-30)/5;
-						inputs[5] = window.Player1.GetPosition().y/5;
-						inputs[6] = window.Player1.GetLinearVelocity().x/5;
-						inputs[7] = window.Player1.GetLinearVelocity().y/5;
-						inputs[8] = strengths[1]/5;
-						inputs[9] = strengths[0]/5;
-						inputs[10] = (window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5;
-						inputs[11] = (window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5;
+						inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+						inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
+						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+						inputs[4] = sigmoid((window.Player1.GetPosition().x-30)/5);
+						inputs[5] = sigmoid(window.Player1.GetPosition().y/5);
+						inputs[6] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+						inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+						inputs[8] = sigmoid(strengths[1]/5);
+						inputs[9] = sigmoid(strengths[0]/5);
+						inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+						inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
 					}
 					let output = predict();
 					function predict() {
