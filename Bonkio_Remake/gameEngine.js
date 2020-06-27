@@ -200,7 +200,7 @@
 				const hidden = tf.layers.dense({
 					units: this.hidden_nodes[i],
 					inputShape: [this.input_nodes],
-					activation: 'sigmoid'
+					activation: 'selu'
 				});
 				model.add(hidden);
 			} else if (i%2 == 0) {
