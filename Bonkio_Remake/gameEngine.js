@@ -283,7 +283,7 @@
 			let NeuralN;
 			NeuralN = savedNNs[winnerList[0]];
 			child = new NN(NeuralN.brain);
-		} else if (pos == (TOTAL) && window.prevWinner != undefined && TOTAL <= 2) {
+		} else if (pos == (TOTAL) && window.prevWinner != undefined && TOTAL >= 2) {
 			let NeuralN;
 			NeuralN = window.prevWinner;
 			child = new NN(NeuralN.brain);
