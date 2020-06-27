@@ -101,8 +101,8 @@
 				inputs[7] = window.Player1.GetLinearVelocity().y/5;
 				inputs[8] = strengths[1]/5;
 				inputs[9] = strengths[0]/5;
-				inputs[10] = (window.Player2.GetPosition().x-window.Player1.GetPosition().x);
-				inputs[11] = (window.Player2.GetPosition().y-window.Player1.GetPosition().y);
+				inputs[10] = (window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5;
+				inputs[11] = (window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5;
 			}
 	
 			let output = this.brain.predict(inputs);
@@ -761,8 +761,8 @@
 						inputs[7] = window.Player1.GetLinearVelocity().y/5;
 						inputs[8] = strengths[1]/5;
 						inputs[9] = strengths[0]/5;
-						inputs[10] = (window.Player2.GetPosition().x-window.Player1.GetPosition().x);
-						inputs[11] = (window.Player2.GetPosition().y-window.Player1.GetPosition().y);
+						inputs[10] = (window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5;
+						inputs[11] = (window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5;
 					}
 					let output = predict();
 					function predict() {
