@@ -10,7 +10,7 @@
 	}
 	
 	function sigmoid(value) {
-		return (Math.pow(Math.E, value)/Math.pow(1+Math.E, value));
+		return 2*(Math.pow(Math.E, value)/Math.pow(1+Math.E, value));
 	}
 	//converts inputs to sigmoid values (this is used for the inputs!)
 
@@ -172,7 +172,7 @@
 			  for (let j = 0; j < values.length; j++) {
 				if (Math.random() < rate) {
 				  let w = values[j];
-				  values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w*2) : (randn_bm()+0.51)/2;
+				  values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
