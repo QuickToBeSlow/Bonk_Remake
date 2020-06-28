@@ -6,7 +6,7 @@
 		var u = 0, v = 0;
 		while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
 		while(v === 0) v = Math.random();
-		return (Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ));
+		return (Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ))-0.5;
 	}
 	
 	function sigmoid(value) {
@@ -172,7 +172,7 @@
 			  for (let j = 0; j < values.length; j++) {
 				if (Math.random() < rate) {
 				  let w = values[j];
-				  values[j] = (Math.abs(w) > 0.01) ? w + randn_bm()*w*2 : randn_bm;
+				  values[j] = (Math.abs(w) > 0.01) ? w + randn_bm()*w : randn_bm;
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
