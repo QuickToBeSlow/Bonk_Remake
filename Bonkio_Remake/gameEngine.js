@@ -172,7 +172,7 @@
 			  for (let j = 0; j < values.length; j++) {
 				if (Math.random() < rate) {
 				  let w = values[j];
-				  values[j] = w + randn_bm();
+				  values[j] = (Math.abs(w) > 0.01) ? w + randn_bm()*w : randn_bm;
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
@@ -553,8 +553,8 @@
 				if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
 					hasCollided = true;
 					if (canColReward && !window.testingMode) {
-						reward += (window.heavy[1] == true) ? strengths[1]/5 : 1;
-						reward2 += (window.heavy[0] == true) ? strengths[0]/5 : 1;
+						reward += (window.heavy[1] == true) ? strengths[1]/roundCap/5 : 1/roundCap;
+						reward2 += (window.heavy[0] == true) ? strengths[0]/roundCap/5 : 1/roundCap;
 					}
 				}
 			}
