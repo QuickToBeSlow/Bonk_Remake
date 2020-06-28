@@ -172,7 +172,7 @@
 			  for (let j = 0; j < values.length; j++) {
 				if (Math.random() < rate) {
 				  let w = values[j];
-				  values[j] = (Math.abs(w) > 0.01) ? w + randn_bm()*w : randn_bm;
+				  values[j] = (Math.abs(w) > 0.01) ? w + randn_bm()*w*2 : randn_bm;
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
