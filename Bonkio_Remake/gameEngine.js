@@ -893,7 +893,7 @@
 		for (let i=0; i<TOTAL; i++) {
 			// NNScores[0].push(i);
 			// NNScores[1].push(i);
-			NNScores.push(i);
+			NNScores.push(0);
 		}
 		var NNFitnesses = [];
 	
@@ -958,7 +958,7 @@
 						for (let i=0; i<TOTAL; i++) {
 							// NNScores[0].push(i);
 							// NNScores[1].push(i);
-							NNScores.push(i);
+							NNScores.push(0);
 						}
 						NNFitnesses = [];
 						winnerList = [];
