@@ -276,7 +276,7 @@
 	  function pickOne(pos) {
 		let index = 0;
 		// let r = Math.random();
-		let r = randn_bm(true);
+		let r = Math.random();
 		// console.log(savedNNs);
 		while (r > 0) {
 			// console.log(savedNNs[i][index].fitness); 
