@@ -2,13 +2,15 @@
 
 	//code for Gaussian
 	
-	function randn_bm() {
+	function randn_bm(restrict) {
 		var u = 0, v = 0;
 		while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
 		while(v === 0) v = Math.random();
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-		num = num / 10.0 + 0.5; // Translate to 0 -> 1
-		if (num > 1 || num < 0) return randn_bm(); // resample between 0 and 1
+		if (restrict == true) {
+			num = num / 10.0 + 0.5; // Translate to 0 -> 1
+			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
+		}
 		return num;
 	}
 	
@@ -176,7 +178,7 @@
 				if (Math.random() < rate) {
 				  let w = values[j];
 				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-				  values[j] = w + randn_bm();
+				  values[j] = w + randn_bm(false);
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
@@ -274,7 +276,7 @@
 	  function pickOne(pos) {
 		let index = 0;
 		// let r = Math.random();
-		let r = randn_bm()+0.5;
+		let r = randn_bm(true);
 		// console.log(savedNNs);
 		while (r > 0) {
 			// console.log(savedNNs[i][index].fitness); 
