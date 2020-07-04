@@ -270,7 +270,8 @@
 	  
 	  function pickOne(pos) {
 		let index = 0;
-		let r = Math.random();
+		// let r = Math.random();
+		let r = randn_bm()+0.5;
 		// console.log(savedNNs);
 		while (r > 0) {
 			// console.log(savedNNs[i][index].fitness); 
