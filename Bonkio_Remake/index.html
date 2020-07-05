@@ -134,6 +134,12 @@
 		table tr td {
 			display: block;
 		}
+		table tr th {
+			display: block;
+			font-size: 20px;
+			text-align: left;
+			text-decoration: underline;
+		}
 		button {
 			width: 175px;
 		}
@@ -152,23 +158,27 @@
 <!-- 	<button id="step" >single step</button> -->
 	<table>
 		<tr>
+			<th>Speed Settings</th>
 			<td><button id="resume" >resume</button></td>
 			<td><button id="pause" >pause</button></td>
 			<td><button id="supaSpeedDown" >speed down</button></td>
 			<td><button id="supaSpeedUp" >speed up</button></td>
 		</tr>
 		<tr>
+			<th>Save Settings</th>
 			<td><button id="saveRedNN" >save red player</button></td>
 			<td><button id="saveBlueNN" >save blue player</button></td>
 			<td><button id="saveTournamentWinner" >save tournament winner</button></td>
 		</tr>
 		<tr>
+			<th>NN Testing</th>
 			<td><button id="toggleTestingMode" >toggle testing mode</button></td>
 			<td><button id="loadModel" >load model (testing only)</button></td>
 			<td><button id="downloadModel" >download model</button></td>
 			<td><button id="loadPretrained" >load pretrained model</button></td>
 		</tr>
 		<tr>
+			<th>Debugging</th>
 			<td><button id="toggleDebug" >toggle debug</button></td>
 		</tr>
 	</table>
