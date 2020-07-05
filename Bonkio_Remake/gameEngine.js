@@ -776,6 +776,13 @@
 				window.left[1] = false;
 				window.right[1] = false;
 				window.heavy[1] = false;
+				if (!window.testingMode) {
+					window.up[0] = false;
+					window.down[0] = false;
+					window.left[0] = false;
+					window.right[0] = false;
+					window.heavy[0] = false;
+				}
 				//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 				// for (let i=0; i<NNs.length; i++) {
 				if (!window.testingMode) {
@@ -785,6 +792,7 @@
 	// 				console.log(index%(TOTAL/2));
 					NNs[index].think(0);
 					if (controlPlayer1) {
+
 						NNs[index2].think(1);
 					}
 				} else if (window.testModel != undefined) {
@@ -964,12 +972,12 @@
 				if (round >= roundCap) {
 					window.scores = [0,0];
 					if (reward > reward2) {
-						NNScores[index] += 10;
-						if (winnerList.length == 2) {secondBest = NNs[index2];}
-						winnerList.splice(currentNN, 1);
-					} else {
 						NNScores[index2] += 10;
 						if (winnerList.length == 2) {secondBest = NNs[index];}
+						winnerList.splice(currentNN, 1);
+					} else {
+						NNScores[index] += 10;
+						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN+1, 1);
 					}
 					reward = 0;
