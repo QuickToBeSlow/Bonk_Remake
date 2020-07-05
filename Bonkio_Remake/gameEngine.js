@@ -921,10 +921,10 @@
 				if (round >= roundCap) {
 					window.scores = [0,0];
 					if (reward > reward2) {
-						if (winnerList.length == 2) {secondBest = NNs[index];}
+						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN, 1);
 					} else {
-						if (winnerList.length == 2) {secondBest = NNs[index2];}
+						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN+1, 1);
 					}
 				}
