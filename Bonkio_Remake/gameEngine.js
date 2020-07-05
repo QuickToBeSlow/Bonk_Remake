@@ -735,7 +735,7 @@
 			for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 				if (!window.testingMode) {
 					steps++;
-					if (steps > 5000) {this.endGame(-1)}
+					if (steps > 5000) {this.endGame(-1); i = supaSpeed;}
 				}
 				playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
 				if (playerDistance<10 && hasCollided == true) {
@@ -752,6 +752,7 @@
 						reward2 -= 10; //red's reward
 					}
 					this.endGame(1);
+					i = supaSpeed;
 				} else if (window.Player2.GetPosition().x < -20 || window.Player2.GetPosition().x > 80 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
 					//if blue is offscreen
 					if (!window.testingMode) {
@@ -759,6 +760,7 @@
 						reward2 += 10; //red's reward
 					}
 					this.endGame(0);
+					i = supaSpeed;
 				}
 				if(!this._world)
 					return;
