@@ -36,6 +36,8 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
+
+	window.debug = false;
 	var controlPlayer1 = true;
 	var round = 0;
 	var roundCap = 7;
@@ -109,8 +111,8 @@
 				inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 				inputs[8] = sigmoid(strengths[1]/5);
 				inputs[9] = sigmoid(strengths[0]/5);
-				inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-				inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+				inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+				inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
 			}
 	
 			let output = this.brain.predict(inputs);
@@ -613,6 +615,52 @@
 			c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
 			c.fillText("generation : "+generation, 250, 30);
 			c.fillText("KD : " + Math.round(window.scores[0]/window.scores[1]*1000)/1000,250, 45);
+			if (window.debug) {
+				for (let i = 0; i < NNScores.length; i+=2) {
+					if (NNScores[i]>NNScores[i+1]) {
+						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+					}
+					if (NNScores[i]<NNScores[i+1]) {
+						c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+					}
+					if (NNScores[i]== 0 && NNScores[i+1] == 0) {
+						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+					}
+					if (winnerList[currentNN]==i || winnerList[currentNN+1]==i){
+						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+					}
+					c.fillText("NNscores[" + (i) + "]: " + NNScores[i],5,115+i/2*10);//currentNN
+				}
+				c.fillText("currentNN : "+currentNN, 250, 60);
+				c.fillText("winnerList[currentNN] : "+winnerList[currentNN], 250, 70);
+				for (let i = 0; i < NNScores.length; i+=2) {
+					if (NNScores[i+1]>NNScores[i]) {
+						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+					}
+					if (NNScores[i]>NNScores[i+1]) {
+						c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+					}
+					if (NNScores[i]== 0 && NNScores[i+1] == 0) {
+						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+					}
+					if (winnerList[currentNN]==i+1 || winnerList[currentNN+1]==i+1){
+						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+					}
+					c.fillText("NNscores[" + (i+1) + "]: " + NNScores[i+1],205,115+i/2*10);
+				}
+				for (let i = 0; i < winnerList.length; i++) {
+					c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";
+					if (currentNN==i){
+						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+						c.fillText("current match : Network #" + winnerList[i]+" VS Network #"+winnerList[i+1],250, 45);
+					}
+					if (currentNN+1==i){
+						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+					}
+					c.fillText("winnerList[" + (i) + "]: " + winnerList[i],500,10+(i)*9);
+				}
+			}
+
 			let tourneyStatus = "";
 			if (winnerList.length > 16) {
 				tourneyStatus = "Qualifying";
@@ -766,8 +814,8 @@
 						inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 						inputs[8] = sigmoid(strengths[1]/5);
 						inputs[9] = sigmoid(strengths[0]/5);
-						inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-						inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+						inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+						inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
 					}
 					let output = predict();
 					function predict() {
