@@ -502,11 +502,6 @@
 		
 		var onPlatform = [false,false];
 		Test.prototype.createWorld = function() {
-			
-			
-			
-			reward = 0;
-			reward2 = 0;
 	
 			window.up[0] = false;
 			window.down[0] = false;
@@ -929,6 +924,8 @@
 						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN+1, 1);
 					}
+					reward = 0;
+					reward2 = 0;
 				}
 				if (window.saveRedNN) {
 					console.log(NNs[0][0]);
