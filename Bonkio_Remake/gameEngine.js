@@ -109,8 +109,8 @@
 				inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 				inputs[8] = sigmoid(strengths[1]/5);
 				inputs[9] = sigmoid(strengths[0]/5);
-				inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-				inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+				inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
 			}
 	
 			let output = this.brain.predict(inputs);
@@ -771,8 +771,8 @@
 						inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 						inputs[8] = sigmoid(strengths[1]/5);
 						inputs[9] = sigmoid(strengths[0]/5);
-						inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-						inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+						inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+						inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
 					}
 					let output = predict();
 					function predict() {
@@ -914,16 +914,18 @@
 				steps = 0;
 				let index = winnerList[currentNN];
 				let index2 = winnerList[currentNN+1];
-				NNScores[index] += reward;
-				if (controlPlayer1) {
-					NNScores[index2] += reward2;
-				}
+				// NNScores[index] += reward;
+				// if (controlPlayer1) {
+				// 	NNScores[index2] += reward2;
+				// }
 				if (round >= roundCap) {
 					window.scores = [0,0];
 					if (reward > reward2) {
+						NNScores[index] += 10;
 						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN, 1);
 					} else {
+						NNScores[index2] += 10;
 						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN+1, 1);
 					}
