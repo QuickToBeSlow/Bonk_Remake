@@ -12,7 +12,9 @@ Test.prototype.createWorld = function() {
 	var m_physScale = 10;
 	
 	var fd = new b2FixtureDef();
+	// var fd2 = new b2FixtureDef();
 	var sd = new b2PolygonShape();
+	var sd2 = new b2PolygonShape();
 	var bd = new b2BodyDef();
 	bd.type = b2Body.b2_dynamicBody;
 	bd.fixedRotation = true;
@@ -81,6 +83,13 @@ Test.prototype.createWorld = function() {
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
+	sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
+	sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.75), new b2Vec2(-0.2, -1.75)];
+	fd.density = 0;
+	fd.isSensor = true;
+	fd.shape = sd2;
+	window.P1Foot = window.Player1.CreateFixture(fd);
+	window.P1Foot.SetUserData("Foot1");
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
@@ -88,13 +97,26 @@ Test.prototype.createWorld = function() {
 // 		bd.position.Set(225/m_physScale, 120/m_physScale);
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
-// 	}
+// 	}	fd.density = 1;
+	fd.restitution = 0.8;
+	fd.friction = 0.0;
+	fd.isSensor = false;
+	fd.shape = P2;
 	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
 	window.PFixture2 = window.Player2.CreateFixture(fd);
+	// sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
+	// sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.75), new b2Vec2(-0.2, -1.75)];
+	fd.density = 0;
+	fd.isSensor = true;
+	fd.shape = sd2;
+	window.P2Foot = window.Player2.CreateFixture(fd);
+	window.P2Foot.SetUserData("Foot2");
 	// console.log(Player2);
+
+
 
 	return world;
 };

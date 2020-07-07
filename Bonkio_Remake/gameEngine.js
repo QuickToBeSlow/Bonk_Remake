@@ -277,8 +277,8 @@
 	  
 	  function pickOne(pos) {
 		let index = 0;
-		// let r = Math.random();
-		let r = randn_bm(true);
+		let r = Math.random();
+		// let r = randn_bm(true);
 		// console.log(savedNNs);
 		while (r > 0) {
 			// console.log(savedNNs[i][index].fitness); 
@@ -547,11 +547,14 @@
 			//Add listeners for contact
 			var listener = new b2Listener;
 			listener.BeginContact = function(contact) {
+				console.log(contact);
+				console.log(contact.GetFixtureA().GetBody().GetUserData());
+				console.log(contact.GetFixtureB().GetBody().GetUserData());
 				// console.log(contact.GetFixtureA().GetBody().GetUserData());
-				if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+				if (contact.GetFixtureA().GetUserData() == 'Foot1' && contact.GetFixtureB().GetBody().GetUserData() == 'Floor') {
 					onPlatform[0] = true;
 				}
-				if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
+				if (contact.GetFixtureA().GetUserData() == 'Foot2' && contact.GetFixtureB().GetBody().GetUserData() == 'Floor') {
 					onPlatform[1]= true;
 				}
 				if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
@@ -564,11 +567,11 @@
 			}
 			listener.EndContact = function(contact) {
 				// console.log(contact.GetFixtureA().GetBody().GetUserData());
-				if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player1') {
+				if (contact.GetFixtureA().GetUserData() == 'Foot1' && contact.GetFixtureB().GetBody().GetUserData() == 'Floor') {
 					onPlatform[0] = false;
 				}
-				if (contact.GetFixtureA().GetBody().GetUserData() == 'Floor' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') {
-					onPlatform[1] = false;
+				if (contact.GetFixtureA().GetUserData() == 'Foot2' && contact.GetFixtureB().GetBody().GetUserData() == 'Floor') {
+					onPlatform[1]= false;
 				}
 			}
 			listener.PostSolve = function(contact, impulse) {
