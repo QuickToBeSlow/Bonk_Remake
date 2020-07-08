@@ -739,7 +739,7 @@
 			for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 				if (!window.testingMode) {
 					steps++;
-					if (steps > 3500) {this.endGame(-1); i = supaSpeed;}
+					if (steps > 5000) {this.endGame(-1); i = supaSpeed;}
 				}
 				playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
 				if (playerDistance<10 && hasCollided == true) {
