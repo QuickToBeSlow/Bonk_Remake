@@ -84,7 +84,7 @@ Test.prototype.createWorld = function() {
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
 	sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
-	sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.75), new b2Vec2(-0.2, -1.75)];
+	sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.51), new b2Vec2(-0.2, -1.51)];
 	fd.density = 0;
 	fd.isSensor = true;
 	fd.shape = sd2;
