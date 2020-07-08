@@ -38,6 +38,7 @@
 	*/
 
 	window.debug = false;
+	window.draw = true;
 	var controlPlayer1 = true;
 	var round = 0;
 	var roundCap = 7;
@@ -253,7 +254,7 @@
 		// }
 		NNs[i] = new NN();
 	  }
-		console.log(NNs);
+		// console.log(NNs);
 	
 	
 	function nextGeneration() {
@@ -547,9 +548,6 @@
 			//Add listeners for contact
 			var listener = new b2Listener;
 			listener.BeginContact = function(contact) {
-				console.log(contact);
-				console.log(contact.GetFixtureA().GetBody().GetUserData());
-				console.log(contact.GetFixtureB().GetBody().GetUserData());
 				// console.log(contact.GetFixtureA().GetBody().GetUserData());
 				if (contact.GetFixtureA().GetUserData() == 'Foot1' && contact.GetFixtureB().GetBody().GetUserData() == 'Floor') {
 					onPlatform[0] = true;
@@ -605,9 +603,10 @@
 			if (this._canvas == null)
 				return;
 			var c = this._canvas.getContext("2d");
-			
+			c.fillStyle = "white";
+			c.fillRect(-5,-5,this._canvas.width+5, this._canvas.height+5);
 			this._dbgDraw.SetSprite(c);
-			if(this._world) {
+			if(this._world && window.draw) {
 				this._world.SetDebugDraw(this._dbgDraw);
 				this._world.DrawDebugData();
 			}
@@ -688,36 +687,38 @@
 			}
 			c.fillStyle = "rgb("+(240)+","+(64)+","+(64)+")";
 			// c.strokeStyle = "rgb(255,255,255)";
-			c.beginPath();
-			c.lineWidth = 1;
-			c.arc(window.Player1.GetPosition().x*12.5,-window.Player1.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
-			c.fill();
-			c.fillStyle = "rgb(0,0,0)";
-	
-			c.fillStyle = "rgb("+(64)+","+(64)+","+(240)+")";
-			// c.strokeStyle = "rgb(255,255,255)";
-			c.beginPath();
-			c.lineWidth = 1;
-			c.arc(window.Player2.GetPosition().x*12.5,-window.Player2.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
-			c.fill();
-			c.fillStyle = "rgb(0,0,0)";
-			if (window.heavy[0]) {
-				c.strokeStyle = "rgb("+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+")";
-				// c.strokeStyle = "rgb(255,255,255)";
+			if (window.draw) {
 				c.beginPath();
-				c.lineWidth = 3;
+				c.lineWidth = 1;
 				c.arc(window.Player1.GetPosition().x*12.5,-window.Player1.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
-				c.stroke();
-				c.strokeStyle = "rgb(0,0,0)";
-			}
-			if (window.heavy[1]) {
-				c.strokeStyle = "rgb("+(127*(strengths[1]/maxStrengths[1])+127)+","+(127*(strengths[1]/maxStrengths[1])+127)+","+(127*(strengths[1]/maxStrengths[1])+127)+")";
+				c.fill();
+				c.fillStyle = "rgb(0,0,0)";
+
+				c.fillStyle = "rgb("+(64)+","+(64)+","+(240)+")";
 				// c.strokeStyle = "rgb(255,255,255)";
 				c.beginPath();
-				c.lineWidth = 3;
+				c.lineWidth = 1;
 				c.arc(window.Player2.GetPosition().x*12.5,-window.Player2.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
-				c.stroke();
-				c.strokeStyle = "rgb(0,0,0)";
+				c.fill();
+				c.fillStyle = "rgb(0,0,0)";
+				if (window.heavy[0]) {
+					c.strokeStyle = "rgb("+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+","+(127*(strengths[0]/maxStrengths[0])+127)+")";
+					// c.strokeStyle = "rgb(255,255,255)";
+					c.beginPath();
+					c.lineWidth = 3;
+					c.arc(window.Player1.GetPosition().x*12.5,-window.Player1.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
+					c.stroke();
+					c.strokeStyle = "rgb(0,0,0)";
+				}
+				if (window.heavy[1]) {
+					c.strokeStyle = "rgb("+(127*(strengths[1]/maxStrengths[1])+127)+","+(127*(strengths[1]/maxStrengths[1])+127)+","+(127*(strengths[1]/maxStrengths[1])+127)+")";
+					// c.strokeStyle = "rgb(255,255,255)";
+					c.beginPath();
+					c.lineWidth = 3;
+					c.arc(window.Player2.GetPosition().x*12.5,-window.Player2.GetPosition().y*12.5+this._canvas.height,20,0,2*Math.PI);
+					c.stroke();
+					c.strokeStyle = "rgb(0,0,0)";
+				}
 			}
 		}
 		
@@ -738,7 +739,7 @@
 			for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 				if (!window.testingMode) {
 					steps++;
-					if (steps > 5000) {this.endGame(-1); i = supaSpeed;}
+					if (steps > 3500) {this.endGame(-1); i = supaSpeed;}
 				}
 				playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
 				if (playerDistance<10 && hasCollided == true) {
