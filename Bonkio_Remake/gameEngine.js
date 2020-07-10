@@ -1,5 +1,23 @@
 (function(){
 
+	//code for raycasting
+	
+	var rayCastInput = new b2RayCastInput();
+	var rayCastOutput =  new b2RayCastOutput();
+	
+	function raycast(b2Fixture, p1, p2, maxFraction){
+	  rayCastInput.set_p1(p1);
+	  rayCastInput.set_p2(p2);
+	  rayCastInput.set_maxFraction(maxFraction);
+	  if(b2Fixture.RayCast(rayCastOutput, rayCastInput)){
+		return {
+		  normal: rayCastOutput.get_normal(),
+		  fraction: rayCastOutput.get_fraction()
+		}
+	  }
+	  return false;
+	}
+
 	//code for Gaussian
 	
 	function randn_bm(restrict) {
