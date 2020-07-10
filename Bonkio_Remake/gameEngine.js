@@ -1111,42 +1111,42 @@
 		window.left = [false,false];
 		window.right = [false,false];
 		window.heavy = [false,false];
-		Test.prototype._updateKeyboardInteraction = function() {
+		// Test.prototype._updateKeyboardInteraction = function() {
 			// TBD
 	
-			if (this._keyDown != undefined) {
-				if (this._keyDown == "KeyW") {
-					window.up[0] = true;
-				} else if (this._keyDown == "KeyA") {
-					window.left[0] = true;
-				} else if (this._keyDown == "KeyS") {
-					window.down[0] = true;
-				} else if (this._keyDown == "KeyD") {
-					window.right[0] = true;
-				} else if (this._keyDown == "Space") {
-					window.heavy[0] = true;
-				}
-			}
-			if (this._keyUp != undefined) {
-				if (this._keyUp == "KeyW") {
-					window.up[0] = false;
-				} else if (this._keyUp == "KeyA") {
-					window.left[0] = false;
-				} else if (this._keyUp == "KeyS") {
-					window.down[0] = false;
-				} else if (this._keyUp == "KeyD") {
-					window.right[0] = false;
-				} else if (this._keyUp == "Space") {
-					window.heavy[0] = false;
-				}
-			}
-				this._keyDown = undefined;
-				this._keyUp = undefined;
-		}
+			// if (this._keyDown != undefined) {
+			// 	if (this._keyDown == "KeyW") {
+			// 		window.up[0] = true;
+			// 	} else if (this._keyDown == "KeyA") {
+			// 		window.left[0] = true;
+			// 	} else if (this._keyDown == "KeyS") {
+			// 		window.down[0] = true;
+			// 	} else if (this._keyDown == "KeyD") {
+			// 		window.right[0] = true;
+			// 	} else if (this._keyDown == "Space") {
+			// 		window.heavy[0] = true;
+			// 	}
+			// }
+			// if (this._keyUp != undefined) {
+			// 	if (this._keyUp == "KeyW") {
+			// 		window.up[0] = false;
+			// 	} else if (this._keyUp == "KeyA") {
+			// 		window.left[0] = false;
+			// 	} else if (this._keyUp == "KeyS") {
+			// 		window.down[0] = false;
+			// 	} else if (this._keyUp == "KeyD") {
+			// 		window.right[0] = false;
+			// 	} else if (this._keyUp == "Space") {
+			// 		window.heavy[0] = false;
+			// 	}
+			// }
+			// 	this._keyDown = undefined;
+			// 	this._keyUp = undefined;
+		// }
 		
 		Test.prototype._updateUserInteraction = function() {
 			this._updateMouseInteraction();
-			this._updateKeyboardInteraction();
+			// this._updateKeyboardInteraction();
 			
 			if(!this._paused) {
 				var that = this;
