@@ -59,7 +59,7 @@ Test.prototype.createWorld = function() {
 	// bd.userData = "ramp";
 	bd.position.Set((300) / m_physScale, (50) / m_physScale);
 	b = world.CreateBody(bd);
-	b.CreateFixture(fd);
+	window.FloorFixture = b.CreateFixture(fd);
 	
 	//Random Pos
 	let randPos = Math.round(Math.random());

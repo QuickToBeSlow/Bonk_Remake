@@ -5,14 +5,17 @@
 	var rayCastInput = new b2RayCastInput();
 	var rayCastOutput =  new b2RayCastOutput();
 	
+	// console.log(rayCastInput);
+
 	function raycast(b2Fixture, p1, p2, maxFraction){
-	  rayCastInput.set_p1(p1);
-	  rayCastInput.set_p2(p2);
-	  rayCastInput.set_maxFraction(maxFraction);
+	  rayCastInput.p1 = p1;
+	  rayCastInput.p2 = p2;
+	  rayCastInput.maxFraction = maxFraction;
+	//   console.log(rayCastInput);
 	  if(b2Fixture.RayCast(rayCastOutput, rayCastInput)){
 		return {
-		  normal: rayCastOutput.get_normal(),
-		  fraction: rayCastOutput.get_fraction()
+		  normal: rayCastOutput.normal,
+		  fraction: rayCastOutput.fraction
 		}
 	  }
 	  return false;
@@ -107,6 +110,7 @@
 		think(i) {
 			let inputs = [];
 			if (i==0) {
+				// console.log(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), 0)));
 				inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
 				inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
 				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
