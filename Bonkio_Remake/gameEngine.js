@@ -73,7 +73,7 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 4;
+	window.eyes = 8;
 	window.debug = false;
 	window.draw = true;
 	var controlPlayer1 = true;
