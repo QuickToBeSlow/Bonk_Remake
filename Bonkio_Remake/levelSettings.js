@@ -10,7 +10,7 @@ extend(Test.prototype, gameEngine.prototype)
 Test.prototype.createWorld = function() {
 	var world = gameEngine.prototype.createWorld.apply(this, arguments);
 	var m_physScale = 10;
-	
+	window.shapes = [];
 	var fd = new b2FixtureDef();
 	// var fd2 = new b2FixtureDef();
 	var sd = new b2PolygonShape();
@@ -24,43 +24,65 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.restitution = 0.1;
 	fd.shape = sd;
-	var i;
-	// Create 3 stacks
-	// for (i = 0; i < 10; i++){
-	// 	sd.SetAsBox((10) / m_physScale, (10) / m_physScale);
-	// 	bd.position.Set((640/2+0+Math.random()*2 - 1) / m_physScale, (360-5-i*25) / m_physScale);
-	// 	b = world.CreateBody(bd);
-	// 	b.CreateFixture(fd);
-	// }
-	// for (i = 0; i < 10; i++){
-	// 	sd.SetAsBox((10) / m_physScale, (10) / m_physScale);
-	// 	bd.position.Set((640/2+100+Math.random()*1 - 0.5) / m_physScale, (360-5-i*25) / m_physScale);
-	// 	b = world.CreateBody(bd);
-	// 	b.CreateFixture(fd);
-	// }
-	// for (i = 0; i < 10; i++){
-	// 	sd.SetAsBox((10) / m_physScale, (10) / m_physScale);
-	// 	bd.position.Set((640/2+200+Math.random()*0.5 - 0.25) / m_physScale, (360-5-i*25) / m_physScale);
-	// 	b = world.CreateBody(bd);
-	// 	b.CreateFixture(fd);
-	// }
-	// Create ramp
+	// sd.SetAsBox((200) / m_physScale, (10) / m_physScale);
+	// fd.density = 0;
+	// bd.type = b2Body.b2_staticBody;
+	// bd.userData = "Floor";
+	// bd.position.Set((300) / m_physScale, (50) / m_physScale);
+	// b = world.CreateBody(bd);
+	// window.FloorFixture = b.CreateFixture(fd);
+	// window.shapes.push(window.FloorFixture);
 
-	// var vxs = [
-	// 	new b2Vec2(100 / m_physScale, 0),
-	// 	new b2Vec2(100 / m_physScale, 100 / m_physScale),
-	// 	new b2Vec2(500 / m_physScale, 100 / m_physScale),
-	// 	new b2Vec2(500 / m_physScale, 0 / m_physScale)
-	// ];
-	sd.SetAsBox((200) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
+	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	// bd.userData = "ramp";
-	bd.position.Set((300) / m_physScale, (50) / m_physScale);
+	bd.position.Set((75) / m_physScale, (350) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
-	
+	window.shapes.push(window.FloorFixture);
+
+	fd.shape = sd;
+	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
+	bd.userData = "Floor";
+	bd.position.Set((525) / m_physScale, (350) / m_physScale);
+	b = world.CreateBody(bd);
+	window.FloorFixture = b.CreateFixture(fd);
+	window.shapes.push(window.FloorFixture);
+
+	fd.shape = sd;
+	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
+	bd.userData = "Floor";
+	bd.position.Set((75) / m_physScale, (50) / m_physScale);
+	b = world.CreateBody(bd);
+	window.FloorFixture = b.CreateFixture(fd);
+	window.shapes.push(window.FloorFixture);
+
+	fd.shape = sd;
+	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
+	bd.userData = "Floor";
+	bd.position.Set((525) / m_physScale, (50) / m_physScale);
+	b = world.CreateBody(bd);
+	window.FloorFixture = b.CreateFixture(fd);
+	window.shapes.push(window.FloorFixture);
+
+	fd.shape = sd;
+	sd.SetAsBox((100) / m_physScale, (10) / m_physScale);
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
+	bd.userData = "Floor";
+	bd.position.Set((300) / m_physScale, (200) / m_physScale);
+	b = world.CreateBody(bd);
+	window.FloorFixture = b.CreateFixture(fd);
+	window.shapes.push(window.FloorFixture);
+
 	//Random Pos
 	let randPos = Math.round(Math.random());
 	
@@ -79,7 +101,7 @@ Test.prototype.createWorld = function() {
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
-	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((300+Math.round(Math.random()*75-37.5))/m_physScale, (275+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
@@ -102,7 +124,7 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	bd.position.Set((300+Math.round(Math.random()*150-75))/m_physScale, (140+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((300+Math.round(Math.random()*75-37.5))/m_physScale, (275+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);

@@ -4,20 +4,36 @@
 	
 	var rayCastInput = new b2RayCastInput();
 	var rayCastOutput =  new b2RayCastOutput();
-	
+	var m_physScale = 10;
 	// console.log(rayCastInput);
 
 	function raycast(b2Fixture, p1, p2, maxFraction){
 	  rayCastInput.p1 = p1;
 	  rayCastInput.p2 = p2;
 	  rayCastInput.maxFraction = maxFraction;
+	  let lastShape = b2Fixture;
 	//   console.log(rayCastInput);
-	  if(b2Fixture.RayCast(rayCastOutput, rayCastInput)){
-		return {
-		  normal: rayCastOutput.normal,
-		  fraction: rayCastOutput.fraction
+	for (let m=0; m<shapes.length; m++) {
+	  if(window.shapes[m].RayCast(rayCastOutput, rayCastInput)){
+		if (rayCastOutput.fraction < maxFraction) {
+			lastShape = window.shapes[m];
+			// return {
+			// 	normal: rayCastOutput.normal,
+			// 	fraction: rayCastOutput.fraction,
+			// 	distance: rayCastOutput.fraction*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2))
+			// }
 		}
 	  }
+	}
+	if(lastShape.RayCast(rayCastOutput, rayCastInput)){
+		if (rayCastOutput.fraction < maxFraction) {
+			return {
+				normal: rayCastOutput.normal,
+				fraction: rayCastOutput.fraction,
+				distance: (1-rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2))
+			}
+		}
+	}
 	  return false;
 	}
 
@@ -57,7 +73,7 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-
+	window.eyes = 4;
 	window.debug = false;
 	window.draw = true;
 	var controlPlayer1 = true;
@@ -95,7 +111,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(12, [8, 8], 3);
+			this.brain = new NeuralNetwork((10+(window.eyes*2)), [20, 20], 3);
 		  }
 		}
 	  
@@ -110,32 +126,45 @@
 		think(i) {
 			let inputs = [];
 			if (i==0) {
-				// console.log(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), 0)));
-				inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
-				inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
-				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-				inputs[4] = sigmoid((window.Player2.GetPosition().x-30)/5);
-				inputs[5] = sigmoid(window.Player2.GetPosition().y/5);
-				inputs[6] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-				inputs[7] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-				inputs[8] = sigmoid(strengths[0]/5);
-				inputs[9] = sigmoid(strengths[1]/5);
-				inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-				inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+				// inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+				// inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
+				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[2] = sigmoid((window.Player2.GetPosition().x-30)/5);
+				inputs[3] = sigmoid(window.Player2.GetPosition().y/5);
+				inputs[4] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[5] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[6] = sigmoid(strengths[0]/5);
+				inputs[7] = sigmoid(strengths[1]/5);
+				inputs[8] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+				inputs[9] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+				// inputs[0] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y-7.5)).distance || 0);
+				// inputs[1] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y+7.5)).distance || 0);
+				let PPosX = window.Player1.GetPosition().x;
+				let PPosY = window.Player1.GetPosition().y;
+				let change = 360/(window.eyes*2);
+				for (let l=0; l<(window.eyes)*2; l++) {
+					inputs[10+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180)*7.5*Math.PI), PPosY+(Math.sin((l*change)/180)*7.5*Math.PI))).distance || 0);
+				}
 			} else {
-				inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
-				inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
-				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-				inputs[4] = sigmoid((window.Player1.GetPosition().x-30)/5);
-				inputs[5] = sigmoid(window.Player1.GetPosition().y/5);
-				inputs[6] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-				inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-				inputs[8] = sigmoid(strengths[1]/5);
-				inputs[9] = sigmoid(strengths[0]/5);
-				inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-				inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				// inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+				// inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
+				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[2] = sigmoid((window.Player1.GetPosition().x-30)/5);
+				inputs[3] = sigmoid(window.Player1.GetPosition().y/5);
+				inputs[4] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[5] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[6] = sigmoid(strengths[1]/5);
+				inputs[7] = sigmoid(strengths[0]/5);
+				inputs[8] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+				inputs[9] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				let PPosX = window.Player2.GetPosition().x;
+				let PPosY = window.Player2.GetPosition().y;
+				let change = 360/(window.eyes*2);
+				for (let l=0; l<(window.eyes)*2; l++) {
+					inputs[10+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180)*7.5*Math.PI), PPosY+(Math.sin((l*change)/180)*7.5*Math.PI))).distance || 0);
+				}
 			}
 	
 			let output = this.brain.predict(inputs);
@@ -541,7 +570,7 @@
 			window.onPlatform = [false,false];
 	
 			var m_world = new b2World(new b2Vec2(0.0, -9.81*3.25), true);
-			var m_physScale = 1;
+			m_physScale = 10;
 			m_world.SetWarmStarting(true);
 			
 			// Create border of boxes
@@ -761,7 +790,7 @@
 			for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 				if (!window.testingMode) {
 					steps++;
-					if (steps > 5000) {this.endGame(-1); i = supaSpeed;}
+					if (steps > 5000) {this.endGame(-1); break;}
 				}
 				playerDistance = Math.pow(window.Player1.GetPosition().x-window.Player2.GetPosition().x, 2)+Math.pow(window.Player1.GetPosition().y-window.Player2.GetPosition().y, 2);
 				if (playerDistance<10 && hasCollided == true) {
@@ -827,31 +856,45 @@
 					let inputs = [];
 					let color = "blue";
 					if (color == "red") {
-						inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
-						inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
-						inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-						inputs[4] = sigmoid((window.Player2.GetPosition().x-30)/5);
-						inputs[5] = sigmoid(window.Player2.GetPosition().y/5);
-						inputs[6] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-						inputs[7] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-						inputs[8] = sigmoid(strengths[0]/5);
-						inputs[9] = sigmoid(strengths[1]/5);
-						inputs[10] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-						inputs[11] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
-					} else {
-						inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
-						inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
-						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-						inputs[4] = sigmoid((window.Player1.GetPosition().x-30)/5);
-						inputs[5] = sigmoid(window.Player1.GetPosition().y/5);
-						inputs[6] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-						inputs[7] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-						inputs[8] = sigmoid(strengths[1]/5);
-						inputs[9] = sigmoid(strengths[0]/5);
-						inputs[10] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-						inputs[11] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				// inputs[0] = sigmoid((window.Player1.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+				// inputs[1] = sigmoid((window.Player1.GetPosition().y)/5); //makes position less important to the initial neural network.
+				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[2] = sigmoid((window.Player2.GetPosition().x-30)/5);
+				inputs[3] = sigmoid(window.Player2.GetPosition().y/5);
+				inputs[4] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[5] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[6] = sigmoid(strengths[0]/5);
+				inputs[7] = sigmoid(strengths[1]/5);
+				inputs[8] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+				inputs[9] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+				// inputs[0] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y-7.5)).distance || 0);
+				// inputs[1] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y+7.5)).distance || 0);
+				let PPosX = window.Player1.GetPosition().x;
+				let PPosY = window.Player1.GetPosition().y;
+				let change = 360/(window.eyes*2);
+				for (let l=0; l<(window.eyes)*2; l++) {
+					inputs[10+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180)*7.5*Math.PI), PPosY+(Math.sin((l*change)/180)*7.5*Math.PI))).distance || 0);
+				}
+			} else {
+				// inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
+				// inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
+				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[2] = sigmoid((window.Player1.GetPosition().x-30)/5);
+				inputs[3] = sigmoid(window.Player1.GetPosition().y/5);
+				inputs[4] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[5] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[6] = sigmoid(strengths[1]/5);
+				inputs[7] = sigmoid(strengths[0]/5);
+				inputs[8] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+				inputs[9] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				let PPosX = window.Player2.GetPosition().x;
+				let PPosY = window.Player2.GetPosition().y;
+				let change = 360/(window.eyes*2);
+				for (let l=0; l<(window.eyes)*2; l++) {
+					inputs[10+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180)*7.5*Math.PI), PPosY+(Math.sin((l*change)/180)*7.5*Math.PI))).distance || -0);
+				}
 					}
 					let output = predict();
 					function predict() {
