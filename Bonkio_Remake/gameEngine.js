@@ -807,7 +807,7 @@
 						reward2 -= 10; //red's reward
 					}
 					this.endGame(1);
-					i = supaSpeed;
+					break;
 				} else if (window.Player2.GetPosition().x < -20 || window.Player2.GetPosition().x > 80 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
 					//if blue is offscreen
 					if (!window.testingMode) {
@@ -815,7 +815,7 @@
 						reward2 += 10; //red's reward
 					}
 					this.endGame(0);
-					i = supaSpeed;
+					break;
 				}
 				if(!this._world)
 					return;
