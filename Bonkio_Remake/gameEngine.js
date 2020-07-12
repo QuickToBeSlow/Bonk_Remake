@@ -136,9 +136,8 @@
 				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
 				inputs[4] = sigmoid(strengths[0]/5);
 				inputs[5] = sigmoid(strengths[1]/5);
-				inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-				inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
-				// inputs[0] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y-7.5)).distance || 0);
+				inputs[6] = sigmoid(Math.abs(window.Player1.GetPosition().x-window.Player2.GetPosition().x <= 10) ? (window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5 : (window.Player1.GetPosition().x-window.Player2.GetPosition().x > 0) ? 10/5: -10/5);
+				inputs[7] = sigmoid(Math.abs(window.Player1.GetPosition().y-window.Player2.GetPosition().y <= 10) ? (window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5 : (window.Player1.GetPosition().y-window.Player2.GetPosition().y > 0) ? 10/5: -10/5);				// inputs[0] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y-7.5)).distance || 0);
 				// inputs[1] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y+7.5)).distance || 0);
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
@@ -157,8 +156,8 @@
 				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 				inputs[4] = sigmoid(strengths[1]/5);
 				inputs[5] = sigmoid(strengths[0]/5);
-				inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-				inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				inputs[6] = sigmoid(Math.abs(window.Player2.GetPosition().x-window.Player1.GetPosition().x <= 10) ? (window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5 : (window.Player2.GetPosition().x-window.Player1.GetPosition().x > 0) ? 10/5: -10/5);
+				inputs[7] = sigmoid(Math.abs(window.Player2.GetPosition().y-window.Player1.GetPosition().y <= 10) ? (window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5 : (window.Player2.GetPosition().y-window.Player1.GetPosition().y > 0) ? 10/5: -10/5);
 				let PPosX = window.Player2.GetPosition().x;
 				let PPosY = window.Player2.GetPosition().y;
 				let change = 360/(window.eyes*2);
@@ -825,8 +824,8 @@
 					reward2 -= 0.001;
 					reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
 					reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
-					reward -= (Math.abs(window.Player2.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player2.GetLinearVelocity().y))/5000 : 0;
-					reward2 -= (Math.abs(window.Player1.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player1.GetLinearVelocity().y))/5000 : 0;
+					// reward -= (Math.abs(window.Player2.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player2.GetLinearVelocity().y))/5000 : 0;
+					// reward2 -= (Math.abs(window.Player1.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player1.GetLinearVelocity().y))/5000 : 0;
 				}
 				window.up[1] = false;
 				window.down[1] = false;
@@ -866,9 +865,8 @@
 						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
 						inputs[4] = sigmoid(strengths[0]/5);
 						inputs[5] = sigmoid(strengths[1]/5);
-						inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-						inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
-						// inputs[0] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y-7.5)).distance || 0);
+						inputs[6] = sigmoid(Math.abs(window.Player1.GetPosition().x-window.Player2.GetPosition().x <= 10) ? (window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5 : (window.Player1.GetPosition().x-window.Player2.GetPosition().x > 0) ? 10/5: -10/5);
+						inputs[7] = sigmoid(Math.abs(window.Player1.GetPosition().y-window.Player2.GetPosition().y <= 10) ? (window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5 : (window.Player1.GetPosition().y-window.Player2.GetPosition().y > 0) ? 10/5: -10/5);				// inputs[0] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y-7.5)).distance || 0);
 						// inputs[1] = sigmoid(raycast(window.FloorFixture, new b2Vec2(window.Player1.GetPosition().x, window.Player1.GetPosition().y), new b2Vec2((window.Player1.GetPosition().x), window.Player1.GetPosition().y+7.5)).distance || 0);
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
@@ -887,8 +885,8 @@
 						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 						inputs[4] = sigmoid(strengths[1]/5);
 						inputs[5] = sigmoid(strengths[0]/5);
-						inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-						inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+						inputs[6] = sigmoid(Math.abs(window.Player2.GetPosition().x-window.Player1.GetPosition().x <= 10) ? (window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5 : (window.Player2.GetPosition().x-window.Player1.GetPosition().x > 0) ? 10/5: -10/5);
+						inputs[7] = sigmoid(Math.abs(window.Player2.GetPosition().y-window.Player1.GetPosition().y <= 10) ? (window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5 : (window.Player2.GetPosition().y-window.Player1.GetPosition().y > 0) ? 10/5: -10/5);
 						let PPosX = window.Player2.GetPosition().x;
 						let PPosY = window.Player2.GetPosition().y;
 						let change = 360/(window.eyes*2);
