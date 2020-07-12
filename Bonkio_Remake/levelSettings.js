@@ -33,55 +33,55 @@ Test.prototype.createWorld = function() {
 	// window.FloorFixture = b.CreateFixture(fd);
 	// window.shapes.push(window.FloorFixture);
 
-	fd.shape = sd;
 	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
 	bd.position.Set((75) / m_physScale, (350) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
-	window.shapes.push(window.FloorFixture);
+	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = sd;
 	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
 	bd.position.Set((525) / m_physScale, (350) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
-	window.shapes.push(window.FloorFixture);
+	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = sd;
 	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
 	bd.position.Set((75) / m_physScale, (50) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
-	window.shapes.push(window.FloorFixture);
+	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = sd;
 	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
 	bd.position.Set((525) / m_physScale, (50) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
-	window.shapes.push(window.FloorFixture);
+	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = sd;
 	sd.SetAsBox((100) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
 	bd.position.Set((300) / m_physScale, (200) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
-	window.shapes.push(window.FloorFixture);
+	window.shapes.push(b.CreateFixture(fd));
 
 	//Random Pos
 	let randPos = Math.round(Math.random());
