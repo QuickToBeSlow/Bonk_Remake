@@ -174,14 +174,19 @@
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
 					//Clarification for beefy line of text:
-					//            1.                                  2.                                    3.
+					//            1.                                  2.                                    3.                                                                                          4.        5.
 					inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0);
 					/*
 					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
 					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
-					3. Alright, this is will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
+					3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
 					   In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
-					   To convert the 
+					   The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
+					   Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
+					   We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
+					   And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
+					4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
+					5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
 					*/
 				}
 			}
@@ -910,9 +915,33 @@
 						inputs[7] = sigmoid(Math.min(Math.max((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5, -10), 10));
 						let PPosX = window.Player2.GetPosition().x;
 						let PPosY = window.Player2.GetPosition().y;
+
+						// let p1Direction = Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x) * (180/Math.PI);//p1 direction of momentum
+						// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
+						// let change = (180-(p1Speed*5))/(window.eyes*2); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
+						// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
+						//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
+						//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
+						//   inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*7.5), PPosY+(Math.sin((p1Direction+l)/180*Math.PI)*7.5))).distance || 0); //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
+						// }
+
 						let change = 360/(window.eyes*2);
 						for (let l=0; l<(window.eyes)*2; l++) {
-							inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*7.5), PPosY+(Math.sin((p1Direction+l)/180*Math.PI)*7.5))).distance || 0); //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
+							//Clarification for beefy line of text:
+							//            1.                                  2.                                    3.                                                                                          4.        5.
+							inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0);
+							/*
+							1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
+							2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
+							3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
+							In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
+							The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
+							Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
+							We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
+							And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
+							4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
+							5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
+							*/
 						}
 					}
 					let output = predict();
