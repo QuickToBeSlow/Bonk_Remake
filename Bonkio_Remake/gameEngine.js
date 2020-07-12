@@ -145,7 +145,7 @@
 				let PPosY = window.Player1.GetPosition().y;
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
-					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY+(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
+					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
 				}
 			} else {
 				// inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
@@ -169,14 +169,14 @@
 				// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
 				//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
 				//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
-				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY+(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || 0; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
+				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || 0; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
 				// }
 
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
 					//Clarification for beefy line of text:
 					//            1.                                  2.                                    3.                                                                                          4.        5.
-					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY+(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
+					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
 					/*
 					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
 					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
@@ -698,7 +698,7 @@
                 let PPosY = window.Player1.GetPosition().y;
                 let change = 360/(window.eyes*4);
                 for (let l=0; l<(window.eyes)*4; l++) {
-                    c.fillText(Math.round(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*200), PPosY-(Math.sin((l*change)/180*Math.PI)*200))).distance) || 0, (PPosX*11.5) + PPosX+(Math.cos((l*change)/180*Math.PI)*200) , ((PPosY*-12.8)+600) + PPosY+(Math.sin((l*change)/180*Math.PI)*200));
+                    c.fillText(Math.round(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*200), PPosY-(Math.sin((l*change)/180*Math.PI)*200))).distance) || 0, (PPosX*11.5) + PPosX+(Math.cos((l*change)/180*Math.PI)*200) , ((PPosY*-12.8)+600) + PPosY-(Math.sin((l*change)/180*Math.PI)*200));
                 }
 				
 				for (let i = 0; i < NNScores.length; i+=2) {
@@ -906,7 +906,7 @@
 				let PPosY = window.Player1.GetPosition().y;
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
-					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY+(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
+					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
 				}
 			} else {
 				// inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
@@ -930,14 +930,14 @@
 				// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
 				//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
 				//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
-				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY+(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || 0; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
+				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || 0; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
 				// }
 
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
 					//Clarification for beefy line of text:
 					//            1.                                  2.                                    3.                                                                                          4.        5.
-					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY+(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
+					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || 0;
 					/*
 					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
 					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
