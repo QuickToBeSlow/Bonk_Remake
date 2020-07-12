@@ -50,7 +50,7 @@
 	}
 	
 	function sigmoid(value) {
-		return (Math.pow(Math.E, value)/Math.pow(1+Math.E, value));
+		return 1 / (1 + Math.exp(-value));
 	}
 	//converts inputs to sigmoid values (this is used for the inputs!)
 
