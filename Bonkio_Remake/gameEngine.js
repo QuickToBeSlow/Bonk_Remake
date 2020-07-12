@@ -695,7 +695,6 @@
                 let PPosY = window.Player1.GetPosition().y;
                 let change = 360/(window.eyes*2);
                 for (let l=0; l<(window.eyes)*2; l++) {
-					c.fillText("PPosX = " + PPosX, 300, 100);
                     c.fillText("l " + l + " = " + sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0), PPosX,PPosY+(l*10));
                     //sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0);
 				}
