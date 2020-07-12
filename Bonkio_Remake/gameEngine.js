@@ -171,11 +171,18 @@
 				//   inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*7.5), PPosY+(Math.sin((p1Direction+l)/180*Math.PI)*7.5))).distance || 0); //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
 				// }
 
-
-
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
-					inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180)*7.5*Math.PI), PPosY+(Math.sin((l*change)/180)*7.5*Math.PI))).distance || 0);
+					//Clarification for beefy line of text:
+					//            1.                                  2.                                    3.
+					inputs[8+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0);
+					/*
+					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
+					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
+					3. Alright, this is will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
+					   In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
+					   To convert the 
+					*/
 				}
 			}
 	
