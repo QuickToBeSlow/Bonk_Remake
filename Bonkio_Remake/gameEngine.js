@@ -26,12 +26,10 @@
 	  }
 	}
 	if(lastShape.RayCast(rayCastOutput, rayCastInput)){
-		if (rayCastOutput.fraction < maxFraction) {
-			return {
-				normal: rayCastOutput.normal,
-				fraction: rayCastOutput.fraction,
-				distance: (1-rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2))
-			}
+		return {
+			normal: rayCastOutput.normal,
+			fraction: rayCastOutput.fraction,
+			distance: (1-rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2))
 		}
 	}
 	  return false;
@@ -693,6 +691,15 @@
 			c.fillText("generation : "+generation, 250, 30);
 			c.fillText("KD : " + Math.round(window.scores[0]/window.scores[1]*1000)/1000,250, 45);
 			if (window.debug) {
+				let PPosX = window.Player1.GetPosition().x;
+                let PPosY = window.Player1.GetPosition().y;
+                let change = 360/(window.eyes*2);
+                for (let l=0; l<(window.eyes)*2; l++) {
+					c.fillText("PPosX = " + PPosX, 300, 100);
+                    c.fillText("l " + l + " = " + sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0), PPosX,PPosY+(l*10));
+                    //sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*7.5), PPosY+(Math.sin((l*change)/180*Math.PI)*7.5))).distance || 0);
+				}
+				
 				for (let i = 0; i < NNScores.length; i+=2) {
 					if (NNScores[i]>NNScores[i+1]) {
 						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
