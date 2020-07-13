@@ -112,7 +112,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork((10+(window.eyes*2)), [20, 20], 3);
+			this.brain = new NeuralNetwork((10+(window.eyes*2)), [6+(window.eyes*2), 6+(window.eyes*2)], 3);
 		  }
 		}
 	  
