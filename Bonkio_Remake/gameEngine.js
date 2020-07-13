@@ -144,8 +144,8 @@
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
 				let change = 360/(window.eyes*2);
-				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-				inputs[10] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+				inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
+				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
 				for (let l=0; l<(window.eyes)*2; l++) {
 					inputs[10+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 				}
@@ -175,8 +175,8 @@
 				// }
 
 				let change = 360/(window.eyes*2);
-				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-				inputs[10] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+				inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
+				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
 				for (let l=0; l<(window.eyes)*2; l++) {
 					//Clarification for beefy line of text:
 					//            1.                                  2.                                    3.                                                                                          4.        5.
@@ -910,8 +910,8 @@
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
 						let change = 360/(window.eyes*2);
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-						inputs[10] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+						inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
+						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
 						for (let l=0; l<(window.eyes)*2; l++) {
 							inputs[10+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 						}
@@ -941,8 +941,8 @@
 						// }
 
 						let change = 360/(window.eyes*2);
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-						inputs[10] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+						inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
+						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
 						for (let l=0; l<(window.eyes)*2; l++) {
 							//Clarification for beefy line of text:
 							//            1.                                  2.                                    3.                                                                                          4.        5.
