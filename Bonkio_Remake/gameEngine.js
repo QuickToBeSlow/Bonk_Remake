@@ -133,8 +133,8 @@
 				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 				// inputs[2] = sigmoid((window.Player2.GetPosition().x-30)/5);
 				// inputs[3] = sigmoid(window.Player2.GetPosition().y/5);
-				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x, -20/5);
-				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y, -20/5);
+				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
 				inputs[4] = sigmoid(strengths[0]/5);
 				inputs[5] = sigmoid(strengths[1]/5);
 				inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
@@ -144,20 +144,20 @@
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
 				let change = 360/(window.eyes*2);
-				inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+				inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
+				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 				for (let l=0; l<(window.eyes)*2; l++) {
 					inputs[10+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 				}
 			} else {
 				// inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
 				// inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
-				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x, -20/5);
-				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y, -20/5);
+				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
 				// inputs[2] = sigmoid((window.Player1.GetPosition().x-30)/5);
 				// inputs[3] = sigmoid(window.Player1.GetPosition().y/5);
-				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x, -20/5);
-				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y, -20/5);
+				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 				inputs[4] = sigmoid(strengths[1]/5);
 				inputs[5] = sigmoid(strengths[0]/5);
 				inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
@@ -175,8 +175,8 @@
 				// }
 
 				let change = 360/(window.eyes*2);
-				inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+				inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
+				inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 				for (let l=0; l<(window.eyes)*2; l++) {
 					//Clarification for beefy line of text:
 					//            1.                                  2.                                    3.                                                                                          4.        5.
@@ -185,11 +185,11 @@
 					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
 					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
 					3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
-					   In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
-					   The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
-					   Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
-					   We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
-					   And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
+					In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
+					The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
+					Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
+					We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
+					And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
 					4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
 					5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
 					*/
@@ -899,8 +899,8 @@
 						inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 						// inputs[2] = sigmoid((window.Player2.GetPosition().x-30)/5);
 						// inputs[3] = sigmoid(window.Player2.GetPosition().y/5);
-						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x, -20/5);
-						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y, -20/5);
+						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
 						inputs[4] = sigmoid(strengths[0]/5);
 						inputs[5] = sigmoid(strengths[1]/5);
 						inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
@@ -910,20 +910,20 @@
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
 						let change = 360/(window.eyes*2);
-						inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+						inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
+						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 						for (let l=0; l<(window.eyes)*2; l++) {
 							inputs[10+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 						}
 					} else {
 						// inputs[0] = sigmoid((window.Player2.GetPosition().x-30)/5); //makes position less important to the initial neural network.
 						// inputs[1] = sigmoid(window.Player2.GetPosition().y/5); //makes position less important to the initial neural network.
-						inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x, -20/5);
-						inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y, -20/5);
+						inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
+						inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
 						// inputs[2] = sigmoid((window.Player1.GetPosition().x-30)/5);
 						// inputs[3] = sigmoid(window.Player1.GetPosition().y/5);
-						inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x, -20/5);
-						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y, -20/5);
+						inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
+						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
 						inputs[4] = sigmoid(strengths[1]/5);
 						inputs[5] = sigmoid(strengths[0]/5);
 						inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
@@ -941,8 +941,8 @@
 						// }
 
 						let change = 360/(window.eyes*2);
-						inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+10, PPosY), new b2Vec2(PPosX+10, PPosY-75)).distance || -1;
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-10, PPosY), new b2Vec2(PPosX-10, PPosY-75)).distance || -1;
+						inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
+						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 						for (let l=0; l<(window.eyes)*2; l++) {
 							//Clarification for beefy line of text:
 							//            1.                                  2.                                    3.                                                                                          4.        5.
