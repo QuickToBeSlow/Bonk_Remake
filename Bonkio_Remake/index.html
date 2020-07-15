@@ -196,7 +196,8 @@
 	
 	<script src="gameEngine.js"></script>
 	<!-- <script src="b2jsTestFallingBoxes.js"></script> -->
-	<script src="levelSettings.js"></script>
+	<script src="DEATH.js"></script>
+	<script src="angledMap.js"></script>
 	<!-- <script src="b2jsTestCompound.js"></script>
 	<script src="b2jsTestJoints.js"></script>
 	<script src="b2jsTestPendulum.js"></script> -->
@@ -204,7 +205,8 @@
 
 	$(document).ready(function(){
 		
-		window.runners = [levelSettings];
+		window.runners = [DEATH, angledMap];
+		window.level = 0;
 		window.runner = null;
 		window.scores = [0,0];
 
@@ -219,7 +221,7 @@
 				window.wasPaused = runner.isPaused();
 				window.runner.destroy();
 			}
-			window.runner = new window.runners[0]($("#canvas")[0]);
+			window.runner = new window.runners[window.level]($("#canvas")[window.level]);
 			if(window.wasPaused)
 				window.runner.draw();
 			else	

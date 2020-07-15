@@ -143,6 +143,6 @@ Test.prototype.createWorld = function() {
 	return world;
 };
 
-window.levelSettings = Test;
+window.DEATH = Test;
 	
 })();

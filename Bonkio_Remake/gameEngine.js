@@ -1164,6 +1164,7 @@
 						for (let j=0; j<TOTAL; j++) {
 							winnerList.push(j);
 						}
+						window.level = 1 - window.level;
 					}
 				}
 			}
@@ -1183,7 +1184,7 @@
 				window.wasPaused = runner.isPaused();
 				window.runner.destroy();
 			}
-			window.runner = new window.runners[0]($("#canvas")[0]);
+			window.runner = new window.runners[window.level]($("#canvas")[0]);
 			if(window.wasPaused)
 				window.runner.draw();
 			else	
