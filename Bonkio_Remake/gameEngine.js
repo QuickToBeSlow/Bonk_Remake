@@ -140,8 +140,9 @@
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
 				let GRSeparation = window.GRRange/window.groundEyes;
-				for (let l=-(window.groundEyes/2); l<window.groundEyes/2; l++) {
-					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation), PPosY), new b2Vec2(PPosX+(l*GRSeparation), PPosY-75)).distance || -1;
+				for (let l=0; l<window.groundEyes; l++) {
+					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+					
 				}
 				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
@@ -171,8 +172,9 @@
 				// }
 
 				let GRSeparation = window.GRRange/window.groundEyes;
-				for (let l=-(window.groundEyes/2); l<window.groundEyes/2; l++) {
-					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation), PPosY), new b2Vec2(PPosX+(l*GRSeparation), PPosY-75)).distance || -1;
+				for (let l=0; l<window.groundEyes; l++) {
+					inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+					
 				}
 				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
@@ -180,7 +182,7 @@
 				for (let l=0; l<(window.eyes)*2; l++) {
 					//Clarification for beefy line of text:
 					//            1.                                  2.                                    3.                                                                                          4.        5.
-					inputs[10+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
+					inputs[8+window.groundEyes+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 					/*
 					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
 					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
@@ -904,8 +906,9 @@
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
 						let GRSeparation = window.GRRange/window.groundEyes;
-						for (let l=-(window.groundEyes/2); l<window.groundEyes/2; l++) {
-							inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation), PPosY), new b2Vec2(PPosX+(l*GRSeparation), PPosY-75)).distance || -1;
+						for (let l=0; l<window.groundEyes; l++) {
+							inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+							
 						}
 						// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 						// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
@@ -935,8 +938,9 @@
 						// }
 		
 						let GRSeparation = window.GRRange/window.groundEyes;
-						for (let l=-(window.groundEyes/2); l<window.groundEyes/2; l++) {
-							inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation), PPosY), new b2Vec2(PPosX+(l*GRSeparation), PPosY-75)).distance || -1;
+						for (let l=0; l<window.groundEyes; l++) {
+							inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+							
 						}
 						// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 						// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
@@ -944,7 +948,7 @@
 						for (let l=0; l<(window.eyes)*2; l++) {
 							//Clarification for beefy line of text:
 							//            1.                                  2.                                    3.                                                                                          4.        5.
-							inputs[10+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
+							inputs[8+window.groundEyes+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 							/*
 							1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
 							2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
