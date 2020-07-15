@@ -48,18 +48,21 @@ Test.prototype.createWorld = function() {
 	// window.shapes.push(b.CreateFixture(fd));
 
 	fd.shape = new b2CircleShape(50/m_physScale);
+	bd.userData = "Floor";
 	bd.position.Set(10, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
 	fd.shape = new b2CircleShape(50/m_physScale);
+	bd.userData = "Floor";
 	bd.position.Set(30, 5);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
 	fd.shape = new b2CircleShape(50/m_physScale);
+	bd.userData = "Floor";
 	bd.position.Set(50, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
