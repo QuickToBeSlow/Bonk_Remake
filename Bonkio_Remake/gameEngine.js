@@ -1166,7 +1166,8 @@
 						for (let j=0; j<TOTAL; j++) {
 							winnerList.push(j);
 						}
-						window.level = 1 - window.level;
+						window.level++;
+						if (window.level >= window.runners.length) {window.level = 0;}
 					}
 				}
 			}
