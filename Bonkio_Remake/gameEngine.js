@@ -11,12 +11,13 @@
 	  rayCastInput.p1 = p1;
 	  rayCastInput.p2 = p2;
 	  rayCastInput.maxFraction = 1;
-	  let lastShape;
+	  let closestShape;
 	//   console.log(rayCastInput);
 	for (let m=0; m<shapes.length; m++) {
 	  if(window.shapes[m].RayCast(rayCastOutput, rayCastInput)){
 		if (rayCastOutput.fraction < rayCastInput.maxFraction && rayCastOutput.fraction >= 0) {
-			lastShape = window.shapes[m];
+			closestShape = window.shapes[m];
+			rayCastInput.maxFraction = rayCastOutput.fraction;
 			// return {
 			// 	normal: rayCastOutput.normal,
 			// 	fraction: rayCastOutput.fraction,
@@ -25,7 +26,7 @@
 		}
 	  }
 	}
-	if(lastShape != undefined && lastShape.RayCast(rayCastOutput, rayCastInput)){
+	if(closestShape != undefined && closestShape.RayCast(rayCastOutput, rayCastInput)){
 		// if ((1-rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2)) < 0) {
 		// 	console.log("error!");
 		// }
@@ -1166,7 +1167,7 @@
 						for (let j=0; j<TOTAL; j++) {
 							winnerList.push(j);
 						}
-						window.level++;
+						// window.level++;
 						if (window.level >= window.runners.length) {window.level = 0;}
 					}
 				}
