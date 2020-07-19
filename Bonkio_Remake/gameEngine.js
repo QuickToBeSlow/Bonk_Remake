@@ -695,11 +695,11 @@
 			}
 	
 			c.fillStyle = "black";
-			c.fillText("score: "+window.scores[0]+" - "+window.scores[1], 250, 15);
-			c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
-			c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
-			c.fillText("generation : "+generation, 250, 30);
-			c.fillText("KD : " + Math.round(window.scores[0]/window.scores[1]*1000)/1000,250, 45);
+            c.fillText("score: red - "+window.scores[0]+" - blue - "+window.scores[1], 250, 15);
+            c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
+            c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
+            c.fillText("generation : "+generation, 250, 30);
+            c.fillText("current match : Network #" + winnerList[currentNN]+" VS Network #"+winnerList[currentNN+1],250, 45);
 			if (window.debug) {
 				let PPosX = window.Player1.GetPosition().x;
                 let PPosY = window.Player1.GetPosition().y;
@@ -754,21 +754,8 @@
 				}
 			}
 
-			let tourneyStatus = "";
-			if (winnerList.length > 16) {
-				tourneyStatus = "Qualifying";
-			} else if (winnerList.length > 8) {
-				tourneyStatus = "Eighth-Finals";
-			} else if (winnerList.length > 4) {
-				tourneyStatus = "Quarter Finals";
-			} else if (winnerList.length > 2) {
-				tourneyStatus = "Semi Finals";
-			} else {
-				tourneyStatus = "Finals";
-			}
-			c.fillText("Tourney status: "+tourneyStatus, 5, 75);
-			c.fillText("Match: "+(TOTAL-winnerList.length+1), 5, 90);
-			c.fillText("Round: "+(round+1), 5, 105);
+			c.fillText("Game: "+(TOTAL-winnerList.length+1) + " of " + (TOTAL-1), 5, 90);
+            c.fillText("Round: "+(round+1) + " of " + roundCap, 5, 105);
 	
 			c.fillText("speed:" + supaSpeed,5, 30);
 			if(this._paused) {
