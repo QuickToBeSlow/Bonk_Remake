@@ -75,8 +75,8 @@
 	
 	*/
 	window.eyes = 8;
-	window.groundEyes = 4;
-	window.GRRange = 10;
+	window.groundEyes = 10;
+	window.GRRange = 15;
 	window.debug = false;
 	window.draw = true;
 	var controlPlayer1 = true;
@@ -702,8 +702,8 @@
 			if (window.debug) {
 				let PPosX = window.Player1.GetPosition().x;
                 let PPosY = window.Player1.GetPosition().y;
-                let change = 360/(window.eyes*4);
-                for (let l=0; l<(window.eyes)*4; l++) {
+                let change = 360/(window.eyes*2);
+                for (let l=0; l<(window.eyes)*2; l++) {
                     let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI)*200), PPosY-(Math.cos(((l)*change)/180*Math.PI)*200))).distance || null;
                     c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI)*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI)*distVal*11.5));
                 }
