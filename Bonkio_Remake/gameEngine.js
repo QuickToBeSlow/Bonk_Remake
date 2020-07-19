@@ -1061,7 +1061,7 @@
 		}
 		
 		Test.prototype.supaSpeedUp = function () {
-			if (supaSpeed <= 256) {
+			if (supaSpeed < 256) {
 				supaSpeed*=2; //increase iterations
 			}
 		}
