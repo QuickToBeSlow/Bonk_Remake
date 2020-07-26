@@ -289,37 +289,37 @@
 		}
 	
 		createModel() {
-		const model = tf.sequential();
-		for (let i=0; i<this.hidden_nodes.length; i++) {
-			if (i==0) {
-				const hidden = tf.layers.dense({
-					units: this.hidden_nodes[i],
-					inputShape: [this.input_nodes],
-					activation: 'selu'
-				});
-				model.add(hidden);
-			} else if (i%2 == 0) {
-				const hidden = tf.layers.dense({
-					units: this.hidden_nodes[i],
-					activation: 'selu'
-				});
-				model.add(hidden);
-			} else {
-				const hidden = tf.layers.dense({
-					units: this.hidden_nodes[i],
-					activation: 'selu'
-				});
-				model.add(hidden);
+			const model = tf.sequential();
+			for (let i=0; i<this.hidden_nodes.length; i++) {
+				if (i==0) {
+					let hidden = tf.layers.dense({
+						units: this.hidden_nodes[i],
+						inputShape: [this.input_nodes],
+						activation: 'selu'
+					});
+					model.add(hidden);
+				} else if (i%2 == 0) {
+					let hidden = tf.layers.dense({
+						units: this.hidden_nodes[i],
+						activation: 'selu'
+					});
+					model.add(hidden);
+				} else {
+					let hidden = tf.layers.dense({
+						units: this.hidden_nodes[i],
+						activation: 'selu'
+					});
+					model.add(hidden);
+				}
 			}
-		}
-		  const output = tf.layers.dense({
-			units: this.output_nodes,
-			activation: 'sigmoid'
-		  }); //might want to use linear, but sigmoid in this instance might be for the best.
-		  model.add(output);
-		  return model;
-		}
-	  }
+			const output = tf.layers.dense({
+				units: this.output_nodes,
+				activation: 'sigmoid'
+			}); //might want to use linear, but sigmoid in this instance might be for the best.
+			model.add(output);
+			return model;
+			}
+	  	}
 	
 	// function keyPressed() {
 	//   if (key === 'S') {
@@ -375,14 +375,14 @@
 		if (pos == 0) {
 			let NeuralN;
 			NeuralN = savedNNs[winnerList[0]];
-			child = new NN(NeuralN.brain);
+			child = NeuralN;
 		} else if (pos == (TOTAL) && window.prevWinner != undefined && TOTAL > 2) {
 			let NeuralN;
 			NeuralN = window.prevWinner;
-			child = new NN(NeuralN.brain);
+			child = NeuralN;
 		} else {
 			let NeuralN = savedNNs[index];
-			child = new NN(NeuralN.brain);
+			child = NeuralN;
 			child.mutate();
 		}
 		return child;
