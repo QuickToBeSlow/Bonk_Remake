@@ -76,8 +76,8 @@
 	
 	*/
 	window.eyes = 8;
-	window.groundEyes = 15;
-	window.GRRange = 15;
+	window.groundEyes = 16;
+	window.GRRange = 16;
 	window.debug = false;
 	window.draw = true;
 	var controlPlayer1 = true;
@@ -169,10 +169,10 @@
 						break;
 					}
 				}
-				console.log(inputs[8]);
-				console.log(inputs[9]);
-				console.log(inputs[10]);
-				console.log(inputs[11]);
+				// console.log(inputs[8]);
+				// console.log(inputs[9]);
+				// console.log(inputs[10]);
+				// console.log(inputs[11]);
 				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 				let change = 360/(window.eyes*2);
