@@ -152,7 +152,7 @@
 					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 					if (tester == -1) {
 						l--;
-						leftDisp = Math.abs((l)*GRSeparation-window.GRRange/2);
+						leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
 						inputs[8] = leftDisp;
 						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 						break;
@@ -212,7 +212,7 @@
 					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 					if (tester == -1) {
 						l--;
-						leftDisp = Math.abs((l)*GRSeparation-window.GRRange/2);
+						leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
 						inputs[8] = leftDisp;
 						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 						break;
@@ -957,7 +957,7 @@
 							tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 							if (tester == -1) {
 								l--;
-								leftDisp = Math.abs((l)*GRSeparation-window.GRRange/2);
+								leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
 								inputs[8] = leftDisp;
 								inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 								break;
@@ -1017,7 +1017,7 @@
 							tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 							if (tester == -1) {
 								l--;
-								leftDisp = Math.abs((l)*GRSeparation-window.GRRange/2);
+								leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
 								inputs[8] = leftDisp;
 								inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
 								break;
