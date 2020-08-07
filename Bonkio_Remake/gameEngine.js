@@ -75,8 +75,8 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 8;
-	window.groundEyes = 16;
+	window.eyes = 16;
+	window.groundEyes = 0;
 	window.GRRange = 16;
 	window.debug = false;
 	window.draw = true;
