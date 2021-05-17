@@ -25,55 +25,40 @@ Test.prototype.createWorld = function() {
 	fd.restitution = 0.8;
 	fd.shape = sd;	
 
-	// sd.SetAsBox((100) / m_physScale, (10) / m_physScale);
-	// fd.shape = sd;
-	// fd.density = 0;
-	// bd.type = b2Body.b2_staticBody;
-	// bd.userData = "Floor";
-	// bd.position.Set((150) / m_physScale, (200) / m_physScale);
-	// b = world.CreateBody(bd);
-	// b.SetAngle(135*(Math.PI/180));
-	// window.FloorFixture = b.CreateFixture(fd);
-	// window.shapes.push(b.CreateFixture(fd));
-
-	// sd.SetAsBox((100) / m_physScale, (10) / m_physScale);
-	// fd.shape = sd;
-	// fd.density = 0;
-	// bd.type = b2Body.b2_staticBody;
-	// bd.userData = "Floor";
-	// bd.position.Set((450) / m_physScale, (200) / m_physScale);
-	// b = world.CreateBody(bd);
-	// b.SetAngle(45*(Math.PI/180));
-	// window.FloorFixture = b.CreateFixture(fd);
-	// window.shapes.push(b.CreateFixture(fd));
-
-	fd.shape = new b2CircleShape(50/m_physScale);
+	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set(10, 10);
+	bd.position.Set((300) / m_physScale, (110) / m_physScale);
 	b = world.CreateBody(bd);
-	b.CreateFixture(fd);
+	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(50/m_physScale);
+	sd.SetAsBox((75) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set(30, 5);
+	bd.position.Set((180) / m_physScale, (75) / m_physScale);
 	b = world.CreateBody(bd);
-	b.CreateFixture(fd);
+	b.SetAngle(Math.PI/6);
+	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(50/m_physScale);
+	sd.SetAsBox((75) / m_physScale, (10) / m_physScale);
+	fd.shape = sd;
+	fd.density = 0;
+	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set(50, 10);
+	bd.position.Set((420) / m_physScale, (75) / m_physScale);
 	b = world.CreateBody(bd);
-	b.CreateFixture(fd);
+	b.SetAngle(-Math.PI/6);
+	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	// fd.shape = new b2CircleShape(50/m_physScale);
-	// bd.position.Set(70, 5);
-	// b = world.CreateBody(bd);
-	// b.CreateFixture(fd);
-	// window.shapes.push(b.CreateFixture(fd));
-	// window.FloorFixture = b.CreateFixture(fd);
+
+
 
 	//Random Pos
 	let randPos = Math.round(Math.random());
