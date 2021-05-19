@@ -25,12 +25,12 @@ Test.prototype.createWorld = function() {
 	fd.restitution = 0.8;
 	fd.shape = sd;	
 
-	sd.SetAsBox((60) / m_physScale, (10) / m_physScale);
+	sd.SetAsBox((80) / m_physScale, (10) / m_physScale);
 	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set((300) / m_physScale, (110) / m_physScale);
+	bd.position.Set((300) / m_physScale, (112) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
@@ -40,7 +40,7 @@ Test.prototype.createWorld = function() {
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set((180) / m_physScale, (75) / m_physScale);
+	bd.position.Set((160) / m_physScale, (75) / m_physScale);
 	b = world.CreateBody(bd);
 	b.SetAngle(Math.PI/6);
 	window.FloorFixture = b.CreateFixture(fd);
@@ -51,7 +51,7 @@ Test.prototype.createWorld = function() {
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set((420) / m_physScale, (75) / m_physScale);
+	bd.position.Set((440) / m_physScale, (75) / m_physScale);
 	b = world.CreateBody(bd);
 	b.SetAngle(-Math.PI/6);
 	window.FloorFixture = b.CreateFixture(fd);
