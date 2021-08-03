@@ -1214,7 +1214,10 @@
 					}
 					reward = 0;
 					reward2 = 0;
+				} else if (!window.testingMode) {
+					window.scores[winner]++;
 				}
+				
 				if (window.saveRedNN) {
 					console.log(NNs[0][0]);
 					NNs[index].brain.model.save("localstorage://savedModel");
@@ -1265,9 +1268,6 @@
 				}
 			}
 	
-			if (round != roundCap-1 && !window.testingMode) {
-				window.scores[winner]++;
-			}
 			window.up = [false, false];
 			window.down = [false, false];
 			window.left = [false, false];
