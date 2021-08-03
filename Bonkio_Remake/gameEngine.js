@@ -879,7 +879,7 @@
 				}
 				let p1Lead = window.scores[0]-window.scores[1];
 				let p2Lead = window.scores[1]-window.scores[0];
-				if (window.Player1.GetPosition().x < -20 || window.Player1.GetPosition().x > 80 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
+				if (window.Player1.GetPosition().x < -40 || window.Player1.GetPosition().x > 100 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
 					//if red is offscreen
 					if (!window.testingMode) {
 						reward  += 10; //blue's reward
@@ -887,7 +887,7 @@
 					}
 					this.endGame(1);
 					break;
-				} else if (window.Player2.GetPosition().x < -20 || window.Player2.GetPosition().x > 80 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
+				} else if (window.Player2.GetPosition().x < -40 || window.Player2.GetPosition().x > 100 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
 					//if blue is offscreen
 					if (!window.testingMode) {
 						reward  -= 10; //blue's reward
