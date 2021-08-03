@@ -1265,7 +1265,7 @@
 				}
 			}
 	
-			if (round != roundCap-1 && !window.testingMode) {
+			if (round != roundCap && !window.testingMode) {
 				window.scores[winner]++;
 			}
 			window.up = [false, false];
