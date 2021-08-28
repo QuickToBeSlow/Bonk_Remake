@@ -78,12 +78,12 @@ Test.prototype.createWorld = function() {
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
-	bd.position.Set((300+Math.round(Math.random()*75-37.5))/m_physScale, (125+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((250)/m_physScale, (150+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
-	sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
-	sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.55), new b2Vec2(-0.2, -1.55)];
+	// sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
+	// sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.55), new b2Vec2(-0.2, -1.55)];
 	fd.density = 0;
 	fd.isSensor = true;
 	fd.shape = sd2;
@@ -101,7 +101,7 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	bd.position.Set((300+Math.round(Math.random()*75-37.5))/m_physScale, (125+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((350)/m_physScale, (150+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
