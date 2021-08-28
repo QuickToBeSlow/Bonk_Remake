@@ -82,8 +82,8 @@ Test.prototype.createWorld = function() {
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
-	// sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
-	// sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.55), new b2Vec2(-0.2, -1.55)];
+	sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
+	sd2.m_vertices = [new b2Vec2(-0.2, 0), new b2Vec2(0.2, 0), new b2Vec2(0.2, -1.55), new b2Vec2(-0.2, -1.55)];
 	fd.density = 0;
 	fd.isSensor = true;
 	fd.shape = sd2;
