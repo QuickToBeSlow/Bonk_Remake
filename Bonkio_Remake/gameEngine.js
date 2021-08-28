@@ -41,49 +41,18 @@
 
 	//code for Gaussian
 	
-	function randn_bm(restrict) {
-		var u = 0, v = 0;
-		while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-		while(v === 0) v = Math.random();
-		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-		if (restrict == true) {
-			num = num / 10.0 + 0.5; // Translate to 0 -> 1
-			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
-		}
-		return num;
-	}
 	
 	function sigmoid(value) {
 		return 2*(Math.pow(Math.E, value)/(1+Math.pow(Math.E, value)))-1;
 	}
-	//converts inputs to sigmoid values (this is used for the inputs!)
 
-	// Daniel Shiffman
-	// Neuro-Evolution Flappy Bird with TensorFlow.js
-	// http://thecodingtrain.com
-	// https://youtu.be/cdUNkwXx-I4
-	// The base of the neural network handling was written by this awesome dude. Props to him!
-	// I simply changed out some code and omitted the unnecessary bits for my purposes.
-	
-	/*
-	variables to change:
-	birds --> NNs (done)
-	savedBirds --> savedNNs (done)
-	class Bird --> class NN (done)
-	
-	TODO (if I get stuck):
-	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
-	
-	*/
-	window.eyes = 16;
-	window.groundEyes = 0;
-	window.GRRange = 16;
+	window.eyes = 8;
 	window.debug = false;
 	window.draw = true;
 	var controlPlayer1 = true;
 	var round = 0;
-	var roundCap = 7;
-	var leadTolerance = 4;
+	var roundCap = 15;
+	var leadTolerance = 9;
 	var currentNN = 0;
 	var TOTAL = 512;
 	var NNs = [];
@@ -115,7 +84,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(12+(window.eyes*2), [Math.round((12+window.eyes*2)*0.75), Math.round((12+window.eyes*2)*0.75), Math.round((12+window.eyes*2)*0.75)], 3);
+		      this.brain = new NeuralNetwork(7+(window.eyes*2), [Math.round((7+window.eyes*2)*0.75),Math.round((7+window.eyes*2)*0.75), Math.round((7+window.eyes*2)*0.75)],3);
 		  }
 		}
 	  
@@ -124,152 +93,71 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.0075);
+		  this.brain.mutate(1); //100% chance of a mutation occuring for each weight.
 		}
 	  
 		think(i) {
 			let inputs = [];
+			var p1 = { x: window.Player1.GetPosition().x , y: window.Player1.GetPosition().y };
+			var p2 = { x: window.Player2.GetPosition().x , y: window.Player2.GetPosition().y };
+			
+			// angle in degrees.
+			var p1AngleDeg = Math.abs(Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI);
+			var p2AngleDeg = Math.abs(Math.atan2(p1.y - p2.y, p1.x - p2.x) * 180 / Math.PI);
+			var p1Deg = Math.abs(Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x) * 180 / Math.PI);
+			var p2Deg = Math.abs(Math.atan2(window.Player2.GetLinearVelocity().y,window.Player2.GetLinearVelocity().x) * 180 / Math.PI);
+			var p1Speed = Math.sqrt(Math.pow(Math.abs(window.Player1.GetLinearVelocity().x),2)+Math.pow(Math.abs(window.Player1.GetLinearVelocity().y),2));
+			var p2Speed = Math.sqrt(Math.pow(Math.abs(window.Player2.GetLinearVelocity().x),2)+Math.pow(Math.abs(window.Player2.GetLinearVelocity().y),2));
+			
 			if (i==0) {
-				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contrains values to just -20 to 20.
-				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-				inputs[4] = sigmoid(strengths[0]/5);
-				inputs[5] = sigmoid(strengths[1]/5);
-				inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-				inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+
+				inputs[0] = (window.Player1.GetPosition().y > window.Player2.GetPosition().y)*10-5;
+				inputs[1] = playerDistance/25; //distance from eachother
+				inputs[2] = p1Speed; //my speed
+				inputs[3] = p2Speed; //opponent's speed
+				inputs[4] = p1Deg; //my current absolute direction
+				inputs[5] = p2Deg; //opponent's current absolute direction
+				inputs[6] = p1AngleDeg; //absolute direction from me to opponent
+
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
-				let GRSeparation = window.GRRange/window.groundEyes;
-				let tester;
-				let leftDisp = 0;
-				let rightDisp = 0;
-				inputs[8] = window.groundEyes/2;
-				inputs[9] = -1;
-				inputs[10] = window.groundEyes/2;
-				inputs[11] = -1;
-				for (let l=window.groundEyes/2; l>0; l--) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
-						inputs[8] = leftDisp;
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
-				}
-
-				for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
-						inputs[10] = rightDisp;
-						inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
-				}
-				// console.log(inputs[8]);
-				// console.log(inputs[9]);
-				// console.log(inputs[10]);
-				// console.log(inputs[11]);
-				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
-				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
-					inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
+					inputs[7+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 				}
 			} else {
-				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-				inputs[4] = sigmoid(strengths[1]/5);
-				inputs[5] = sigmoid(strengths[0]/5);
-				inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-				inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+
+				inputs[0] = (window.Player2.GetPosition().y > window.Player1.GetPosition().y)*10-5;
+				inputs[1] = playerDistance/25; //distance from eachother
+				inputs[2] = p2Speed; //my speed
+				inputs[3] = p1Speed; //opponent's speed
+				inputs[4] = p2Deg; //my current absolute direction
+				inputs[5] = p1Deg; //opponent's current absolute direction
+				inputs[6] = p2AngleDeg; //absolute direction from me to opponent
+
 				let PPosX = window.Player2.GetPosition().x;
 				let PPosY = window.Player2.GetPosition().y;
-
-				// let p1Direction = Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x) * (180/Math.PI);//p1 direction of momentum
-				// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
-				// let change = (180-(p1Speed*5))/(window.eyes*2); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
-				// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
-				//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
-				//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
-				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
-				// }
-
-				let GRSeparation = window.GRRange/window.groundEyes;
-				let tester;
-				let leftDisp = 0;
-				let rightDisp = 0;
-				inputs[8] = window.groundEyes/2;
-				inputs[9] = -1;
-				inputs[10] = window.groundEyes/2;
-				inputs[11] = -1;
-				for (let l=window.groundEyes/2; l>0; l--) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
-						inputs[8] = leftDisp;
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
-				}
-
-				for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
-						inputs[10] = rightDisp;
-						inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
-				}
-				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
-				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
 				let change = 360/(window.eyes*2);
 				for (let l=0; l<(window.eyes)*2; l++) {
-					//Clarification for beefy line of text:
-					//            1.                                  2.                                    3.                                                                                          4.        5.
-					inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
-					/*
-					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
-					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
-					3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
-					In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
-					The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
-					Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
-					We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
-					And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
-					4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
-					5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
-					*/
+					inputs[7+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 				}
 			}
 	
 			let output = this.brain.predict(inputs);
-		  if (output[0] < (8/18)) {
+		  if (output[0] < (1/2)) {
 				window.down[i] = true;
-			} else if (output[0] > (10/18)) {
+			} else if (output[0] > (1/2)) {
 				window.up[i] = true;
 			}
-		  if (output[1] < (8/18)) {
+		  if (output[1] < (1/2)) {
 				window.left[i] = true;
-			} else if (output[1] > (10/18)) {
+			} else if (output[1] > (1/2)) {
 				window.right[i] = true;
 			}
 		  if (0.5 < output[2]) {
 				window.heavy[i] = true;
 			}
-		}
-	  
-		// update() {
-		//   this.score++;
-		// }
+		}	  
 	  }
 	  class NeuralNetwork {
 		constructor(a, b, c, d) {
@@ -295,12 +183,7 @@
 			  weightCopies[i] = weights[i].clone();
 			}
 			modelCopy.setWeights(weightCopies);
-			return new NeuralNetwork(
-			  modelCopy,
-			  this.input_nodes,
-			  this.hidden_nodes,
-			  this.output_nodes
-			);
+			return new NeuralNetwork(modelCopy,this.input_nodes,this.hidden_nodes,this.output_nodes);
 		  });
 		}
 	  
@@ -313,11 +196,17 @@
 			  let shape = weights[i].shape;
 			  let values = tensor.dataSync().slice();
 			  for (let j = 0; j < values.length; j++) {
+
 				if (Math.random() < rate) {
-				  let w = values[j];
-				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-				  values[j] = w + randn_bm(false);
+					let w = values[j];
+					var test = w + Math.random()/100-0.005;
+					if( test > -5 && test < 5) {
+						values[j] = test;		
+					} else {
+						values[j] = w;
+					}
 				}
+
 			  }
 			  let newTensor = tf.tensor(values, shape);
 			  mutatedWeights[i] = newTensor;
@@ -383,42 +272,24 @@
 	  tf.setBackend('cpu');
 	
 	  for (let i = 0; i < TOTAL; i++) {
-		// NNs[0][i] = new NN();
-		// if (controlPlayer1) {
-		// 	NNs[1][i] = new NN();
-		// }
+
 		NNs[i] = new NN();
 	  }
-		// console.log(NNs);
 	
 	
 	function nextGeneration() {
 		// console.log('next generation');
 		calculateFitness();
 		for (let i = 0; i < TOTAL; i++) {
-		//   NNs[0][i] = pickOne(0, i);
-		//   if (controlPlayer1) {
-		//   	NNs[1][i] = pickOne(1, i);
-		//   }
 		NNs[i] = pickOne(i);
 		}
-		// for (let i = 0; i < TOTAL; i++) {
-		// 	savedNNs[0][i].dispose();
-		// 	if (controlPlayer1) {
-		// 		savedNNs[1][i].dispose();
-		// 	}
-		// }
 		savedNNs = [];
 	  }
 	  
 	  function pickOne(pos) {
 		let index = 0;
 		let r = Math.random();
-		// let r = randn_bm(true);
-		// console.log(savedNNs);
 		while (r > 0) {
-			// console.log(savedNNs[i][index].fitness); 
-			// console.log(r);
 			r = r - NNFitnesses[index];
 		  index++;
 		}
@@ -428,7 +299,7 @@
 			let NeuralN;
 			NeuralN = savedNNs[winnerList[0]];
 			child = NeuralN;
-		} else if (pos == (TOTAL) && window.prevWinner != undefined && TOTAL > 2) {
+		} else if (pos == TOTAL && window.prevWinner != undefined && TOTAL > 2) {
 			let NeuralN;
 			NeuralN = window.prevWinner;
 			child = NeuralN;
@@ -449,12 +320,6 @@
 		for (let j=0; j<TOTAL; j++) {
 			NNFitnesses.push(NNScores[j] / sum);
 		}
-		// for (let NN of savedNNs[1]) {
-		// 	sum[1] += NN.score;
-		//   }
-		// for (let NN of savedNNs[1]) {
-		// 	NN.fitness = NN.score / sum[1];
-		// }
 	  }
 	
 		var Test = function() {
@@ -747,52 +612,50 @@
 			}
 	
 			c.fillStyle = "black";
-            c.fillText("score: red - "+window.scores[0]+" - blue - "+window.scores[1], 250, 15);
-            c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
-            c.fillText("current reward (Player2): "+Math.round(reward*1000)/1000, 5, 60);
+            c.fillText("score: red - " + window.scores[0] + " - blue - " + window.scores[1], 250, 15);
             c.fillText("generation : "+generation, 250, 30);
             c.fillText("current match : Network #" + winnerList[currentNN]+" VS Network #"+winnerList[currentNN+1],250, 45);
-			if (window.debug) {
-				let PPosX = window.Player1.GetPosition().x;
-                let PPosY = window.Player1.GetPosition().y;
-                let change = 360/(window.eyes*2);
-                for (let l=0; l<(window.eyes)*2; l++) {
-                    let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI)*200), PPosY-(Math.cos(((l)*change)/180*Math.PI)*200))).distance || null;
-                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI)*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI)*distVal*11.5));
+		if (window.debug) {
+			let PPosX = window.Player1.GetPosition().x;
+                	let PPosY = window.Player1.GetPosition().y;
+                	let change = 360/(window.eyes*2);
+                	for (let l=0; l<(window.eyes)*2; l++) {
+                    	let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI)*200), PPosY-(Math.cos(((l)*change)/180*Math.PI)*200))).distance || null;
+                    	c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI)*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI)*distVal*11.5));
                 }
 				
-				for (let i = 0; i < NNScores.length; i+=2) {
-					if (NNScores[i]>NNScores[i+1]) {
-						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
-					}
-					if (NNScores[i]<NNScores[i+1]) {
-						c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
-					}
-					if (NNScores[i]== 0 && NNScores[i+1] == 0) {
-						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
-					}
-					if (winnerList[currentNN]==i || winnerList[currentNN+1]==i){
-						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
-					}
-					c.fillText("NNscores[" + (i) + "]: " + NNScores[i],5,115+i/2*10);//currentNN
-				}
-				c.fillText("currentNN : "+currentNN, 250, 60);
-				c.fillText("winnerList[currentNN] : "+winnerList[currentNN], 250, 70);
-				for (let i = 0; i < NNScores.length; i+=2) {
-					if (NNScores[i+1]>NNScores[i]) {
-						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
-					}
-					if (NNScores[i]>NNScores[i+1]) {
-						c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
-					}
-					if (NNScores[i]== 0 && NNScores[i+1] == 0) {
-						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
-					}
-					if (winnerList[currentNN]==i+1 || winnerList[currentNN+1]==i+1){
-						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
-					}
-					c.fillText("NNscores[" + (i+1) + "]: " + NNScores[i+1],205,115+i/2*10);
-				}
+				//for (let i = 0; i < NNScores.length; i+=2) {
+				//	if (NNScores[i]>NNScores[i+1]) {
+				//		c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+				//	}
+				//	if (NNScores[i]<NNScores[i+1]) {
+				//		c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+				//	}
+				//	if (NNScores[i]== 0 && NNScores[i+1] == 0) {
+				//		c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+				//	}
+				//	if (winnerList[currentNN]==i || winnerList[currentNN+1]==i){
+				//		c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+				//	}
+				//	c.fillText("NNscores[" + (i) + "]: " + NNScores[i],5,115+i/2*10);//currentNN
+				//}
+				//c.fillText("currentNN : "+currentNN, 250, 60);
+				//c.fillText("winnerList[currentNN] : "+winnerList[currentNN], 250, 70);
+				//for (let i = 0; i < NNScores.length; i+=2) {
+				//	if (NNScores[i+1]>NNScores[i]) {
+				//		c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+				//	}
+				//	if (NNScores[i]>NNScores[i+1]) {
+				//		c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+				//	}
+				//	if (NNScores[i]== 0 && NNScores[i+1] == 0) {
+				//		c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+				//	}
+				//	if (winnerList[currentNN]==i+1 || winnerList[currentNN+1]==i+1){
+				//		c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+				//	}
+				//	c.fillText("NNscores[" + (i+1) + "]: " + NNScores[i+1],205,115+i/2*10);
+				//}
 				for (let i = 0; i < winnerList.length; i++) {
 					c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";
 					if (currentNN==i){
@@ -806,14 +669,13 @@
 				}
 			}
 
-			c.fillText("Game: "+(TOTAL-winnerList.length+1) + " of " + (TOTAL-1), 5, 90);
-            c.fillText("Round: "+(round+1) + " of " + roundCap, 5, 105);
-	
-			c.fillText("speed:" + supaSpeed,5, 30);
 			if(this._paused) {
 				c.fillText("paused", 5, 15);
 			} else {
 				c.fillText("FPS: " + this._fpsAchieved, 5, 15);
+				c.fillText("Game: "+(TOTAL-winnerList.length+1) + " of " + (TOTAL-1), 5, 90);
+            			c.fillText("Round: "+(round+1) + " of " + roundCap, 5, 105);
+				c.fillText("speed:" + supaSpeed,5, 30);
 			}
 			c.fillStyle = "rgb("+(240)+","+(64)+","+(64)+")";
 			// c.strokeStyle = "rgb(255,255,255)";
@@ -879,18 +741,16 @@
 				}
 				let p1Lead = window.scores[0]-window.scores[1];
 				let p2Lead = window.scores[1]-window.scores[0];
-				if (window.Player1.GetPosition().x < -40 || window.Player1.GetPosition().x > 100 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
+				if (window.Player1.GetPosition().x < -20 || window.Player1.GetPosition().x > 80 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
 					//if red is offscreen
 					if (!window.testingMode) {
 						reward  += 10; //blue's reward
-						reward2 -= 10; //red's reward
 					}
 					this.endGame(1);
 					break;
-				} else if (window.Player2.GetPosition().x < -40 || window.Player2.GetPosition().x > 100 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
+				} else if (window.Player2.GetPosition().x < -20 || window.Player2.GetPosition().x > 80 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
 					//if blue is offscreen
 					if (!window.testingMode) {
-						reward  -= 10; //blue's reward
 						reward2 += 10; //red's reward
 					}
 					this.endGame(0);
@@ -904,8 +764,6 @@
 					reward2 -= 0.001;
 					reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
 					reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
-					// reward -= (Math.abs(window.Player2.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player2.GetLinearVelocity().y))/5000 : 0;
-					// reward2 -= (Math.abs(window.Player1.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player1.GetLinearVelocity().y))/5000 : 0;
 				}
 				window.up[1] = false;
 				window.down[1] = false;
@@ -935,124 +793,33 @@
 					let inputs = [];
 					let color = "blue";
 					if (color == "red") {
-						inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contrains values to just -20 to 20.
+						inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contains values to just -20 to 20.
 						inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-						inputs[4] = sigmoid(strengths[0]/5);
-						inputs[5] = sigmoid(strengths[1]/5);
-						inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-						inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+						inputs[2] = sigmoid(strengths[0]/5);
+						inputs[3] = sigmoid(strengths[1]/5);
+						inputs[4] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
+						inputs[5] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
-						let GRSeparation = window.GRRange/window.groundEyes;
-						let tester;
-						let leftDisp = 0;
-						let rightDisp = 0;
-						inputs[8] = window.groundEyes/2;
-						inputs[9] = -1;
-						inputs[10] = window.groundEyes/2;
-						inputs[11] = -1;
-						for (let l=window.groundEyes/2; l>0; l--) {
-							tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-							if (tester == -1) {
-								l--;
-								leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
-								inputs[8] = leftDisp;
-								inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-								break;
-							}
-						}
-		
-						for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
-							tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-							if (tester == -1) {
-								l--;
-								rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
-								inputs[10] = rightDisp;
-								inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-								break;
-							}
-						}
-						// console.log(inputs[8]);
-						// console.log(inputs[9]);
-						// console.log(inputs[10]);
-						// console.log(inputs[11]);
-						// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
-						// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
+						
 						let change = 360/(window.eyes*2);
 						for (let l=0; l<(window.eyes)*2; l++) {
-							inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
+							inputs[6+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
 						}
 					} else {
 						inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
 						inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-						inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-						inputs[4] = sigmoid(strengths[1]/5);
-						inputs[5] = sigmoid(strengths[0]/5);
-						inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-						inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+						inputs[2] = sigmoid(strengths[1]/5);
+						inputs[3] = sigmoid(strengths[0]/5);
+						inputs[4] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
+						inputs[5] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
 						let PPosX = window.Player2.GetPosition().x;
 						let PPosY = window.Player2.GetPosition().y;
-		
-						// let p1Direction = Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x) * (180/Math.PI);//p1 direction of momentum
-						// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
-						// let change = (180-(p1Speed*5))/(window.eyes*2); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
-						// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
-						//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
-						//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
-						//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
-						// }
-		
-						let GRSeparation = window.GRRange/window.groundEyes;
-						let tester;
-						let leftDisp = 0;
-						let rightDisp = 0;
-						inputs[8] = window.groundEyes/2;
-						inputs[9] = -1;
-						inputs[10] = window.groundEyes/2;
-						inputs[11] = -1;
-						for (let l=window.groundEyes/2; l>0; l--) {
-							tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-							if (tester == -1) {
-								l--;
-								leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
-								inputs[8] = leftDisp;
-								inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-								break;
-							}
-						}
-		
-						for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
-							tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-							if (tester == -1) {
-								l--;
-								rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
-								inputs[10] = rightDisp;
-								inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-								break;
-							}
-						}
-						// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
-						// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
+
 						let change = 360/(window.eyes*2);
 						for (let l=0; l<(window.eyes)*2; l++) {
-							//Clarification for beefy line of text:
-							//            1.                                  2.                                    3.                                                                                          4.        5.
-							inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
-							/*
-							1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
-							2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
-							3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
-							In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
-							The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
-							Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
-							We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
-							And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
-							4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
-							5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
-							*/
+							inputs[6+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
+
 						}
 					}
 					let output = predict();
@@ -1158,8 +925,6 @@
 				if (window.right[1]) {
 					window.Player2.ApplyForce(new b2Vec2(speed, 0), window.Player2.GetPosition());
 				}		
-				//this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
-			
 				this._world.Step(delta, delta * this._velocityIterationsPerSecond, delta * this._positionIterationsPerSecond);
 			}
 		}
@@ -1180,8 +945,6 @@
 		var activeNNs = 1;
 		var NNScores = [];
 		for (let i=0; i<TOTAL; i++) {
-			// NNScores[0].push(i);
-			// NNScores[1].push(i);
 			NNScores.push(0);
 		}
 		var NNFitnesses = [];
@@ -1207,17 +970,15 @@
 						NNScores[index2] += 10;
 						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN, 1);
-					} else {
+					}
+					if (reward2 > reward) {
 						NNScores[index] += 10;
 						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN+1, 1);
 					}
 					reward = 0;
 					reward2 = 0;
-				} else if (!window.testingMode) {
-					window.scores[winner]++;
 				}
-				
 				if (window.saveRedNN) {
 					console.log(NNs[0][0]);
 					NNs[index].brain.model.save("localstorage://savedModel");
@@ -1268,6 +1029,9 @@
 				}
 			}
 	
+			if (winner != -1 && !window.testingMode) {
+				window.scores[winner]++;
+			}
 			window.up = [false, false];
 			window.down = [false, false];
 			window.left = [false, false];
