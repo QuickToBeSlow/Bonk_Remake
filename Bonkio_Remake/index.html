@@ -177,6 +177,7 @@
 			<td><button id="loadModel" >load model (testing only)</button></td>
 			<td><button id="downloadModel" >download model</button></td>
 			<td><button id="loadPretrained" >load pretrained model</button></td>
+			<td><button id="nextMap" >next map</button></td>
 		</tr>
 		<tr>
 			<th>Debugging</th>
@@ -301,6 +302,10 @@
 		$('#loadPretrained').click(function(){
 			window.path = "https://quicktobeslow.github.io/Bonk_Remake/Bonkio_Remake/PTModel2.json";
 			getModel();
+		});
+		$('#nextMap').click(function(){
+			window.level++;
+			if (window.level >= window.runners.length) {window.level = 0;}
 		});
 		$('#toggleDebug').click(function(){
 			window.debug = (window.debug) ? false : true;
