@@ -124,7 +124,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.001);
+		  this.brain.mutate(0.00025);
 		}
 	  
 		think(i) {
@@ -1240,6 +1240,7 @@
 					round = 0;
 					currentNN = 0;
 					if (winnerList.length == 1) {
+						NNScores[winnerList[0]] += Math.log2(TOTAL)*10;
 						if (window.saveTourneyWinner == true) {
 							NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
 							window.saveTourneyWinner = false;
