@@ -1189,6 +1189,10 @@
 		Test.prototype.endGame = function (winner) {
 			if (!window.testingMode) {
 				round++;
+
+				//Varies the level every single round instead of at the end of a tournament.
+				window.level++;
+				if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
