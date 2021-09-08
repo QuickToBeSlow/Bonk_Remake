@@ -1208,11 +1208,11 @@
 				if (round >= roundCap) {
 					window.scores = [0,0];
 					if (reward > reward2) {
-						NNScores[index2] += 10;
+						NNScores[index2] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
 						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN, 1);
 					} else {
-						NNScores[index] += 10;
+						NNScores[index] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
 						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN+1, 1);
 					}
