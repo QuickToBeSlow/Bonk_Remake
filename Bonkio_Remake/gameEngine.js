@@ -216,7 +216,7 @@
 				let rightDisp = 0;
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
-				let eyeRotation = (lastOutputs[0]*4-2)*Math.PI;
+				let eyeRotation = (this.lastOutputs[0]*4-2)*Math.PI;
 				for (let m=0; m<window.eyes*2; m++) {
 					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change))*75), PPosY-(Math.sin((m*change))*75))).distance || 1;
 				}
