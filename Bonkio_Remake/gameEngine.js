@@ -113,6 +113,7 @@
 		  this.score = 0;
 		  this.fitness = 0;
 		  this.lastOutputs=[0.5,0.5,0.5];
+
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
@@ -129,7 +130,7 @@
 		}
 	  
 		think(i) {
-			window.currThink = this.brain;
+			// window.currThink = this.brain;
 			let inputs = [];
 			if (i==0) {
 				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contrains values to just -20 to 20.
@@ -146,10 +147,9 @@
 				// let tester;
 				// let leftDisp = 0;
 				// let rightDisp = 0;
-
-				for(let m=0; m<this.lastOutputs.length-3; m++) {
-					inputs[8+m] = this.lastOutputs[3+m];
-					console.log(this.lastOutputs[3+m]);
+				for(let m=0; m<this.lastOutputs.length; m++) {
+					inputs[8+m] = this.lastOutputs[m];
+					console.log(this.lastOutputs[m]);
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
@@ -216,13 +216,14 @@
 				let leftDisp = 0;
 				let rightDisp = 0;
 
-				for(let m=0; m<this.lastOutputs.length-3; m++) {
-					inputs[8+m] = this.lastOutputs[3+m];
-					console.log(this.lastOutputs[3+m]);
+				for(let m=0; m<this.lastOutputs.length; m++) {
+					inputs[8+m] = this.lastOutputs[m];
+					console.log(this.lastOutputs[m]);
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
 				let eyeRotation = (this.lastOutputs[0]*4-2)*Math.PI;
+				console.log(eyeRotation);
 				for (let m=0; m<window.eyes*2; m++) {
 					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation))*75), PPosY-(Math.sin((m*change+eyeRotation))*75))).distance || -1;
 				}
@@ -270,6 +271,7 @@
 			}
 	
 			let output = this.brain.predict(inputs);
+			console.log(output);
 		  if (output[0] < (8/18)) {
 				window.down[i] = true;
 			} else if (output[0] > (10/18)) {
@@ -282,6 +284,9 @@
 			}
 		  if (0.5 < output[2]) {
 				window.heavy[i] = true;
+			}
+			for(let m=0; m<this.lastOutputs.length; m++) {
+				this.lastOutputs[m]=output[3+m];
 			}
 		}
 	  
