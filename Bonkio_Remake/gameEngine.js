@@ -1111,7 +1111,7 @@
 						window.heavy[1] = true;
 					}
 					for(let m=0; m<lastOutputs.length; m++) {
-						lastOutputs[m]=output[3+m];
+						lastOutputs[m]=sigmoid(output[3+m]);
 					}
 				}
 				// }
