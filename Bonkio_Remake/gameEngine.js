@@ -148,7 +148,8 @@
 				// let rightDisp = 0;
 
 				for(let m=0; m<this.lastOutputs.length-3; m++) {
-					inputs[8+m] = lastOutputs[3+m];
+					inputs[8+m] = this.lastOutputs[3+m];
+					console.log(this.lastOutputs[3+m]);
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
@@ -214,6 +215,11 @@
 				let tester;
 				let leftDisp = 0;
 				let rightDisp = 0;
+
+				for(let m=0; m<this.lastOutputs.length-3; m++) {
+					inputs[8+m] = this.lastOutputs[3+m];
+					console.log(this.lastOutputs[3+m]);
+				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
 				let eyeRotation = (this.lastOutputs[0]*4-2)*Math.PI;
