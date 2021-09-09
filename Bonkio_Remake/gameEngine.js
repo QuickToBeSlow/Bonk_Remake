@@ -150,7 +150,6 @@
 				// let rightDisp = 0;
 				for(let m=0; m<this.lastOutputs.length; m++) {
 					inputs[8+m] = this.lastOutputs[m];
-					console.log(this.lastOutputs[m]);
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
@@ -219,7 +218,6 @@
 
 				for(let m=0; m<this.lastOutputs.length; m++) {
 					inputs[8+m] = this.lastOutputs[m];
-					console.log(this.lastOutputs[m]);
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
@@ -271,7 +269,6 @@
 			}
 	
 			let output = this.brain.predict(inputs);
-			console.log(output);
 		  if (output[0] < (8/18)) {
 				window.down[i] = true;
 			} else if (output[0] > (10/18)) {
@@ -1246,7 +1243,6 @@
 				}
 				
 				if (window.saveRedNN) {
-					console.log(NNs[0][0]);
 					NNs[index].brain.model.save("localstorage://savedModel");
 					window.saveRedNN = false;
 				}
