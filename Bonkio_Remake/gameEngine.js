@@ -80,6 +80,7 @@
 	window.GRRange = 16;
 	window.debug = false;
 	window.draw = true;
+	var eyeRotation = [0.5, 0.5];
 	var controlPlayer1 = true;
 	var round = 0;
 	var roundCap = 7;
@@ -153,9 +154,9 @@
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
-				let eyeRotation = (this.lastOutputs[0]*4-2)*Math.PI;
+				eyeRotation[0] = (this.lastOutputs[0]*4-2)*Math.PI;
 				for (let m=0; m<window.eyes*2; m++) {
-					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation))*75), PPosY-(Math.sin((m*change+eyeRotation))*75))).distance || -1;
+					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*75), PPosY-(Math.sin((m*change+eyeRotation[0]))*75))).distance || -1;
 				}
 				
 				// inputs[11] = 0.5;
@@ -222,10 +223,9 @@
 				}
 
 				let change = 360/(window.eyes*2)/180*Math.PI;
-				let eyeRotation = (this.lastOutputs[0]*4-2)*Math.PI;
-				console.log(eyeRotation);
+				eyeRotation[1] = (this.lastOutputs[0]*4-2)*Math.PI;
 				for (let m=0; m<window.eyes*2; m++) {
-					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation))*75), PPosY-(Math.sin((m*change+eyeRotation))*75))).distance || -1;
+					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[1]))*75), PPosY-(Math.sin((m*change+eyeRotation[1]))*75))).distance || -1;
 				}
 				
 				// inputs[11] = 0.5;
@@ -780,8 +780,8 @@
                 let PPosY = window.Player1.GetPosition().y;
                 let change = 360/(window.eyes*2);
                 for (let l=0; l<(window.eyes)*2; l++) {
-                    let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI)*200), PPosY-(Math.cos(((l)*change)/180*Math.PI)*200))).distance || null;
-                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI)*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI)*distVal*11.5));
+                    let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0])*200), PPosY-(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0])*200))).distance || null;
+                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0])*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0])*distVal*11.5));
                 }
 				
 				for (let i = 0; i < NNScores.length; i+=2) {
