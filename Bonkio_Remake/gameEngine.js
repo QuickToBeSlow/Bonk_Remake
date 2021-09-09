@@ -75,7 +75,7 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 16;
+	window.eyes = 2;
 	window.groundEyes = 0;
 	window.GRRange = 16;
 	window.debug = false;
@@ -112,10 +112,11 @@
 		constructor(brain) {
 		  this.score = 0;
 		  this.fitness = 0;
+		  this.lastOutputs=[0.5,0.5,0.5];
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(12+(window.eyes*2), [7, 7, 7], 3);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2), [7, 7, 7], 6);
 		  }
 		}
 	  
@@ -124,10 +125,11 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.0005);
+		  this.brain.mutate(0.005);
 		}
 	  
 		think(i) {
+			window.currThink = this.brain;
 			let inputs = [];
 			if (i==0) {
 				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contrains values to just -20 to 20.
@@ -140,45 +142,53 @@
 				inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
-				let GRSeparation = window.GRRange/window.groundEyes;
-				let tester;
-				let leftDisp = 0;
-				let rightDisp = 0;
-				inputs[8] = window.groundEyes/2;
-				inputs[9] = -1;
-				inputs[10] = window.groundEyes/2;
-				inputs[11] = -1;
-				for (let l=window.groundEyes/2; l>0; l--) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
-						inputs[8] = leftDisp;
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
+				// let GRSeparation = window.GRRange/window.groundEyes;
+				// let tester;
+				// let leftDisp = 0;
+				// let rightDisp = 0;
+
+				for(let m=0; m<this.lastOutputs.length-3; m++) {
+					inputs[8+m] = lastOutputs[3+m];
 				}
 
-				for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
-						inputs[10] = rightDisp;
-						inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
+				let change = 360/(window.eyes*2)/180*Math.PI;
+				let eyeRotation = (lastOutputs[0]*4-2)*Math.PI;
+				for (let m=0; m<window.eyes*2; m++) {
+					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change))*75), PPosY-(Math.sin((m*change))*75))).distance || 1;
 				}
+				
+				// inputs[11] = 0.5;
+				// for (let l=window.groundEyes/2; l>0; l--) {
+				// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 	if (tester == -1) {
+				// 		l--;
+				// 		leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
+				// 		inputs[8] = leftDisp;
+				// 		inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 		break;
+				// 	}
+				// }
+
+				// for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
+				// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 	if (tester == -1) {
+				// 		l--;
+				// 		rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
+				// 		inputs[10] = rightDisp;
+				// 		inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 		break;
+				// 	}
+				// }
 				// console.log(inputs[8]);
 				// console.log(inputs[9]);
 				// console.log(inputs[10]);
 				// console.log(inputs[11]);
 				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
-				let change = 360/(window.eyes*2);
-				for (let l=0; l<(window.eyes)*2; l++) {
-					inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
-				}
+				// let change = 360/(window.eyes*2);
+				// for (let l=0; l<(window.eyes)*2; l++) {
+				// 	inputs[12+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
+				// }
 			} else {
 				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
 				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
@@ -204,51 +214,53 @@
 				let tester;
 				let leftDisp = 0;
 				let rightDisp = 0;
-				inputs[8] = window.groundEyes/2;
-				inputs[9] = -1;
-				inputs[10] = window.groundEyes/2;
-				inputs[11] = -1;
-				for (let l=window.groundEyes/2; l>0; l--) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
-						inputs[8] = leftDisp;
-						inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
-				}
 
-				for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
-					tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-					if (tester == -1) {
-						l--;
-						rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
-						inputs[10] = rightDisp;
-						inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
-						break;
-					}
+				let change = 360/(window.eyes*2)/180*Math.PI;
+				let eyeRotation = (lastOutputs[0]*4-2)*Math.PI;
+				for (let m=0; m<window.eyes*2; m++) {
+					inputs[8+this.lastOutputs.length+m] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change))*75), PPosY-(Math.sin((m*change))*75))).distance || 1;
 				}
-				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
-				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
-				let change = 360/(window.eyes*2);
-				for (let l=0; l<(window.eyes)*2; l++) {
-					//Clarification for beefy line of text:
-					//            1.                                  2.                                    3.                                                                                          4.        5.
-					inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
-					/*
-					1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
-					2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
-					3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
-					In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
-					The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
-					Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
-					We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
-					And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
-					4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
-					5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
-					*/
-				}
+				
+				// inputs[11] = 0.5;
+				// for (let l=window.groundEyes/2; l>0; l--) {
+				// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 	if (tester == -1) {
+				// 		l--;
+				// 		leftDisp = Math.abs((l+1)*GRSeparation-window.GRRange/2);
+				// 		inputs[8] = leftDisp;
+				// 		inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 		break;
+				// 	}
+				// }
+
+				// for (let l=window.groundEyes/2; l<window.groundEyes; l++) {
+				// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 	if (tester == -1) {
+				// 		l--;
+				// 		rightDisp = Math.abs((l-1)*GRSeparation-window.GRRange/2);
+				// 		inputs[10] = rightDisp;
+				// 		inputs[11] = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
+				// 		break;
+				// 	}
+				// }
+				// let change = 360/(window.eyes*2);
+				// for (let l=0; l<(window.eyes)*2; l++) {
+				// 	//Clarification for beefy line of text:
+				// 	//            1.                                  2.                                    3.                                                                                          4.        5.
+				// 	inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance || -1;
+				// 	/*
+				// 	1. the raycast function is used to determine the closest object to the player in the given vector. The parameters are defined in this for loop, namely the start and end points of the raycast.
+				// 	2. Sets the starting point of the raycast (the input is a vector, and therefore uses the b2Vec2 class :) ).
+				// 	3. Alright, this will require a bit of explanation. So, to clarify, the goal of this third input into the raycast function is to define the end point of the raycast.
+				// 	In order to do this, we use the sine and cosine methods to determine the length of the line as the raycasts are projected to the sides of the player.
+				// 	The change variable is going to be the rate of change required per l in terms of the angle to revolve around the player precisely one time.
+				// 	Unfortunately, the cosine method uses radians, not degrees, so we simply convert from degrees to radians by dividing by 180 and multipling by PI.
+				// 	We then multiply the Math.cos method by the length we want the line to be, since we're defining the end point of the raycast. This is also done with Math.sin.
+				// 	And of course, since we want to stay centered around the player, we're adding onto the x and y position of the player.
+				// 	4. The .distance value is the distance from the closest shape (if any) from the given parameters into the raycast function.
+				// 	5. The raycast function may return false (if no shape is intersected by the raycast), and if that's the case, 0 is returned as the input.
+				// 	*/
+				// }
 			}
 	
 			let output = this.brain.predict(inputs);
