@@ -282,7 +282,7 @@
 				window.heavy[i] = true;
 			}
 			for(let m=0; m<this.lastOutputs.length; m++) {
-				this.lastOutputs[m]=output[3+m];
+				this.lastOutputs[m]=sigmoid(output[3+m]);
 			}
 		}
 	  
