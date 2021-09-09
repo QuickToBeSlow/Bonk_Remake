@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>box2d.js demos</title>
+	<title>Bonk.io AI Trainer</title>
 	<!--
 	these imports had been taken from generated ../javascript/Box2D/load.html
 	uncomment these and comment out box2d.min.js to debug box2d itself.
@@ -146,16 +146,9 @@
 	</style>
 </head>
 <body>
-	<h1>Bonk2.io remake</h1>
-	<!-- <p>
-		use the tools below to pause the game, go one step ahead in the game, or resume the game.
-	</p> -->
+	<h1>Bonk.io AI Trainer</h1>
 	<canvas style = "margin-left: auto; margin-right: auto; display: block;" tabindex = "1" id="canvas" width="800"  height="600"></canvas>
 	<hr>
-	<!-- <button id="prev" >&lt;-- previous simulation</button>
-	<button id="next" >next simulation --&gt;</button> -->
-	<!-- <button id="reset">reset simulation</button> -->
-<!-- 	<button id="step" >single step</button> -->
 	<table>
 		<tr>
 			<th>Speed Settings</th>
@@ -196,13 +189,9 @@
 	<script src="jquery.min.js"></script>
 	
 	<script src="gameEngine.js"></script>
-	<!-- <script src="b2jsTestFallingBoxes.js"></script> -->
 	<script src="DEATH.js"></script>
 	<script src="angledMap.js"></script>
 	<script src="forNovices.js"></script>
-	<!-- <script src="b2jsTestCompound.js"></script>
-	<script src="b2jsTestJoints.js"></script>
-	<script src="b2jsTestPendulum.js"></script> -->
 	<script type="text/javascript">
 
 	$(document).ready(function(){
@@ -231,17 +220,7 @@
 		}
 		
 		resetCurrentRunner();
-		
-		// $('#next').click(function(){
-		// 	runners.push(runners.shift());
-		// 	resetCurrentRunner();
-		// });
-
-		// $('#prev').click(function(){
-		// 	runners.unshift(runners.pop());
-		// 	resetCurrentRunner();
-		// });
-		
+				
 		$('#reset').click(function(){
 			resetCurrentRunner();
 		});
