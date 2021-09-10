@@ -269,14 +269,14 @@
 			}
 
 			let output = this.brain.predict(inputs);
-		  	if (output[0] < (8/18)) {
+		  	if (output[0] < (19/40)) {
 				window.down[i] = true;
-			} else if (output[0] > (10/18)) {
+			} else if (output[0] > (21/40)) {
 				window.up[i] = true;
 			}
-		  	if (output[1] < (8/18)) {
+		  	if (output[1] < (19/40)) {
 				window.left[i] = true;
-			} else if (output[1] > (10/18)) {
+			} else if (output[1] > (21/40)) {
 				window.right[i] = true;
 			}
 		  	if (0.5 < output[2]) {
@@ -1098,14 +1098,14 @@
 						return outputs;
 					  });
 					}
-					if (output[0] < (8/18)) {
+					if (output[0] < (19/40)) {
 						window.down[1] = true;
-					} else if (output[0] > (10/18)) {
+					} else if (output[0] > (21/40)) {
 						window.up[1] = true;
 					}
-				  	if (output[1] < (8/18)) {
+				  	if (output[1] < (19/40)) {
 						window.left[1] = true;
-					} else if (output[1] > (10/18)) {
+					} else if (output[1] > (21/40)) {
 						window.right[1] = true;
 					}
 					if (0.5 < output[2]) {
