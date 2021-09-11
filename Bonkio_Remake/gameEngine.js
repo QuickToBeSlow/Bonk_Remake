@@ -1227,8 +1227,8 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
@@ -1302,8 +1302,8 @@
 							winnerList.push(j);
 						}
 						//Can comment out
-						window.level++;
-						if (window.level >= window.runners.length) {window.level = 0;}
+						// window.level++;
+						// if (window.level >= window.runners.length) {window.level = 0;}
 					}
 				}
 			}
