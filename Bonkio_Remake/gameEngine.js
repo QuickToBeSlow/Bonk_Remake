@@ -337,7 +337,6 @@
 				  let w = values[j];
 				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
 				  values[j] = w + (randn_bm(true));
-				  if (values[j]>3) {values[j]=0.5}
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
@@ -368,19 +367,22 @@
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						inputShape: [this.input_nodes],
-						activation: 'selu'
+						activation: 'selu',
+						weights: [ tf.randomUniform([1, 6], 0, 1),  tf.randomUniform([6], 0, 1)]
 					});
 					model.add(hidden);
 				} else if (i%2 == 0) {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
-						activation: 'selu'
+						activation: 'selu',
+						weights: [ tf.randomUniform([1, 6], 0, 1),  tf.randomUniform([6], 0, 1)]
 					});
 					model.add(hidden);
 				} else {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
-						activation: 'selu'
+						activation: 'selu',
+						weights: [ tf.randomUniform([1, 6], 0, 1),  tf.randomUniform([6], 0, 1)]
 					});
 					model.add(hidden);
 				}
