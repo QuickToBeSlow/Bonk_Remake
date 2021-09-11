@@ -1244,11 +1244,11 @@
 				if (round >= roundCap) {
 					window.scores = [0,0];
 					if (reward > reward2) {
-						NNScores[index2] += /*(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))**/10;
+						NNScores[index2] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
 						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN, 1);
 					} else {
-						NNScores[index] += /*(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))**/10;
+						NNScores[index] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
 						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN+1, 1);
 					}
@@ -1279,7 +1279,7 @@
 					round = 0;
 					currentNN = 0;
 					if (winnerList.length == 1) {
-						NNScores[winnerList[0]] += 10;
+						NNScores[winnerList[0]] += Math.log2(TOTAL)*10;
 						if (window.saveTourneyWinner == true) {
 							NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
 							window.saveTourneyWinner = false;
