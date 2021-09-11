@@ -46,8 +46,9 @@
 		while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
 		while(v === 0) v = Math.random();
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+		console.log(num);
 		if (restrict == true) {
-			num = num / 10.0 + 0.5; // Translate to 0 -> 1
+			num = num / 2; // Translate to 0 -> 1
 			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
@@ -89,7 +90,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 512;
+	var TOTAL = 32;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -338,7 +339,7 @@
 				if (Math.random() < rate) {
 				  let w = values[j];
 				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-				  values[j] = w + (randn_bm(true))-0.5;
+				  values[j] = w + (randn_bm(true));
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
