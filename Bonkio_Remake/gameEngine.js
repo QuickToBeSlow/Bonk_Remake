@@ -54,7 +54,8 @@
 	}
 
 	function sigmoid(value) {
-		return (Math.pow(Math.E, value)/(1+Math.pow(Math.E, value)));
+		return value;
+		// return (Math.pow(Math.E, value)/(1+Math.pow(Math.E, value)));
 	}
 	//converts inputs to sigmoid values (this is used for the inputs!)
 
@@ -135,14 +136,14 @@
 			// window.currThink = this.brain;
 			let inputs = [];
 			if (i==0) {
-				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contrains values to just -20 to 20.
-				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/20); //contrains values to just -20 to 20.
+				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/20);
+				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/20);
+				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/20);
 				inputs[4] = sigmoid(strengths[0]/5);
 				inputs[5] = sigmoid(strengths[1]/5);
-				inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-				inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+				inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange);
+				inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange);
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
 				// let GRSeparation = window.GRRange/window.groundEyes;
@@ -156,7 +157,7 @@
 				let change = 360/(window.eyes*2)/180*Math.PI;
 				eyeRotation[0] = (this.lastOutputs[0]*2-1)*Math.PI;
 				for (let m=0; m<window.eyes*2; m++) {
-					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange);
+					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
 				}
 				// inputs[11] = 0.5;
 				// for (let l=window.groundEyes/2; l>0; l--) {
@@ -191,14 +192,14 @@
 				// 	inputs[12+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 				// }
 			} else {
-				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/20);
+				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/20);
+				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/20);
+				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/20);
 				inputs[4] = sigmoid(strengths[1]/5);
 				inputs[5] = sigmoid(strengths[0]/5);
-				inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-				inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+				inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange);
+				inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange);
 				let PPosX = window.Player2.GetPosition().x;
 				let PPosY = window.Player2.GetPosition().y;
 
@@ -223,7 +224,7 @@
 				let change = 360/(window.eyes*2)/180*Math.PI;
 				eyeRotation[1] = (this.lastOutputs[0]*2-1)*Math.PI;
 				for (let m=0; m<window.eyes*2; m++) {
-					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange);
+					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
 				}
 				
 				// inputs[11] = 0.5;
@@ -956,14 +957,14 @@
 					let inputs = [];
 					let color = "blue";
 					if (color == "red") {
-						inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/5); //contrains values to just -20 to 20.
-						inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/5);
-						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/5);
+						inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/20); //contrains values to just -20 to 20.
+						inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/20);
+						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/20);
+						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/20);
 						inputs[4] = sigmoid(strengths[0]/5);
 						inputs[5] = sigmoid(strengths[1]/5);
-						inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/5);
-						inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/5);
+						inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange);
+						inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange);
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
 						// let GRSeparation = window.GRRange/window.groundEyes;
@@ -977,7 +978,7 @@
 						let change = 360/(window.eyes*2)/180*Math.PI;
 						eyeRotation[0] = (lastOutputs[0]*2-1)*Math.PI;
 						for (let m=0; m<window.eyes*2; m++) {
-							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange);
+							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
 						// inputs[11] = 0.5;
 						// for (let l=window.groundEyes/2; l>0; l--) {
@@ -1044,7 +1045,7 @@
 						let change = 360/(window.eyes*2)/180*Math.PI;
 						eyeRotation[1] = (lastOutputs[0]*2-1)*Math.PI;
 						for (let m=0; m<window.eyes*2; m++) {
-							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange);
+							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
 						
 						// inputs[11] = 0.5;
