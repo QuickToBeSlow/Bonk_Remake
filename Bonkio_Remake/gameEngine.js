@@ -336,7 +336,7 @@
 				if (Math.random() < rate) {
 				  let w = values[j];
 				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-				  values[j] = w + randn_bm(false);
+				  values[j] = w + (randn_bm(false)-0.5);
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
