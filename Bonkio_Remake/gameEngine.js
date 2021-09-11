@@ -82,6 +82,7 @@
 	window.debug = false;
 	window.draw = true;
 	var eyeRange = 75;
+	var velocityRange = 30;
 	var eyeRotation = [0.5, 0.5];
 	var controlPlayer1 = true;
 	var round = 0;
@@ -136,14 +137,14 @@
 			// window.currThink = this.brain;
 			let inputs = [];
 			if (i==0) {
-				inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/20); //contrains values to just -20 to 20.
-				inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/20);
-				inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/20);
-				inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/20);
+				inputs[0] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1));
+				inputs[1] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1));
+				inputs[2] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().x/20), -1), 1));
+				inputs[3] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/20), -1), 1));
 				inputs[4] = sigmoid(strengths[0]/5);
 				inputs[5] = sigmoid(strengths[1]/5);
-				inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange);
-				inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange);
+				inputs[6] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1));
+				inputs[7] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1));
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
 				// let GRSeparation = window.GRRange/window.groundEyes;
@@ -192,14 +193,14 @@
 				// 	inputs[12+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 				// }
 			} else {
-				inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/20);
-				inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/20);
-				inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/20);
-				inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/20);
+				inputs[0] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), -1), 1));
+				inputs[1] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1));
+				inputs[2] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().x/20), -1), 1));
+				inputs[3] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/20), -1), 1));
 				inputs[4] = sigmoid(strengths[1]/5);
 				inputs[5] = sigmoid(strengths[0]/5);
-				inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange);
-				inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange);
+				inputs[6] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1));
+				inputs[7] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange), 1), -1));
 				let PPosX = window.Player2.GetPosition().x;
 				let PPosY = window.Player2.GetPosition().y;
 
@@ -957,14 +958,14 @@
 					let inputs = [];
 					let color = "blue";
 					if (color == "red") {
-						inputs[0] = sigmoid(window.Player1.GetLinearVelocity().x/20); //contrains values to just -20 to 20.
-						inputs[1] = sigmoid(window.Player1.GetLinearVelocity().y/20);
-						inputs[2] = sigmoid(window.Player2.GetLinearVelocity().x/20);
-						inputs[3] = sigmoid(window.Player2.GetLinearVelocity().y/20);
+						inputs[0] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1));
+						inputs[1] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1));
+						inputs[2] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().x/20), -1), 1));
+						inputs[3] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/20), -1), 1));
 						inputs[4] = sigmoid(strengths[0]/5);
 						inputs[5] = sigmoid(strengths[1]/5);
-						inputs[6] = sigmoid((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange);
-						inputs[7] = sigmoid((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange);
+						inputs[6] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1));
+						inputs[7] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1));
 						let PPosX = window.Player1.GetPosition().x;
 						let PPosY = window.Player1.GetPosition().y;
 						// let GRSeparation = window.GRRange/window.groundEyes;
@@ -1013,14 +1014,14 @@
 						// 	inputs[12+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 						// }
 					} else {
-						inputs[0] = sigmoid(window.Player2.GetLinearVelocity().x/5);
-						inputs[1] = sigmoid(window.Player2.GetLinearVelocity().y/5);
-						inputs[2] = sigmoid(window.Player1.GetLinearVelocity().x/5);
-						inputs[3] = sigmoid(window.Player1.GetLinearVelocity().y/5);
+						inputs[0] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), -1), 1));
+						inputs[1] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1));
+						inputs[2] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().x/20), -1), 1));
+						inputs[3] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/20), -1), 1));
 						inputs[4] = sigmoid(strengths[1]/5);
 						inputs[5] = sigmoid(strengths[0]/5);
-						inputs[6] = sigmoid((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/5);
-						inputs[7] = sigmoid((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/5);
+						inputs[6] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1));
+						inputs[7] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange), 1), -1));
 						let PPosX = window.Player2.GetPosition().x;
 						let PPosY = window.Player2.GetPosition().y;
 		
