@@ -61,7 +61,7 @@ Test.prototype.createWorld = function() {
 
 
 	//Random Pos
-	let randPos = Math.round(Math.random());
+	let randPos = (Math.round(Math.random())-0.5)*2;
 	
 	// Create ball
 	var P1 = new b2CircleShape();
