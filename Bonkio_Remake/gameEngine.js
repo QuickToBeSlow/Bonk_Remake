@@ -87,7 +87,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 1024;
+	var TOTAL = 2048;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -128,7 +128,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.011);
+		  this.brain.mutate(0.001);
 		}
 	  
 		think(i) {
