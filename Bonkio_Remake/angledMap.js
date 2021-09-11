@@ -78,7 +78,7 @@ Test.prototype.createWorld = function() {
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
-	bd.position.Set((300+randPos*50)/m_physScale, (300+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((300+randPos*50)/m_physScale, (250)/m_physScale);
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
@@ -101,7 +101,7 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	bd.position.Set((300-randPos*50)/m_physScale, (300+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((300-randPos*50)/m_physScale, (250)/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
