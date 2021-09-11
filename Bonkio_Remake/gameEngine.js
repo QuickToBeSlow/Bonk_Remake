@@ -130,7 +130,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.0091);
+		  this.brain.mutate(0.1);
 		}
 	  
 		think(i) {
