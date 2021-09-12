@@ -26,6 +26,7 @@
 		}
 	  }
 	}
+
 	if(closestShape != undefined && closestShape.RayCast(rayCastOutput, rayCastInput)){
 		// if ((1-rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2)) < 0) {
 		// 	console.log("error!");
@@ -37,6 +38,63 @@
 		}
 	}
 	  return false;
+	}
+
+	//QuickSort code
+
+	function quickSort(items, left, right) {
+
+		var ind;
+	
+		if (items.length > 1) {
+	
+			left = typeof left != "number" ? 0 : left;
+			right = typeof right != "number" ? items.length - 1 : right;
+	
+			ind = partition(items, left, right);
+	
+			if (left < ind - 1) {
+				quickSort(items, left, ind - 1);
+			}
+	
+			if (ind < right) {
+				quickSort(items, ind, right);
+			}
+	
+		}
+	
+		return items;
+	}
+	function partition(items, left, right) {
+	
+		var pivot   = items[Math.floor((right + left) / 2)],
+			i       = left,
+			j       = right;
+	
+	
+		while (i <= j) {
+	
+			while (items[i] < pivot) {
+				i++;
+			}
+	
+			while (items[j] > pivot) {
+				j--;
+			}
+	
+			if (i <= j) {
+				swap(items, i, j);
+				i++;
+				j--;
+			}
+		}
+	
+		return i;
+	}
+	function swap(items, firstIndex, secondIndex){
+		var temp = items[firstIndex];
+		items[firstIndex] = items[secondIndex];
+		items[secondIndex] = temp;
 	}
 
 	//code for Gaussian
@@ -1229,8 +1287,8 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				// window.level++;
-				// if (window.level >= window.runners.length) {window.level = 0;}
+				window.level++;
+				if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
@@ -1291,6 +1349,7 @@
 						generation++;
 						// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 						savedNNs = [...NNs];
+						NNScores = quickSort(NNScores);
 						nextGeneration();
 						NNScores = [];
 						for (let i=0; i<TOTAL; i++) {
