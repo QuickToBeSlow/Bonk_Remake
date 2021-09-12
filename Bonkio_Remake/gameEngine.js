@@ -105,7 +105,7 @@
 		while(v === 0) v = Math.random();
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
 		if (restrict == true) {
-			num = num; // Translate to 0 -> 1
+			num = num/10; // Translate to 0 -> 1
 			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
