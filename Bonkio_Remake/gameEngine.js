@@ -846,8 +846,8 @@
                 let PPosY = window.Player1.GetPosition().y;
                 let change = 360/(window.eyes);
                 for (let l=0; l<(window.eyes)*2; l++) {
-                    let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0])*200), PPosY-(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0])*200))).distance || null;
-                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0])*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0])*distVal*11.5));
+                    let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0][l])*200), PPosY-(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0][l])*200))).distance || null;
+                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0][l])*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0][l])*distVal*11.5));
                 }
 				
 				for (let i = 0; i < NNScores.length; i+=2) {
