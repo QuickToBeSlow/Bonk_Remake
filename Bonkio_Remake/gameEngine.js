@@ -134,14 +134,18 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 2;
+	window.eyes = 3;
 	window.groundEyes = 0;
 	window.GRRange = 16;
 	window.debug = false;
 	window.draw = true;
 	var eyeRange = 75;
 	var velocityRange = 30;
-	var eyeRotation = [0.5, 0.5];
+	var eyeRotation = [];
+	for (let i=0; i<window.eyes; i++) {
+		eyeRotation[0][i]=0.5;
+		eyeRotation[1][i]=0.5;
+	}
 	var controlPlayer1 = true;
 	var round = 0;
 	var roundCap = 7;
@@ -174,12 +178,15 @@
 		constructor(brain) {
 		  this.score = 0;
 		  this.fitness = 0;
-		  this.lastOutputs=[0.5,0.5,0.5];
+		  this.lastOutputs=[];
+		  for (let i=0; i<window.eyes; i++) {
+			  this.lastOutputs[i]=0.5;
+		  }
 
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2), [7, 7, 7], 6);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [7, 7, 7], 6);
 		  }
 		}
 	  
@@ -213,10 +220,10 @@
 					inputs[8+m] = this.lastOutputs[m];
 				}
 
-				let change = 360/(window.eyes*2)/180*Math.PI;
-				eyeRotation[0] = (this.lastOutputs[0]*2-1)*Math.PI;
-				for (let m=0; m<window.eyes*2; m++) {
-					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
+				let change = 360/(window.eyes)/180*Math.PI;
+				for (let m=0; m<window.eyes; m++) {
+					eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
+					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 				}
 				// inputs[11] = 0.5;
 				// for (let l=window.groundEyes/2; l>0; l--) {
@@ -246,7 +253,7 @@
 				// console.log(inputs[11]);
 				// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 				// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
-				// let change = 360/(window.eyes*2);
+				// let change = 360/(window.eyes);
 				// for (let l=0; l<(window.eyes)*2; l++) {
 				// 	inputs[12+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 				// }
@@ -264,7 +271,7 @@
 
 				// let p1Direction = Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x) * (180/Math.PI);//p1 direction of momentum
 				// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
-				// let change = (180-(p1Speed*5))/(window.eyes*2); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
+				// let change = (180-(p1Speed*5))/(window.eyes); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
 				// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
 				//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
 				//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
@@ -280,10 +287,10 @@
 					inputs[8+m] = this.lastOutputs[m];
 				}
 
-				let change = 360/(window.eyes*2)/180*Math.PI;
-				eyeRotation[1] = (this.lastOutputs[0]*2-1)*Math.PI;
-				for (let m=0; m<window.eyes*2; m++) {
-					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
+				let change = 360/(window.eyes)/180*Math.PI;
+				for (let m=0; m<window.eyes; m++) {
+					eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
+					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 				}
 				
 				// inputs[11] = 0.5;
@@ -308,7 +315,7 @@
 				// 		break;
 				// 	}
 				// }
-				// let change = 360/(window.eyes*2);
+				// let change = 360/(window.eyes);
 				// for (let l=0; l<(window.eyes)*2; l++) {
 				// 	//Clarification for beefy line of text:
 				// 	//            1.                                  2.                                    3.                                                                                          4.        5.
@@ -835,7 +842,7 @@
 			if (window.debug) {
 				let PPosX = window.Player1.GetPosition().x;
                 let PPosY = window.Player1.GetPosition().y;
-                let change = 360/(window.eyes*2);
+                let change = 360/(window.eyes);
                 for (let l=0; l<(window.eyes)*2; l++) {
                     let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0])*200), PPosY-(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0])*200))).distance || null;
                     c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(((l)*change)/180*Math.PI+eyeRotation[0])*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(((l)*change)/180*Math.PI+eyeRotation[0])*distVal*11.5));
@@ -1034,11 +1041,12 @@
 							inputs[8+m] = lastOutputs[m];
 						}
 		
-						let change = 360/(window.eyes*2)/180*Math.PI;
-						eyeRotation[0] = (lastOutputs[0]*2-1)*Math.PI;
-						for (let m=0; m<window.eyes*2; m++) {
-							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
+						let change = 360/(window.eyes)/180*Math.PI;
+						for (let m=0; m<window.eyes; m++) {
+							eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
+							inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
+						
 						// inputs[11] = 0.5;
 						// for (let l=window.groundEyes/2; l>0; l--) {
 						// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
@@ -1067,7 +1075,7 @@
 						// console.log(inputs[11]);
 						// inputs[8] = raycast(window.FloorFixture, new b2Vec2(PPosX+5, PPosY), new b2Vec2(PPosX+5, PPosY-75)).distance || -1;
 						// inputs[9] = raycast(window.FloorFixture, new b2Vec2(PPosX-5, PPosY), new b2Vec2(PPosX-5, PPosY-75)).distance || -1;
-						// let change = 360/(window.eyes*2);
+						// let change = 360/(window.eyes);
 						// for (let l=0; l<(window.eyes)*2; l++) {
 						// 	inputs[12+l] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 						// }
@@ -1085,7 +1093,7 @@
 		
 						// let p1Direction = Math.atan2(window.Player1.GetLinearVelocity().y,window.Player1.GetLinearVelocity().x) * (180/Math.PI);//p1 direction of momentum
 						// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
-						// let change = (180-(p1Speed*5))/(window.eyes*2); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
+						// let change = (180-(p1Speed*5))/(window.eyes); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
 						// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
 						//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
 						//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
@@ -1101,10 +1109,10 @@
 							inputs[8+m] = lastOutputs[m];
 						}
 		
-						let change = 360/(window.eyes*2)/180*Math.PI;
-						eyeRotation[1] = (lastOutputs[0]*2-1)*Math.PI;
-						for (let m=0; m<window.eyes*2; m++) {
-							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0]))*eyeRange))).distance || eyeRange)/eyeRange;
+						let change = 360/(window.eyes)/180*Math.PI;
+						for (let m=0; m<window.eyes; m++) {
+							eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
+							inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
 						
 						// inputs[11] = 0.5;
@@ -1129,7 +1137,7 @@
 						// 		break;
 						// 	}
 						// }
-						// let change = 360/(window.eyes*2);
+						// let change = 360/(window.eyes);
 						// for (let l=0; l<(window.eyes)*2; l++) {
 						// 	//Clarification for beefy line of text:
 						// 	//            1.                                  2.                                    3.                                                                                          4.        5.
@@ -1287,8 +1295,8 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
