@@ -142,6 +142,8 @@
 	var eyeRange = 75;
 	var velocityRange = 30;
 	var eyeRotation = [];
+	eyeRotation[0] = [];
+	eyeRotation[1] = [];
 	for (let i=0; i<window.eyes; i++) {
 		eyeRotation[0][i]=0.5;
 		eyeRotation[1][i]=0.5;
@@ -1046,7 +1048,7 @@
 							eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
 							inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
-						
+
 						// inputs[11] = 0.5;
 						// for (let l=window.groundEyes/2; l>0; l--) {
 						// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
