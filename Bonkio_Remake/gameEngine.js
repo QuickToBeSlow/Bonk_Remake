@@ -224,7 +224,7 @@
 
 				let change = 360/(window.eyes)/180*Math.PI;
 				for (let m=0; m<window.eyes; m++) {
-					eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
+					eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
 					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 				}
 				// inputs[11] = 0.5;
@@ -291,8 +291,8 @@
 
 				let change = 360/(window.eyes)/180*Math.PI;
 				for (let m=0; m<window.eyes; m++) {
-					eyeRotation[0][m] = (this.lastOutputs[0]*2-1)*Math.PI;
-					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
+					eyeRotation[1][m] = (this.lastOutputs[m]*2-1)*Math.PI;
+					inputs[8+this.lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[1][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 				}
 				
 				// inputs[11] = 0.5;
@@ -1045,7 +1045,7 @@
 		
 						let change = 360/(window.eyes)/180*Math.PI;
 						for (let m=0; m<window.eyes; m++) {
-							eyeRotation[0][m] = (lastOutputs[0]*2-1)*Math.PI;
+							eyeRotation[0][m] = (lastOutputs[m]*2-1)*Math.PI;
 							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
 
@@ -1113,8 +1113,8 @@
 		
 						let change = 360/(window.eyes)/180*Math.PI;
 						for (let m=0; m<window.eyes; m++) {
-							eyeRotation[0][m] = (lastOutputs[0]*2-1)*Math.PI;
-							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[0][m]))*eyeRange))).distance || eyeRange)/eyeRange;
+							eyeRotation[1][m] = (lastOutputs[m]*2-1)*Math.PI;
+							inputs[8+lastOutputs.length+m] = sigmoid(raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((m*change+eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((m*change+eyeRotation[1][m]))*eyeRange))).distance || eyeRange)/eyeRange;
 						}
 						
 						// inputs[11] = 0.5;
