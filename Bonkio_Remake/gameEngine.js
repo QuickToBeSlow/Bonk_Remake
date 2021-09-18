@@ -191,7 +191,7 @@
 			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [7, 7], 6);
 		  }
 		}
-	  
+		
 		dispose() {
 		  this.brain.dispose();
 		}
