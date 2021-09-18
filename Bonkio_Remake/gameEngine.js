@@ -153,7 +153,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 512;
+	var TOTAL = 1024;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -208,8 +208,8 @@
 				inputs[1] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1));
 				inputs[2] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().x/20), -1), 1));
 				inputs[3] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/20), -1), 1));
-				inputs[4] = sigmoid(strengths[0]/5);
-				inputs[5] = sigmoid(strengths[1]/5);
+				inputs[4] = sigmoid(strengths[0]/10);
+				inputs[5] = sigmoid(strengths[1]/10);
 				inputs[6] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1));
 				inputs[7] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1));
 				let PPosX = window.Player1.GetPosition().x;
@@ -264,8 +264,8 @@
 				inputs[1] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1));
 				inputs[2] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().x/20), -1), 1));
 				inputs[3] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/20), -1), 1));
-				inputs[4] = sigmoid(strengths[1]/5);
-				inputs[5] = sigmoid(strengths[0]/5);
+				inputs[4] = sigmoid(strengths[1]/10);
+				inputs[5] = sigmoid(strengths[0]/10);
 				inputs[6] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1));
 				inputs[7] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange), 1), -1));
 				let PPosX = window.Player2.GetPosition().x;
@@ -1029,8 +1029,8 @@
 						inputs[1] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1));
 						inputs[2] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().x/20), -1), 1));
 						inputs[3] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/20), -1), 1));
-						inputs[4] = sigmoid(strengths[0]/5);
-						inputs[5] = sigmoid(strengths[1]/5);
+						inputs[4] = sigmoid(strengths[0]/10);
+						inputs[5] = sigmoid(strengths[1]/10);
 						inputs[6] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1));
 						inputs[7] = sigmoid(Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1));
 						let PPosX = window.Player1.GetPosition().x;
@@ -1086,8 +1086,8 @@
 						inputs[1] = sigmoid(Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1));
 						inputs[2] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().x/20), -1), 1));
 						inputs[3] = sigmoid(Math.max(Math.min((window.Player1.GetLinearVelocity().y/20), -1), 1));
-						inputs[4] = sigmoid(strengths[1]/5);
-						inputs[5] = sigmoid(strengths[0]/5);
+						inputs[4] = sigmoid(strengths[1]/10);
+						inputs[5] = sigmoid(strengths[0]/10);
 						inputs[6] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1));
 						inputs[7] = sigmoid(Math.max(Math.min(((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange), 1), -1));
 						let PPosX = window.Player2.GetPosition().x;
