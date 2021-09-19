@@ -153,7 +153,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 1024;
+	var TOTAL = 512;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -197,7 +197,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.001);
+		  this.brain.mutate(0.01);
 		}
 	  
 		think(i) {
@@ -406,6 +406,8 @@
 				  let w = values[j];
 				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
 				  values[j] = w + (randn_bm(false));
+				  if (values[j]<=0) {values[j]=0.1}
+				  if (values[j]>2) {values[j]=2}
 				}
 			  }
 			  let newTensor = tf.tensor(values, shape);
@@ -437,18 +439,21 @@
 						units: this.hidden_nodes[i],
 						inputShape: [this.input_nodes],
 						activation: 'selu',
+						weights: [ tf.randomUniform([14, 7], 0, 1),  tf.randomUniform([7], 0, 1)]
 					});
 					model.add(hidden);
 				} else if (i%2 == 0) {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						activation: 'selu',
+						weights: [ tf.randomUniform([7, 7], 0, 1),  tf.randomUniform([7], 0, 1)]
 					});
 					model.add(hidden);
 				} else {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						activation: 'selu',
+						weights: [ tf.randomUniform([7, 7], 0, 1),  tf.randomUniform([7], 0, 1)]
 					});
 					model.add(hidden);
 				}
@@ -1297,8 +1302,8 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
