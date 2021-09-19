@@ -439,21 +439,21 @@
 						units: this.hidden_nodes[i],
 						inputShape: [this.input_nodes],
 						activation: 'selu',
-						weights: [ tf.randomUniform([14, 7], 0, 1),  tf.randomUniform([7], 0, 1)]
+						weights: [ tf.randomUniform([14, 7], 0, 2),  tf.randomUniform([7], 0, 2)]
 					});
 					model.add(hidden);
 				} else if (i%2 == 0) {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						activation: 'selu',
-						weights: [ tf.randomUniform([7, 7], 0, 1),  tf.randomUniform([7], 0, 1)]
+						weights: [ tf.randomUniform([7, 7], 0, 2),  tf.randomUniform([7], 0, 2)]
 					});
 					model.add(hidden);
 				} else {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						activation: 'selu',
-						weights: [ tf.randomUniform([7, 7], 0, 1),  tf.randomUniform([7], 0, 1)]
+						weights: [ tf.randomUniform([7, 7], 0, 2),  tf.randomUniform([7], 0, 2)]
 					});
 					model.add(hidden);
 				}
