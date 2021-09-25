@@ -96,12 +96,17 @@ Test.prototype.createWorld = function() {
 	bd.type = b2Body.b2_dynamicBody;
 	bd.userData = "Player1";
 	bd.isBullet = true;
+	var random = Math.round(Math.random());
 // 	if (randPos == 0) {
 // 		bd.position.Set(225/m_physScale, 120/m_physScale);
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
-	bd.position.Set((300+randPos*40)/m_physScale, (275)/m_physScale);
+	if (random==0) {
+		bd.position.Set((300+randPos*200)/m_physScale, (400)/m_physScale);
+	} else {
+		bd.position.Set((300+randPos*40)/m_physScale, (275)/m_physScale);
+	}
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
@@ -125,7 +130,11 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	bd.position.Set((300-randPos*40)/m_physScale, (275)/m_physScale);
+	if (random==0) {
+		bd.position.Set((300-randPos*200)/m_physScale, (400)/m_physScale);
+	} else {
+		bd.position.Set((300-randPos*40)/m_physScale, (275)/m_physScale);
+	}
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
