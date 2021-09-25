@@ -103,9 +103,9 @@ Test.prototype.createWorld = function() {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
 	if (random==0) {
-		bd.position.Set((300+randPos*200)/m_physScale, (400)/m_physScale);
+		bd.position.Set((300+randPos*200)/m_physScale, (400+Math.round(Math.random()*30))/m_physScale);
 	} else {
-		bd.position.Set((300+randPos*40)/m_physScale, (275)/m_physScale);
+		bd.position.Set((300+randPos*40)/m_physScale, (275+Math.round(Math.random()*15))/m_physScale);
 	}
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
@@ -131,9 +131,9 @@ Test.prototype.createWorld = function() {
 	fd.isSensor = false;
 	fd.shape = P2;
 	if (random==0) {
-		bd.position.Set((300-randPos*200)/m_physScale, (400)/m_physScale);
+		bd.position.Set((300-randPos*200)/m_physScale, (400+Math.round(Math.random()*30))/m_physScale);
 	} else {
-		bd.position.Set((300-randPos*40)/m_physScale, (275)/m_physScale);
+		bd.position.Set((300-randPos*40)/m_physScale, (275+Math.round(Math.random()*15))/m_physScale);
 	}
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
