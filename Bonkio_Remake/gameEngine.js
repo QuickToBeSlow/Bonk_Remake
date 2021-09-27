@@ -154,7 +154,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 1024;
+	var TOTAL = 512;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -1299,8 +1299,8 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
