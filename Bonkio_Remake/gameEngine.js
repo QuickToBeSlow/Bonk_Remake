@@ -223,7 +223,6 @@
 				}
 
 				// let change = 360/(window.eyes)/180*Math.PI;
-				console.log(this.lastOutputs[0]+", "+this.lastOutputs[1]+", "+this.lastOutputs[2]+", "+this.lastOutputs[3]);
 				for (let m=0; m<window.eyes; m++) {
 					eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
 					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
