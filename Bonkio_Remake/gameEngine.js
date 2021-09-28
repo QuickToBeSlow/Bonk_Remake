@@ -185,7 +185,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 8], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 10], 3+this.lastOutputs.length);
 		  }
 		}
 		
