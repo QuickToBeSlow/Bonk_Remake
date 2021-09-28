@@ -96,18 +96,8 @@ Test.prototype.createWorld = function() {
 	bd.type = b2Body.b2_dynamicBody;
 	bd.userData = "Player1";
 	bd.isBullet = true;
-	var random = Math.round(Math.random());
-// 	if (randPos == 0) {
-// 		bd.position.Set(225/m_physScale, 120/m_physScale);
-// 	} else {
-// 		bd.position.Set(375/m_physScale, 120/m_physScale);
-// 	}
-	if (random==0) {
-		bd.position.Set((300+randPos*200)/m_physScale, (400+Math.round(Math.random()*30))/m_physScale);
-	} else {
-		bd.position.Set((300+randPos*40)/m_physScale, (275+Math.round(Math.random()*15))/m_physScale);
-	}
-	// bd.position.Set(275/m_physScale, 120/m_physScale);
+	// var random = Math.round(Math.random());
+	bd.position.Set((300+randPos*200)/m_physScale, (400+Math.round(Math.random()*30))/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
 	sd2.SetAsBox(5,5, new b2Vec2(0, 0), 0);
@@ -120,22 +110,13 @@ Test.prototype.createWorld = function() {
 
 	var P2 = new b2CircleShape();
 	P2.m_radius = 15/m_physScale;
-// 	if (randPos == 1) {
-// 		bd.position.Set(225/m_physScale, 120/m_physScale);
-// 	} else {
-// 		bd.position.Set(375/m_physScale, 120/m_physScale);
-// 	}
 	fd.density = 1;
 	fd.restitution = 0.8;
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	if (random==0) {
-		bd.position.Set((300-randPos*200)/m_physScale, (400+Math.round(Math.random()*30))/m_physScale);
-	} else {
-		bd.position.Set((300-randPos*40)/m_physScale, (275+Math.round(Math.random()*15))/m_physScale);
-	}
-	// bd.position.Set(325/m_physScale, 120/m_physScale);
+	bd.position.Set((300-randPos*200)/m_physScale, (400+Math.round(Math.random()*30))/m_physScale);
+	// bd.position.Set((300-randPos*40)/m_physScale, (275+Math.round(Math.random()*15))/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
 	window.PFixture2 = window.Player2.CreateFixture(fd);
