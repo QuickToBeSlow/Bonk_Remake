@@ -197,6 +197,10 @@
 		  this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
 		}
 	  
+		crossover(network) {
+			this.brain.crossover(network, 0.7);
+		}
+
 		think(i) {
 			let inputs = [];
 			if (i==0) {
@@ -414,6 +418,29 @@
 			this.model.setWeights(mutatedWeights);
 		  });
 		}
+		
+		crossover(network, rate) {
+			tf.tidy(() => {
+			  const weights1 = this.model.getWeights();
+			  const weights2 = network.getWeights();
+			  const crossoverWeights = [];
+			  for (let i = 0; i < weights1.length; i++) {
+				let tensor1 = weights1[i];
+				let tensor2 = weights2[i];
+				let shape = weights1[i].shape;
+				let values1 = tensor1.dataSync().slice();
+				let values2 = tensor2.dataSync().slice();
+				for (let j = 0; j < values.length; j++) {
+				  if (Math.random() < rate) {
+					values1[j] = values2[j];
+				  }
+				}
+				let newTensor = tf.tensor(values1, shape);
+				crossoverWeights[i] = newTensor;
+			  }
+			  this.model.setWeights(crossoverWeights);
+			});
+		  }
 	  
 		dispose() {
 		  this.model.dispose();
@@ -489,7 +516,9 @@
 		//   if (controlPlayer1) {
 		//   	NNs[1][i] = pickOne(1, i);
 		//   }
-		NNs[i] = pickOne(i);
+		let NN1 = pickOne(i);
+		let NN2 = pickOne(i);
+		NNs[i] = NN1.crossover(NN2);
 		}
 		// for (let i = 0; i < TOTAL; i++) {
 		// 	savedNNs[0][i].dispose();
