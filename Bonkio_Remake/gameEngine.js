@@ -194,7 +194,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(1/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
+		  this.brain.mutate(10/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
 		}
 	  
 		think(i) {
