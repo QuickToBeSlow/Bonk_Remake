@@ -150,7 +150,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 512;
+	var TOTAL = 4096;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
