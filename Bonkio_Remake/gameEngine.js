@@ -5,7 +5,6 @@
 	var rayCastInput = new b2RayCastInput();
 	var rayCastOutput =  new b2RayCastOutput();
 	var m_physScale = 10;
-	// console.log(rayCastInput);
 
 	function raycast(b2Fixture, p1, p2, maxFraction){
 	  rayCastInput.p1 = p1;
@@ -28,9 +27,6 @@
 	}
 
 	if(closestShape != undefined && closestShape.RayCast(rayCastOutput, rayCastInput)){
-		// if ((1-rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2)) < 0) {
-		// 	console.log("error!");
-		// }
 		return {
 			normal: rayCastOutput.normal,
 			fraction: rayCastOutput.fraction,
@@ -202,7 +198,6 @@
 		}
 	  
 		think(i) {
-			// window.currThink = this.brain;
 			let inputs = [];
 			if (i==0) {
 				inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1);
@@ -1001,8 +996,6 @@
 					reward2 -= 0.001;
 					reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
 					reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
-					// reward -= (Math.abs(window.Player2.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player2.GetLinearVelocity().y))/5000 : 0;
-					// reward2 -= (Math.abs(window.Player1.GetLinearVelocity().y) > 30) ? (Math.abs(window.Player1.GetLinearVelocity().y))/5000 : 0;
 				}
 				window.up[1] = false;
 				window.down[1] = false;
@@ -1021,8 +1014,6 @@
 				if (!window.testingMode) {
 					let index = winnerList[currentNN];
 					let index2 = winnerList[currentNN+1];
-	// 				console.log(Math.floor(index/(TOTAL/2)));
-	// 				console.log(index%(TOTAL/2));
 					NNs[index].think(0);
 					if (controlPlayer1) {
 
