@@ -150,7 +150,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 128;
+	var TOTAL = 512;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -198,7 +198,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.model, 0.7);
+			this.brain.crossover(network.brain.model, 0.7);
 		}
 
 		think(i) {
@@ -429,7 +429,7 @@
 				let shape = weights1[i].shape;
 				let values1 = tensor1.dataSync().slice();
 				let values2 = tensor2.dataSync().slice();
-				for (let j = 0; j < values.length; j++) {
+				for (let j = 0; j < values1.length; j++) {
 				  if (Math.random() < rate) {
 					values1[j] = values2[j];
 				  }
@@ -517,7 +517,9 @@
 		//   }
 		let NN1 = pickOne(i);
 		let NN2 = pickOne(i);
-		NNs[i] = NN1.crossover(NN2);
+		NN1.crossover(NN2);
+		// console.log(NN2);
+		NNs[i] = NN1;
 		}
 		// for (let i = 0; i < TOTAL; i++) {
 		// 	savedNNs[0][i].dispose();
