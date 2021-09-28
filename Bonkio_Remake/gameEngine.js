@@ -185,7 +185,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 5], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 10], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -1295,8 +1295,8 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 			}
 	
 			// console.log(winnerList);
