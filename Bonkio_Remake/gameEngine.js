@@ -185,7 +185,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 10], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 5], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -194,7 +194,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(10/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
+		  this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
 		}
 	  
 		think(i) {
