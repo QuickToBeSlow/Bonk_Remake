@@ -100,7 +100,7 @@
 		while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
 		while(v === 0) v = Math.random();
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-		num = num / 10;
+		num = num / 1.5;
 		if (restrict == true) {
 			// num = num / 10; // Translate to 0 -> 1
 			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
@@ -194,7 +194,7 @@
 		}
 	
 		mutate() {
-		  this.brain.mutate(0.091);
+		  this.brain.mutate(1/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
 		}
 	  
 		think(i) {
