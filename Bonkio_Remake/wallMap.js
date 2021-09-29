@@ -117,6 +117,6 @@ Test.prototype.createWorld = function() {
 	return world;
 };
 
-window.angledMap = Test;
+window.wallMap = Test;
 	
 })();

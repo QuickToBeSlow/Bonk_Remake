@@ -107,6 +107,6 @@ Test.prototype.createWorld = function() {
 	return world;
 };
 
-window.angledMap = Test;
+window.spacedOutPlatforms = Test;
 	
 })();
