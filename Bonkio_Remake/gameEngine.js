@@ -277,9 +277,9 @@
 				// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
 				// let change = (180-(p1Speed*5))/(window.eyes); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
 				// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
-				//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
+				//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of its momentum.
 				//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
-				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
+				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using its direction - the offset from the for-loop variable, which dynamically increases in magnitude as speed increases.
 				// }
 
 				let GRSeparation = window.GRRange/window.groundEyes;
@@ -1126,9 +1126,9 @@
 						// let p1Speed = Math.sqrt(Math.pow(window.Player1.GetLinearVelocity().x,2)+Math.pow(window.Player1.GetLinearVelocity().y,2)); //p1 speed
 						// let change = (180-(p1Speed*5))/(window.eyes); // makes the change value to half a circle, minus the player's speed * 5. (allowing for it to shrink dynamically as it goes faster.)
 						// for (let l=Math.ceil(window.eyes*-.5); l<Math.floor(window.eyes/2); l++) {
-						//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of it's momentum.
+						//   //here we will probably want the window.eyes var to be odd, so that it can see directly infront of its momentum.
 						//   //We can quickly see how this works with window.eyes = 7;  7*-.5 = -3.5, ceil(-3.5) == -3, looping -3 to 3. < this is our offset from our stored p1Direction var.
-						//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using it's direction - the offset from the for-loop variable, which dynamically increases in magnitude, as speed increases.
+						//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using its direction - the offset from the for-loop variable, which dynamically increases in magnitude as speed increases.
 						// }
 		
 						let GRSeparation = window.GRRange/window.groundEyes;
