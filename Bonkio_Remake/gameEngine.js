@@ -194,12 +194,12 @@
 		}
 	
 		mutate() {
-		//   this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
-		  this.brain.mutate(0.02);
+		  this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
+		//   this.brain.mutate(0.02);
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.5);
+			this.brain.crossover(network.brain.model, 0.1);
 		}
 
 		think(i) {
