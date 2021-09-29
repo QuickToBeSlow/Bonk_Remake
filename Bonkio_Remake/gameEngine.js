@@ -150,7 +150,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 512;
+	var TOTAL = 2048;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -199,7 +199,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.5);
+			this.brain.crossover(network.brain.model, 0.2);
 		}
 
 		think(i) {
