@@ -191,12 +191,14 @@
 	<script src="gameEngine.js"></script>
 	<script src="DEATH.js"></script>
 	<script src="angledMap.js"></script>
+	<script src="spacedOutPlatforms.js"></script>
+	<script src="wallMap.js"></script>
 	<script src="forNovices.js"></script>
 	<script type="text/javascript">
 
 	$(document).ready(function(){
 		
-		window.runners = [DEATH, angledMap];
+		window.runners = [DEATH, angledMap, spacedOutPlatforms, wallMap];
 		window.level = 0;
 		window.runner = null;
 		window.scores = [0,0];
