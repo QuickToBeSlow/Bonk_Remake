@@ -205,10 +205,10 @@
 		think(i) {
 			let inputs = [];
 			if (i==0) {
-				inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1);
-				inputs[1] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1);
-				inputs[2] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), -1), 1);
-				inputs[3] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1);
+				inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1);
+				inputs[1] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1);
+				inputs[2] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1);
+				inputs[3] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1);
 				inputs[4] = strengths[0]/10;
 				inputs[5] = strengths[1]/10;
 				inputs[6] = Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1);
@@ -262,10 +262,10 @@
 				// 	inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 				// }
 			} else {
-				inputs[0] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), -1), 1);
-				inputs[1] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1);
-				inputs[2] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1);
-				inputs[3] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1);
+				inputs[0] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1);
+				inputs[1] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1);
+				inputs[2] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1);
+				inputs[3] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1);
 				inputs[4] = strengths[1]/10;
 				inputs[5] = strengths[0]/10;
 				inputs[6] = Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1);
@@ -1061,10 +1061,10 @@
 					let inputs = [];
 					let color = "blue";
 					if (color == "red") {
-						inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1);
-						inputs[1] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1);
-						inputs[2] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), -1), 1);
-						inputs[3] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1);
+						inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1);
+						inputs[1] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1);
+						inputs[2] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1);
+						inputs[3] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1);
 						inputs[4] = strengths[0]/10;
 						inputs[5] = strengths[1]/10;
 						inputs[6] = Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1);
@@ -1118,10 +1118,10 @@
 						// 	inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 						// }
 					} else {
-						inputs[0] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), -1), 1);
-						inputs[1] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), -1), 1);
-						inputs[2] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), -1), 1);
-						inputs[3] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), -1), 1);
+						inputs[0] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1);
+						inputs[1] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1);
+						inputs[2] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1);
+						inputs[3] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1);
 						inputs[4] = strengths[1]/10;
 						inputs[5] = strengths[0]/10;
 						inputs[6] = Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1);
