@@ -45,7 +45,7 @@ Test.prototype.createWorld = function() {
 	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	sd.SetAsBox((10) / m_physScale, (90) / m_physScale);
+	sd.SetAsBox((10) / m_physScale, (70) / m_physScale);
 	fd.shape = sd;
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
