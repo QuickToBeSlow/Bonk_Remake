@@ -199,7 +199,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.3);
+			this.brain.crossover(network.brain.model, 0.1);
 		}
 
 		think(i) {
