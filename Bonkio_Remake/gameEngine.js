@@ -147,10 +147,10 @@
 	}
 	var controlPlayer1 = true;
 	var round = 0;
-	var roundCap = 7;
-	var leadTolerance = 4;
+	var roundCap = 15;
+	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 128;
+	window.TOTAL = 256;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
