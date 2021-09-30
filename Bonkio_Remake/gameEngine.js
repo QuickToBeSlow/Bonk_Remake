@@ -102,7 +102,7 @@
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
 		num = num / 1.5;
 		if (restrict == true) {
-			// num = num / 10; // Translate to 0 -> 1
+			num = num / 6.65; // Translate to 0 -> 1
 			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
@@ -150,7 +150,7 @@
 	var roundCap = 7;
 	var leadTolerance = 4;
 	var currentNN = 0;
-	var TOTAL = 2048;
+	var TOTAL = 256;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -199,7 +199,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.2);
+			this.brain.crossover(network.brain.model, 0.5);
 		}
 
 		think(i) {
@@ -403,11 +403,12 @@
 			  let tensor = weights[i];
 			  let shape = weights[i].shape;
 			  let values = tensor.dataSync().slice();
+			  let mode = (i%2==1&&i!=weights.length);
 			  for (let j = 0; j < values.length; j++) {
 				if (Math.random() < rate) {
 				  let w = values[j];
 				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-				  values[j] = w + (randn_bm(false));
+				  values[j] = w + (randn_bm(mode));
 				  if (values[j]<-2) {values[j]=-2}
 				  if (values[j]>2) {values[j]=2}
 				}
@@ -464,18 +465,24 @@
 						units: this.hidden_nodes[i],
 						inputShape: [this.input_nodes],
 						activation: 'selu',
+						useBias: true,
+						biasInitializer: 'randomUniform',
 					});
 					model.add(hidden);
 				} else if (i%2 == 0) {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						activation: 'selu',
+						useBias: true,
+						biasInitializer: 'randomUniform',
 					});
 					model.add(hidden);
 				} else {
 					let hidden = tf.layers.dense({
 						units: this.hidden_nodes[i],
 						activation: 'selu',
+						useBias: true,
+						biasInitializer: 'randomUniform',
 					});
 					model.add(hidden);
 				}
