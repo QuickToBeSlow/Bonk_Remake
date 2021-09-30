@@ -103,7 +103,7 @@
 		num = num / 1.5;
 		if (restrict == true) {
 			num = num / 6.65; // Translate to 0 -> 1
-			if (num > 1 || num < 0) return randn_bm(true); // resample between 0 and 1
+			// if (num > 1 || num < -1) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
 	}
