@@ -185,7 +185,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 10], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [7, 7], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -199,7 +199,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.1);
+			this.brain.crossover(network.brain.model, 0.5);
 		}
 
 		think(i) {
