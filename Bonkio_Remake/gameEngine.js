@@ -100,9 +100,9 @@
 		while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
 		while(v === 0) v = Math.random();
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-		num = num / 1.5;
+		// num = num;
 		if (restrict == true) {
-			num = num / 6.65; // Translate to 0 -> 1
+			num = num / 20; // Translate to 0 -> 1
 			// if (num > 1 || num < -1) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
@@ -131,7 +131,7 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 4;
+	window.eyes = 3;
 	window.groundEyes = 0;
 	window.GRRange = 16;
 	window.debug = false;
@@ -199,7 +199,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.3);
+			this.brain.crossover(network.brain.model, 0.05);
 		}
 
 		think(i) {
