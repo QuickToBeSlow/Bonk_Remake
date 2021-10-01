@@ -150,7 +150,7 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 256;
+	var TOTAL = 512;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
