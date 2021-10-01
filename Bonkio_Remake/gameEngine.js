@@ -131,7 +131,7 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 3;
+	window.eyes = 2;
 	window.groundEyes = 0;
 	window.GRRange = 16;
 	window.debug = false;
@@ -199,7 +199,7 @@
 		}
 	  
 		crossover(network) {
-			this.brain.crossover(network.brain.model, 0.05);
+			this.brain.crossover(network.brain.model, 0.025);
 		}
 
 		think(i) {
@@ -1333,9 +1333,9 @@
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				// window.level++;
-				// if (window.level >= window.runners.length) {window.level = 0;}
-				window.level = Math.round(Math.random()*(window.runners.length-1));
+				window.level++;
+				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level = Math.round(Math.random()*(window.runners.length-1));
 				// window.level = Math.round(Math.random()*(window.runners.length-2)+1);
 			}
 			if (!window.testingMode) {
