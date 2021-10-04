@@ -132,8 +132,8 @@
 	
 	*/
 	window.eyes = 2;
-	window.groundEyes = 0;
-	window.GRRange = 16;
+	window.groundEyes = 1;
+	window.GRRange = 0;
 	window.debug = false;
 	window.draw = true;
 	var eyeRange = 40;
@@ -185,7 +185,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes), [10, 7], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes)+window.groundEyes, [10, 7], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -215,10 +215,6 @@
 				inputs[7] = Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1);
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
-				// let GRSeparation = window.GRRange/window.groundEyes;
-				// let tester;
-				// let leftDisp = 0;
-				// let rightDisp = 0;
 				for(let m=0; m<window.eyes; m++) {
 					inputs[8+m] = this.lastOutputs[m];
 				}
@@ -229,6 +225,13 @@
 					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
 					inputs[8+this.lastOutputs.length+m] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange))).distance || -eyeRange)/eyeRange;
 				}
+				// let GRSeparation = window.GRRange/window.groundEyes;
+				// let tester;
+				// let leftDisp = 0;
+				// let rightDisp = 0;
+
+				inputs[8+this.lastOutputs.length+window.eyes] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || -eyeRange)/eyeRange;
+
 				// inputs[11] = 0.5;
 				// for (let l=window.groundEyes/2; l>0; l--) {
 				// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
@@ -282,10 +285,10 @@
 				//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using its direction - the offset from the for-loop variable, which dynamically increases in magnitude as speed increases.
 				// }
 
-				let GRSeparation = window.GRRange/window.groundEyes;
-				let tester;
-				let leftDisp = 0;
-				let rightDisp = 0;
+				// let GRSeparation = window.GRRange/window.groundEyes;
+				// let tester;
+				// let leftDisp = 0;
+				// let rightDisp = 0;
 
 				for(let m=0; m<this.lastOutputs.length; m++) {
 					inputs[8+m] = this.lastOutputs[m];
@@ -297,6 +300,8 @@
 					inputs[8+this.lastOutputs.length+m] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[1][m]))*eyeRange))).distance || -eyeRange)/eyeRange;
 				}
 				
+				inputs[8+this.lastOutputs.length+window.eyes] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || -eyeRange)/eyeRange;
+
 				// inputs[11] = 0.5;
 				// for (let l=window.groundEyes/2; l>0; l--) {
 				// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
@@ -884,8 +889,10 @@
                 let PPosY = window.Player2.GetPosition().y;
                 for (let l=0; l<(window.eyes); l++) {
                     let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(l+eyeRotation[1][l])*200), PPosY-(Math.cos(l+eyeRotation[1][l])*200))).distance || null;
-                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(l+eyeRotation[1][l])*distVal*11.5) , ((PPosY*-12.8)+600) + PPosY+(Math.cos(l+eyeRotation[1][l])*distVal*11.5));
+                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(l+eyeRotation[1][l])*distVal*11.5) , ((PPosY*-12.5)+600) + PPosY+(Math.cos(l+eyeRotation[1][l])*distVal*11.5));
                 }
+				let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || 0;
+				c.fillText(Math.round(distVal), (PPosX*12.5) , ((PPosY*-12.5)+600) + (distVal*12.5));
 				
 				for (let i = 0; i < NNScores.length; i+=2) {
 					if (NNScores[i]>NNScores[i+1]) {
@@ -1085,6 +1092,8 @@
 							inputs[8+lastOutputs.length+m] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange))).distance || -eyeRange)/eyeRange;
 						}
 
+						inputs[8+lastOutputs.length+window.eyes] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || -eyeRange)/eyeRange;
+
 						// inputs[11] = 0.5;
 						// for (let l=window.groundEyes/2; l>0; l--) {
 						// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
@@ -1138,10 +1147,10 @@
 						//   inputs[8+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((p1Direction+l)/180*Math.PI)*75), PPosY-(Math.sin((p1Direction+l)/180*Math.PI)*75))).distance || -1; //now it will loop through while using its direction - the offset from the for-loop variable, which dynamically increases in magnitude as speed increases.
 						// }
 		
-						let GRSeparation = window.GRRange/window.groundEyes;
-						let tester;
-						let leftDisp = 0;
-						let rightDisp = 0;
+						// let GRSeparation = window.GRRange/window.groundEyes;
+						// let tester;
+						// let leftDisp = 0;
+						// let rightDisp = 0;
 		
 						for(let m=0; m<window.eyes; m++) {
 							inputs[8+m] = lastOutputs[m];
@@ -1153,6 +1162,7 @@
 							inputs[8+lastOutputs.length+m] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[1][m]))*eyeRange))).distance || -eyeRange)/eyeRange;
 						}
 						
+						inputs[8+lastOutputs.length+window.eyes] = (raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || -eyeRange)/eyeRange;
 						// inputs[11] = 0.5;
 						// for (let l=window.groundEyes/2; l>0; l--) {
 						// 	tester = raycast(window.FloorFixture, new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY), new b2Vec2(PPosX+(l*GRSeparation)-window.GRRange/2, PPosY-75)).distance || -1;
