@@ -147,7 +147,7 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	var TOTAL = 256;
+	var TOTAL = 1024;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -182,7 +182,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [7, 7], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [10, 7], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -192,7 +192,7 @@
 	
 		mutate() {
 		//   this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
-		  this.brain.mutate(0.0075);
+		  this.brain.mutate(0.05);
 		}
 	  
 		crossover(network) {
@@ -1359,8 +1359,8 @@
 				//Varies the level every single round instead of at the end of a tournament.
 				// window.level++;
 				// if (window.level >= window.runners.length) {window.level = 0;}
-				// window.level = Math.round(Math.random()*(window.runners.length-1));
-				window.level = Math.round(Math.random()*(window.runners.length-2)+1);
+				window.level = Math.round(Math.random()*(window.runners.length-1));
+				// window.level = Math.round(Math.random()*(window.runners.length-2)+1);
 			}
 			if (!window.testingMode) {
 				steps = 0;
