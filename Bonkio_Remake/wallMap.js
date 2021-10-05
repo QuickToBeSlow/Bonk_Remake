@@ -30,7 +30,7 @@ Test.prototype.createWorld = function() {
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set((200) / m_physScale, (112) / m_physScale);
+	bd.position.Set((150) / m_physScale, (112) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
@@ -40,7 +40,7 @@ Test.prototype.createWorld = function() {
 	fd.density = 0;
 	bd.type = b2Body.b2_staticBody;
 	bd.userData = "Floor";
-	bd.position.Set((400) / m_physScale, (112) / m_physScale);
+	bd.position.Set((450) / m_physScale, (112) / m_physScale);
 	b = world.CreateBody(bd);
 	window.FloorFixture = b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
