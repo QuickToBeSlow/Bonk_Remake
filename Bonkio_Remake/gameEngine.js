@@ -23,9 +23,10 @@
 
 	if(closestShape != undefined && closestShape.RayCast(rayCastOutput, rayCastInput)){
 		let norm = rayCastOutput.normal;
+		console.log((Math.atan(norm.y/norm.x)/Math.PI*2+1.5)%2-0.5);
 		return {
 			normal: norm,
-			angle: Math.atan(norm.y/norm.x),
+			angle: (Math.atan(norm.y/norm.x)/Math.PI*2+1.5)%2-0.5,
 			fraction: rayCastOutput.fraction,
 			distance: (rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2))
 		}
