@@ -23,7 +23,6 @@
 
 	if(closestShape != undefined && closestShape.RayCast(rayCastOutput, rayCastInput)){
 		let norm = rayCastOutput.normal;
-		console.log((Math.atan(norm.y/norm.x)/Math.PI*2+1.5)%2-0.5);
 		return {
 			normal: norm,
 			angle: (Math.atan(norm.y/norm.x)/Math.PI*2+1.5)%2-0.5,
@@ -219,8 +218,8 @@
 
 				// let change = 360/(window.eyes)/180*Math.PI;
 				for (let m=0; m<window.eyes; m++) {
-					eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
+					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
+					eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
 					let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange)));
 					inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange;
 					inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle || 0;
@@ -293,9 +292,10 @@
 
 				// let change = 360/(window.eyes)/180*Math.PI;
 				for (let m=0; m<window.eyes; m++) {
-					eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
-					let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange)));
+					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
+					eyeRotation[1][m] = (this.lastOutputs[m]*2-1)*Math.PI;
+					console.log(eyeRotation[1]);
+					let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[1][m]))*eyeRange)));
 					inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange;
 					inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle || 0;
 				}
@@ -1091,8 +1091,8 @@
 		
 						// let change = 360/(window.eyes)/180*Math.PI;
 						for (let m=0; m<window.eyes; m++) {
-							eyeRotation[0][m] = (lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-							// eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
+							// eyeRotation[0][m] = (lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
+							eyeRotation[0][m] = (lastOutputs[m]*2-1)*Math.PI;
 							let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange)));
 							inputs[8+lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange;
 							inputs[8+lastOutputs.length+m+window.eyes] = cast.angle || 0;
@@ -1164,9 +1164,9 @@
 		
 						// let change = 360/(window.eyes)/180*Math.PI;
 						for (let m=0; m<window.eyes; m++) {
-							eyeRotation[0][m] = (lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-							// eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI;
-							let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange)));
+							// eyeRotation[0][m] = (lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
+							eyeRotation[1][m] = (lastOutputs[m]*2-1)*Math.PI;
+							let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[1][m]))*eyeRange)));
 							inputs[8+lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange;
 							inputs[8+lastOutputs.length+m+window.eyes] = cast.angle || 0;
 						}
