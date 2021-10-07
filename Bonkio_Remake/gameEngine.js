@@ -182,7 +182,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [10, 7], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [15, 15], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -192,7 +192,7 @@
 	
 		mutate() {
 		//   this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
-		  this.brain.mutate(0.05);
+		  this.brain.mutate(0.0075);
 		}
 	  
 		crossover(network) {
