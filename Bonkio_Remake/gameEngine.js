@@ -147,7 +147,7 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	var TOTAL = 1024;
+	var TOTAL = 256;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -182,7 +182,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [12, 12], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [6, 6], 3+this.lastOutputs.length);
 		  }
 		}
 		
