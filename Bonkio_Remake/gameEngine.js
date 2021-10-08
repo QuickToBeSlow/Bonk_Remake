@@ -147,7 +147,7 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	var TOTAL = 256;
+	var TOTAL = 1024;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -191,8 +191,8 @@
 		}
 	
 		mutate() {
-		//   this.brain.mutate(3/((8+this.lastOutputs.length+window.eyes)*10+10*10+10*(3+this.lastOutputs.length)));
-		  this.brain.mutate(0.0075);
+		  this.brain.mutate(3/((8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2)*6+6*6+6*(3+this.lastOutputs.length)));
+		//   this.brain.mutate(0.0075);
 		}
 	  
 		crossover(network) {
