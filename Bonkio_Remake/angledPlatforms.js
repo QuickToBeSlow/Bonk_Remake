@@ -28,11 +28,11 @@ Test.prototype.createWorld = function() {
 	let platWidths = 30;
 	let platHeights = 5;
 	let distanceX = 500;
-	let distanceY = 300;
+	let distanceY = 400;
 	let platNumX = 4;
 	let platNumY = 3;
-	let xChange = 10;
-	let yChange = 10;
+	let xChange = 40;
+	let yChange = 20;
 	let displacementX = 50;
 	let displacementY = 50;
 	let angleChange = Math.PI/8;
@@ -68,7 +68,7 @@ Test.prototype.createWorld = function() {
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
-	bd.position.Set((300+randPos*100)/m_physScale, (350+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((300+randPos*100)/m_physScale, (450+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
@@ -91,7 +91,7 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	bd.position.Set((300-randPos*100)/m_physScale, (350+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((300-randPos*100)/m_physScale, (450+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);
