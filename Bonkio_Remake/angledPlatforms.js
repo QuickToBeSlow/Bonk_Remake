@@ -41,9 +41,9 @@ Test.prototype.createWorld = function() {
 			fd.density = 0;
 			bd.type = b2Body.b2_staticBody;
 			bd.userData = "Floor";
-			b.SetAngle(Math.random()*angleChange-angleChange/2);
 			bd.position.Set((j+Math.random()*xChange-xChange/2) / m_physScale, (i+Math.random()*yChange-yChange/2) / m_physScale);
 			b = world.CreateBody(bd);
+			b.SetAngle(Math.random()*angleChange-angleChange/2);
 			window.FloorFixture = b.CreateFixture(fd);
 			window.shapes.push(b.CreateFixture(fd));
 		}
