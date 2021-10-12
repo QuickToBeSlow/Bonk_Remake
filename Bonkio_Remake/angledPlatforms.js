@@ -33,7 +33,7 @@ Test.prototype.createWorld = function() {
 	let platNumY = 3;
 	let xChange = 40;
 	let yChange = 20;
-	let displacementX = 50;
+	let displacementX = 100;
 	let displacementY = 50;
 	let angleChange = Math.PI/4;
 	for (let j=platWidths+displacementX; j<distanceX+displacementX; j+=distanceX/platNumX) {
