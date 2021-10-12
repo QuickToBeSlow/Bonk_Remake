@@ -25,17 +25,19 @@ Test.prototype.createWorld = function() {
 	fd.restitution = 0.8;
 	fd.shape = sd;	
 
-	let platWidths = 20;
+	let platWidths = 30;
 	let platHeights = 5;
 	let distanceX = 500;
 	let distanceY = 300;
-	let platNumX = 7;
+	let platNumX = 4;
 	let platNumY = 3;
 	let xChange = 10;
 	let yChange = 10;
+	let displacementX = 50;
+	let displacementY = 50;
 	let angleChange = Math.PI/8;
-	for (let j=platWidths; j<distanceX; j+=distanceX/platNumX) {
-		for (let i=0; i<distanceY; i+=distanceY/platNumY) {
+	for (let j=platWidths+displacementX; j<distanceX+displacementX; j+=distanceX/platNumX) {
+		for (let i=displacementY; i<distanceY+displacementY; i+=distanceY/platNumY) {
 			sd.SetAsBox((platWidths) / m_physScale, (platHeights) / m_physScale);
 			fd.shape = sd;
 			fd.density = 0;
