@@ -35,7 +35,7 @@ Test.prototype.createWorld = function() {
 	let yChange = 20;
 	let displacementX = 50;
 	let displacementY = 50;
-	let angleChange = Math.PI/8;
+	let angleChange = Math.PI/4;
 	for (let j=platWidths+displacementX; j<distanceX+displacementX; j+=distanceX/platNumX) {
 		for (let i=displacementY; i<distanceY+displacementY; i+=distanceY/platNumY) {
 			sd.SetAsBox((platWidths) / m_physScale, (platHeights) / m_physScale);
