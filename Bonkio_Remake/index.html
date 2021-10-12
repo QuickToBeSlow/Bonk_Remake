@@ -234,12 +234,12 @@
 		});
 		
 		$('#togglePause').click(function(){
-			if (window.isPaused) {
+			if (window.runner.isPaused()) {
 				runner.resume();
-				document.getElementById("togglePause").value = "pause";
+				document.getElementById("togglePause").textContent = "pause";
 			} else {
 				runner.pause();
-				document.getElementById("togglePause").value = "resume";
+				document.getElementById("togglePause").textContent = "resume";
 			}
 		});
 		
