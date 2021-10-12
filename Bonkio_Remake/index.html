@@ -155,8 +155,7 @@
 			<td><button id="supaSpeedUp" >speed up</button></td>
 			<td><button id="supaSpeedDown" >speed down</button></td>
 			<td><button id="toggleDraw" >toggle drawing</button></td>
-			<td><button id="pause" >pause</button></td>
-			<td><button id="resume" >resume</button></td>
+			<td><button id="togglePause" >pause</button></td>
 		</tr>
 		<tr>
 			<th>Save Settings</th>
@@ -190,15 +189,17 @@
 	
 	<script src="gameEngine.js"></script>
 	<script src="DEATH.js"></script>
-	<script src="angledMap.js"></script>
+	<script src="flatMap.js"></script>
 	<script src="spacedOutPlatforms.js"></script>
 	<script src="wallMap.js"></script>
 	<script src="forNovices.js"></script>
+	<script src="angledPlatforms.js"></script>
 	<script type="text/javascript">
 
 	$(document).ready(function(){
 		
-		window.runners = [DEATH, angledMap, spacedOutPlatforms, wallMap];
+		// window.runners = [DEATH, angledMap, spacedOutPlatforms, wallMap, angledPlatforms];
+		window.runners = [angledPlatforms];
 		window.level = 0;
 		window.runner = null;
 		window.scores = [0,0];
@@ -232,12 +233,14 @@
 			runner.draw();
 		});
 		
-		$('#resume').click(function(){
-			runner.resume();
-		});
-		
-		$('#pause').click(function(){
-			runner.pause();
+		$('#togglePause').click(function(){
+			if (window.isPaused) {
+				runner.resume();
+				document.getElementById("togglePause").value = "pause";
+			} else {
+				runner.pause();
+				document.getElementById("togglePause").value = "resume";
+			}
 		});
 		
 		$('#supaSpeedUp').click(function(){
