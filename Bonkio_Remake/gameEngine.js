@@ -133,6 +133,7 @@
 	window.GRRange = 0;
 	window.debug = false;
 	window.draw = true;
+	window.noise = 5/100;
 	var eyeRange = 40;
 	var velocityRange = 30;
 	var eyeRotation = [];
@@ -147,7 +148,7 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	var TOTAL = 1024;
+	var TOTAL = 256;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -182,7 +183,7 @@
 		  if (brain) {
 			this.brain = brain.copy();
 		  } else {
-			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [6, 6], 3+this.lastOutputs.length);
+			this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [9, 7], 3+this.lastOutputs.length);
 		  }
 		}
 		
@@ -202,14 +203,14 @@
 		think(i) {
 			let inputs = [];
 			if (i==0) {
-				inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1);
-				inputs[1] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1);
-				inputs[2] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1);
-				inputs[3] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1);
-				inputs[4] = strengths[0]/10;
-				inputs[5] = strengths[1]/10;
-				inputs[6] = Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1);
-				inputs[7] = Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1);
+				inputs[0] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[1] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[2] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[3] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[4] = strengths[0]/10+(Math.random()-0.5)*noise;
+				inputs[5] = strengths[1]/10+(Math.random()-0.5)*noise;
+				inputs[6] = Math.max(Math.min(((window.Player1.GetPosition().x-window.Player2.GetPosition().x)/eyeRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[7] = Math.max(Math.min(((window.Player1.GetPosition().y-window.Player2.GetPosition().y)/eyeRange), 1), -1)+(Math.random()-0.5)*noise;
 				let PPosX = window.Player1.GetPosition().x;
 				let PPosY = window.Player1.GetPosition().y;
 				for(let m=0; m<window.eyes; m++) {
@@ -221,8 +222,8 @@
 					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
 					eyeRotation[0][m] = (this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
 					let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange)));
-					inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange;
-					inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle || 0;
+					inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
+					inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle+(Math.random()-0.5)*noise || 0;
 				}
 				// let GRSeparation = window.GRRange/window.groundEyes;
 				// let tester;
@@ -230,8 +231,8 @@
 				// let rightDisp = 0;
 
 				let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange));
-				inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange;
-				inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle || 0;
+				inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
+				inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle+(Math.random()-0.5)*noise || 0;
 
 				// inputs[11] = 0.5;
 				// for (let l=window.groundEyes/2; l>0; l--) {
@@ -266,14 +267,14 @@
 				// 	inputs[12+l] = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((l*change)/180*Math.PI)*75), PPosY-(Math.sin((l*change)/180*Math.PI)*75))).distance) || 1;
 				// }
 			} else {
-				inputs[0] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1);
-				inputs[1] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1);
-				inputs[2] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1);
-				inputs[3] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1);
-				inputs[4] = strengths[1]/10;
-				inputs[5] = strengths[0]/10;
-				inputs[6] = Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1);
-				inputs[7] = Math.max(Math.min(((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange), 1), -1);
+				inputs[0] = Math.max(Math.min((window.Player2.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[1] = Math.max(Math.min((window.Player2.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[2] = Math.max(Math.min((window.Player1.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[3] = Math.max(Math.min((window.Player1.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[4] = strengths[1]/10+(Math.random()-0.5)*noise;
+				inputs[5] = strengths[0]/10+(Math.random()-0.5)*noise;
+				inputs[6] = Math.max(Math.min(((window.Player2.GetPosition().x-window.Player1.GetPosition().x)/eyeRange), 1), -1)+(Math.random()-0.5)*noise;
+				inputs[7] = Math.max(Math.min(((window.Player2.GetPosition().y-window.Player1.GetPosition().y)/eyeRange), 1), -1)+(Math.random()-0.5)*noise;
 				let PPosX = window.Player2.GetPosition().x;
 				let PPosY = window.Player2.GetPosition().y;
 
@@ -295,8 +296,8 @@
 					// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
 					eyeRotation[1][m] = (this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
 					let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[1][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[1][m]))*eyeRange)));
-					inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange;
-					inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle || 0;
+					inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
+					inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle+(Math.random()-0.5)*noise || 0;
 				}
 				// let GRSeparation = window.GRRange/window.groundEyes;
 				// let tester;
@@ -304,8 +305,8 @@
 				// let rightDisp = 0;
 
 				let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange));
-				inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange;
-				inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle || 0;
+				inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
+				inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle+(Math.random()-0.5)*noise || 0;
 
 				// inputs[11] = 0.5;
 				// for (let l=window.groundEyes/2; l>0; l--) {
