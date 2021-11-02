@@ -275,7 +275,7 @@
 			getModel();
 		});
 		async function getModel() {
-			window.testModel = await tf.loadLayersModel(window.path);
+			window.testModel = window.gameEngine.prototype.makeNN(await tf.loadLayersModel(window.path).brain);
 			console.log(window.testModel);
 		}
 		$('#downloadModel').click(function(){
