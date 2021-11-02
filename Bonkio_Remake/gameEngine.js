@@ -135,6 +135,7 @@
 	window.draw = true;
 	window.noise = 5/100;
 	var eyeRange = 40;
+	var posRange = 10;
 	var velocityRange = 30;
 	var eyeRotation = [];
 	eyeRotation[0] = [];
@@ -208,8 +209,8 @@
 			inputs[3] = Math.max(Math.min((p2.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
 			inputs[4] = strengths[i]/10+(Math.random()-0.5)*noise;
 			inputs[5] = strengths[(1-i)]/10+(Math.random()-0.5)*noise;
-			inputs[6] = Math.max(Math.min(((p1.GetPosition().x-p2.GetPosition().x)/eyeRange), 1), -1)+(Math.random()-0.5)*noise;
-			inputs[7] = Math.max(Math.min(((p1.GetPosition().y-p2.GetPosition().y)/eyeRange), 1), -1)+(Math.random()-0.5)*noise;
+			inputs[6] = Math.max(Math.min(((p1.GetPosition().x-p2.GetPosition().x)/posRange), 1), -1)+(Math.random()-0.5)*noise;
+			inputs[7] = Math.max(Math.min(((p1.GetPosition().y-p2.GetPosition().y)/posRange), 1), -1)+(Math.random()-0.5)*noise;
 			let PPosX = p1.GetPosition().x;
 			let PPosY = p1.GetPosition().y;
 			for(let m=0; m<window.eyes; m++) {
