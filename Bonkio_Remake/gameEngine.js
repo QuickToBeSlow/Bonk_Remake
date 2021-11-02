@@ -220,8 +220,8 @@
 			// let change = 360/(window.eyes)/180*Math.PI;
 			for (let m=0; m<window.eyes; m++) {
 				// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-				eyeRotation[0][m] = 2*(this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
-				let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[0][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[0][m]))*eyeRange)));
+				eyeRotation[i][m] = 2*(this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
+				let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[i][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[i][m]))*eyeRange)));
 				inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
 				inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle+(Math.random()-0.5)*noise || 0;
 			}
