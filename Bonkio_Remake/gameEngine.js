@@ -99,7 +99,7 @@
 		let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
 		// num = num;
 		if (restrict == true) {
-			num = num / 20; // Translate to 0 -> 1
+			num = num / 20;
 			// if (num > 1 || num < -1) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
@@ -128,14 +128,14 @@
 	rewrite think function of the neural network. Make sure to change the inputs namely. (done)
 	
 	*/
-	window.eyes = 1;
+	window.eyes = 2;
 	window.groundEyes = 1;
 	window.GRRange = 0;
 	window.debug = false;
 	window.draw = true;
 	window.noise = 5/100;
 	var eyeRange = 40;
-	var posRange = 10;
+	var posRange = 5;
 	var velocityRange = 30;
 	var eyeRotation = [];
 	eyeRotation[0] = [];
@@ -149,7 +149,7 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	var TOTAL = 512;
+	window.TOTAL = 128;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
@@ -194,7 +194,7 @@
 	
 		mutate() {
 		//   this.brain.mutate(3/((8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2)*6+6*6+6*(3+this.lastOutputs.length)));
-		  this.brain.mutate(0.0075);
+		  this.brain.mutate(0.075);
 		}
 	  
 		crossover(network) {
@@ -203,6 +203,12 @@
 
 		output(i, p1, p2) {
 			let inputs = [];
+			// inputs[0] = Math.atan(p1.GetPosition().x/p1.GetPosition().y)+(Math.random()-0.5)*noise;
+			// inputs[1] = Math.max(Math.min((Math.sqrt(Math.pow(p1.GetLinearVelocity().x, 2) + Math.pow(p1.GetLinearVelocity().y, 2))), 1), -1)/velocityRange+(Math.random()-0.5)*noise;
+
+			// inputs[2] = Math.atan(p2.GetPosition().x/p2.GetPosition().y)+(Math.random()-0.5)*noise;
+			// inputs[3] = Math.max(Math.min((Math.sqrt(Math.pow(p2.GetLinearVelocity().x, 2) + Math.pow(p2.GetLinearVelocity().y, 2))), 1), -1)/velocityRange+(Math.random()-0.5)*noise;
+
 			inputs[0] = Math.max(Math.min((p1.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
 			inputs[1] = Math.max(Math.min((p1.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
 			inputs[2] = Math.max(Math.min((p2.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
