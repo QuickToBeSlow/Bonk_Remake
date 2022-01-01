@@ -133,7 +133,7 @@
 	window.GRRange = 0;
 	window.debug = false;
 	window.draw = true;
-	window.noise = 5/100;
+	window.noise = 0; // 5/100
 	var eyeRange = 40;
 	var posRange = 5;
 	var velocityRange = 30;
@@ -149,14 +149,28 @@
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 128;
+	window.TOTAL = 256;
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
+
+	//NEAT implementation in these two variable definitions.
+	var config = {
+		model: [
+			{nodeCount: 8+3+(window.eyes*2)+window.groundEyes*2, type: "input"},
+			{nodeCount: 3+3, type: "output", activationfunc: activation.SOFTMAX}
+		],
+		mutationRate: 0.05,
+		crossoverMethod: crossover.RANDOM,
+		mutationMethod: mutate.RANDOM,
+		populationSize: window.TOTAL
+	};
+	var neat = new NEAT(config);
+
 	window.saveTourneyWinner = false;
 	window.saveRedNN = false;
 	window.saveBlueNN = false;
-	var secondBest;
+	// var secondBest;
 	window.testingMode = false;
 	window.testingChange = false;
 	window.winner = undefined;
