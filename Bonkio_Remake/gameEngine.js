@@ -159,7 +159,7 @@
 	var config = {
 		model: [
 			{nodeCount: 8+window.eyes+(window.eyes*2)+window.groundEyes*2, type: "input"},
-			{nodeCount: 3+window.eyes, type: "output", activationfunc: activation.SOFTMAX}
+			{nodeCount: 3+window.eyes, type: "output", activationfunc: window.activation.SOFTMAX}
 		],
 		mutationRate: 0.05,
 		crossoverMethod: crossover.RANDOM,
