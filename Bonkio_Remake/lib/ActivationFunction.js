@@ -4,7 +4,7 @@
 	License: MIT
 */
 
-window.activation = { // Supported activation functions.
+let activation = { // Supported activation functions.
 	RELU: function (x) {
 		if (x > 0) return x;
 		else return 0;
