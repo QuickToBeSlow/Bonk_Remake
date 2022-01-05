@@ -150,15 +150,16 @@
 	var leadTolerance = 5;
 	var currentNN = 0;
 	window.TOTAL = 256;
-	var NNs = [];
+	//Changed to use NEAT NNs.
+	var NNs;
 	var savedNNs = [];
 	var winnerList = [];
 
 	//NEAT implementation in these two variable definitions.
 	var config = {
 		model: [
-			{nodeCount: 8+3+(window.eyes*2)+window.groundEyes*2, type: "input"},
-			{nodeCount: 3+3, type: "output", activationfunc: activation.SOFTMAX}
+			{nodeCount: 8+window.eyes+(window.eyes*2)+window.groundEyes*2, type: "input"},
+			{nodeCount: 3+window.eyes, type: "output", activationfunc: activation.SOFTMAX}
 		],
 		mutationRate: 0.05,
 		crossoverMethod: crossover.RANDOM,
@@ -423,21 +424,27 @@
 	//   }
 	// }
 	
+		  //Make new NEAT AIs.
+	  NNs = new NEAT(config);
+
 	  tf.setBackend('cpu');
-	
-	  for (let i = 0; i < TOTAL; i++) {
-		// NNs[0][i] = new NN();
-		// if (controlPlayer1) {
-		// 	NNs[1][i] = new NN();
-		// }
-		NNs[i] = new NN();
-	  }
+	//   for (let i = 0; i < TOTAL; i++) {
+	// 	// NNs[0][i] = new NN();
+	// 	// if (controlPlayer1) {
+	// 	// 	NNs[1][i] = new NN();
+	// 	// }
+	// 	NNs[i] = new NN();
+	//   }
 		// console.log(NNs);
 	
 	
 	function nextGeneration() {
 		// console.log('next generation');
 		calculateFitness();
+
+		//NOTE: Might want to re-add the "save winner" functionality later on if this is implemented.
+		// NNs.doGen();
+
 		for (let i = 0; i < TOTAL; i++) {
 		//   NNs[0][i] = pickOne(0, i);
 		//   if (controlPlayer1) {
@@ -447,14 +454,14 @@
 		let NN2 = pickOne(i);
 		NN1.crossover(NN2);
 		// console.log(NN2);
-		NNs[i] = NN1;
+		NNs.creatures[i] = NN1;
 		}
-		// for (let i = 0; i < TOTAL; i++) {
-		// 	savedNNs[0][i].dispose();
-		// 	if (controlPlayer1) {
-		// 		savedNNs[1][i].dispose();
-		// 	}
-		// }
+		for (let i = 0; i < TOTAL; i++) {
+			savedNNs[0][i].dispose();
+			if (controlPlayer1) {
+				savedNNs[1][i].dispose();
+			}
+		}
 		savedNNs = [];
 	  }
 	  
@@ -974,10 +981,10 @@
 				if (!window.testingMode) {
 					let index = winnerList[currentNN];
 					let index2 = winnerList[currentNN+1];
-					NNs[index].think(0);
+					NNs.creatures[index].think(0);
 					if (controlPlayer1) {
 
-						NNs[index2].think(1);
+						NNs.creatures[index2].think(1);
 					}
 				} else if (window.testModel != undefined) {
 					window.testModel.think(1);
@@ -1111,11 +1118,11 @@
 					window.scores = [0,0];
 					if (reward > reward2) {
 						NNScores[index2] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
-						if (winnerList.length == 2) {secondBest = NNs[index];}
+						if (winnerList.length == 2) {secondBest = NNs.creatures[index];}
 						winnerList.splice(currentNN, 1);
 					} else {
 						NNScores[index] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
-						if (winnerList.length == 2) {secondBest = NNs[index2];}
+						if (winnerList.length == 2) {secondBest = NNs.creatures[index2];}
 						winnerList.splice(currentNN+1, 1);
 					}
 					reward = 0;
@@ -1125,11 +1132,15 @@
 				}
 				
 				if (window.saveRedNN) {
-					NNs[index].brain.model.save("localstorage://savedModel");
+					// NNs[index].brain.model.save("localstorage://savedModel");
+					//NOT DONE YET!
+					NNs.export(index);
 					window.saveRedNN = false;
 				}
 				if (window.saveBlueNN) {
 					NNs[index2].brain.model.save("localstorage://savedModel");
+					//NOT DONE YET!
+					NNs.export(index2);
 					window.saveBlueNN = false;
 				}
 	
@@ -1147,14 +1158,17 @@
 					if (winnerList.length == 1) {
 						NNScores[winnerList[0]] += Math.log2(TOTAL)*10;
 						if (window.saveTourneyWinner == true) {
-							NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
+							// NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
+							//NOT DONE YET!
+							NNs.export(winnerList[0]);
+
 							window.saveTourneyWinner = false;
 						}
 						window.prevWinner = window.winner;
 						window.winner = winnerList[0];
 						generation++;
 						// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
-						savedNNs = [...NNs];
+						savedNNs = [...NNs.creatures];
 						NNScores = quickSort(NNScores);
 						nextGeneration();
 						NNScores = [];
