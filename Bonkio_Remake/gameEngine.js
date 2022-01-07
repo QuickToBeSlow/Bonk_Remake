@@ -313,17 +313,17 @@ function Creature(model) {
 
 		this.feedForward(inputs);
 		let output = this.multiDecision();
-		  if (output[0].value < (0.5)) {
+		  if (output[0].value < (0)) {
 			window.down[i] = true;
-		} else if (output[0] > (0.5)) {
+		} else if (output[0] > (0)) {
 			window.up[i] = true;
 		}
-		  if (output[1] < (0.5)) {
+		  if (output[1] < (0)) {
 			window.left[i] = true;
-		} else if (output[1] > (0.5)) {
+		} else if (output[1] > (0)) {
 			window.right[i] = true;
 		}
-		  if (0.5 < output[2]) {
+		  if (0 < output[2]) {
 			window.heavy[i] = true;
 		}
 		for(let m=0; m<window.eyes; m++) {
