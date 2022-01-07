@@ -226,13 +226,16 @@ function Creature(model) {
 
 	//Added by Blake, allows for multiple decisions to be made.
 	this.multiDecision = function () {
-		let indexes = [];
-		for (let i = 0; i < this.network.layers[this.network.layers.length - 1].nodes.length; i++) {
-			if (this.network.layers[this.network.layers.length - 1].nodes[i].value > 0.5) {
-				indexes.push(i);
-			}
+		let values = [];
+		for (let i=0; i<this.network.layers[this.network.layers.length - 1].nodes.length; i++) {
+			values[i] = this.network.layers[this.network.layers.length - 1].nodes[i].value;
 		}
-		return indexes;
+		// for (let i = 0; i < this.network.layers[this.network.layers.length - 1].nodes.length; i++) {
+		// 	if (this.network.layers[this.network.layers.length - 1].nodes[i].value > 0.5) {
+		// 		indexes.push(i);
+		// 	}
+		// }
+		return values;
 	}
 
 	//WIP
@@ -310,7 +313,7 @@ function Creature(model) {
 
 		this.feedForward(inputs);
 		let output = this.multiDecision();
-		  if (output[0] < (0.5)) {
+		  if (output[0].value < (0.5)) {
 			window.down[i] = true;
 		} else if (output[0] > (0.5)) {
 			window.up[i] = true;
@@ -415,7 +418,9 @@ function Layer(nodeCount, type, activationfunc) { // A layer component of a netw
 			layer.nodes[w].value += this.bias.weights[w];
 		}
 
-		if (layer.activationfunc.name !== "SOFTMAX") for (let w = 0; w < layer.nodes.length; w++) layer.nodes[w].value = layer.activationfunc(layer.nodes[w].value);
+		if (layer.activationfunc.name !== "SOFTMAX") for (let w = 0; w < layer.nodes.length; w++)
+			layer.nodes[w].value = layer.activationfunc(layer.nodes[w].value);
+
 		else layer.setValues(layer.activationfunc(layer.getValues()));
 	}
 
@@ -669,7 +674,7 @@ let mutate = { // Mutation function (More to come!).
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 256;
+	window.TOTAL = 128;
 	//Changed to use NEAT NNs.
 	var NNs;
 	var savedNNs = [];
@@ -679,7 +684,7 @@ let mutate = { // Mutation function (More to come!).
 	var config = {
 		model: [
 			{nodeCount: 8+window.eyes+(window.eyes*2)+window.groundEyes*2, type: "input"},
-			{nodeCount: 3+window.eyes, type: "output", activationfunc: activation.SOFTMAX}
+			{nodeCount: 3+window.eyes, type: "output", activationfunc: activation.TANH}
 		],
 		mutationRate: 0.05,
 		crossoverMethod: crossover.RANDOM,
@@ -964,6 +969,7 @@ let mutate = { // Mutation function (More to come!).
 		//NOTE: Might want to re-add the "save winner" functionality later on if this is implemented.
 		// NNs.doGen();
 
+		console.log(NNs);
 		for (let i = 0; i < TOTAL; i++) {
 		//   NNs[0][i] = pickOne(0, i);
 		//   if (controlPlayer1) {
@@ -976,9 +982,9 @@ let mutate = { // Mutation function (More to come!).
 		NNs.creatures[i] = NN1;
 		}
 		for (let i = 0; i < TOTAL; i++) {
-			savedNNs[0][i].dispose();
+			savedNNs[0][i] = null;
 			if (controlPlayer1) {
-				savedNNs[1][i].dispose();
+				savedNNs[1][i] = null;
 			}
 		}
 		savedNNs = [];
