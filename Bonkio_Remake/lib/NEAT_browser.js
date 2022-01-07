@@ -6,7 +6,7 @@
 	Edited by Blake Meyer on 1/1/2022
 */
 
-function NEAT(config) {
+window.NEAT = function (config) {
 	this.creatures = [];
 	this.oldCreatures = [];
 	this.model = config.model;
