@@ -123,29 +123,49 @@ function NEAT(config) {
 	this.export = function (index) {
 		let data = [];
 		data.push(JSON.parse(JSON.stringify(this.exportModel)));
-		data.push([]);
-		if (index) {
-			data[1].push(this.creatures[index].flattenGenes());
-		} else {
-			for (let i = 0; i < this.populationSize; i++) {
-				data[1].push(this.creatures[i].flattenGenes());
-			}
-		}
-		return data;
+		data.push([this.creatures[index].flattenGenes()]);
+		console.log(this.creatures[index].flattenGenes());
+		data[1].push(this.creatures[index].flattenGenes());
+		console.log(data[1]);
+		// if (index != null) {
+		// 	data[1].push(this.creatures[index].flattenGenes());
+		// } else {
+		// 	for (let i = 0; i < this.populationSize; i++) {
+		// 		data[1].push(this.creatures[i].flattenGenes());
+		// 	}
+		// }
+		window.testModel = this.import(data);
+	
+		//DOWNLOADS MODEL (not ideal for later, but for testing purposes it's fine)
+		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+		console.log(data);
+		console.log(JSON.stringify(data));
+		console.log(encodeURIComponent(JSON.stringify(data)));
+		var dlAnchorElem = document.createElement("a");
+		dlAnchorElem.setAttribute("href",     dataStr     );
+		dlAnchorElem.setAttribute("download", "savedModel.json");
+		// dlAnchorElem.click();
+		dlAnchorElem.remove();
+		// return data;
 	}
 
 	this.import = function (data) {
-		if (JSON.stringify(data[0]) === JSON.stringify(this.exportModel)) {
-			console.log('Importing ' + data[1].length + ' creature(s)');
-			for (let i = 0; i < data[1].length; i++) {
-				let newCreature = new Creature(this.model);
-				newCreature.setFlattenedGenes(data[1][i]);
-				this.creatures.push(newCreature);
-				this.populationSize++;
-			}
-		} else {
-			throw "Invalid model!";
-		}
+		
+		// var request = new XMLHttpRequest();
+		// request.open("GET", path, false);
+		// request.send(null)
+		// var data = JSON.parse(request.responseText);
+		// console.log(data);
+
+
+		// if (JSON.stringify(data[0]) === JSON.stringify(this.exportModel)) {
+			// console.log('Importing ' + data[1].length + ' creature(s)');
+			let newCreature = new Creature(this.model);
+			newCreature.setFlattenedGenes(data[1][i]);
+		// } else {
+		// 	throw "Invalid model!";
+		// }
+		return newCreature;
 	}
 
 	this.getTensorflowModel = function(index) { // Generate the requested tensorflow model.
@@ -674,7 +694,7 @@ let mutate = { // Mutation function (More to come!).
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 128;
+	window.TOTAL = 256;
 	//Changed to use NEAT NNs.
 	var NNs;
 	var savedNNs = [];
@@ -1663,7 +1683,7 @@ let mutate = { // Mutation function (More to come!).
 					window.saveRedNN = false;
 				}
 				if (window.saveBlueNN) {
-					NNs[index2].brain.model.save("localstorage://savedModel");
+					// NNs[index2].brain.model.save("localstorage://savedModel");
 					//NOT DONE YET!
 					NNs.export(index2);
 					window.saveBlueNN = false;
