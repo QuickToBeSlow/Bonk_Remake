@@ -120,7 +120,7 @@ function NEAT(config) {
 		this.creatures[index].setInputs(array);
 	}
 
-	this.export = function (index) {
+	this.export = function (index, download = false) {
 		let data = [];
 		data.push(JSON.parse(JSON.stringify(this.exportModel)));
 		data.push([this.creatures[index].flattenGenes()]);
@@ -137,15 +137,17 @@ function NEAT(config) {
 		window.testModel = this.import(data);
 	
 		//DOWNLOADS MODEL (not ideal for later, but for testing purposes it's fine)
-		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-		console.log(data);
-		console.log(JSON.stringify(data));
-		console.log(encodeURIComponent(JSON.stringify(data)));
-		var dlAnchorElem = document.createElement("a");
-		dlAnchorElem.setAttribute("href",     dataStr     );
-		dlAnchorElem.setAttribute("download", "savedModel.json");
-		// dlAnchorElem.click();
-		dlAnchorElem.remove();
+		if (download) {
+			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+			console.log(data);
+			console.log(JSON.stringify(data));
+			console.log(encodeURIComponent(JSON.stringify(data)));
+			var dlAnchorElem = document.createElement("a");
+			dlAnchorElem.setAttribute("href",     dataStr     );
+			dlAnchorElem.setAttribute("download", "savedModel.json");
+			dlAnchorElem.click();
+			dlAnchorElem.remove();
+		}
 		// return data;
 	}
 
