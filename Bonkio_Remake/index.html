@@ -5,6 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Bonk.io AI Trainer</title>
+
 	<!--
 	these imports had been taken from generated ../javascript/Box2D/load.html
 	uncomment these and comment out box2d.min.js to debug box2d itself.
@@ -187,6 +188,10 @@
 
 	<script src="jquery.min.js"></script>
 	
+	<!-- Script for NEAT library -->
+	<!-- <script language="javascript" type="module" src="./lib/NEAT_browser.js"></script>
+	<script language="javascript" type="module" src="./lib/ActivationFunction.js"></script> -->
+
 	<script src="gameEngine.js"></script>
 	<script src="DEATH.js"></script>
 	<script src="flatMap.js"></script>
@@ -198,7 +203,8 @@
 
 	$(document).ready(function(){
 		
-		window.runners = [angledPlatforms, DEATH, angledMap, spacedOutPlatforms, wallMap];
+		window.runners = [angledPlatforms, DEATH, flatMap, spacedOutPlatforms, wallMap];
+		// window.runners = [flatMap];
 		window.level = 0;
 		window.runner = null;
 		window.scores = [0,0];
