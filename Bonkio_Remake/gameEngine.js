@@ -350,16 +350,19 @@ function Creature(model) {
 	this.think = function(i) {
 		let inputs = (i==0) ? this.output(i, window.Player1, window.Player2) : this.output(i, window.Player2, window.Player1);
 
-		this.feedForward(inputs);
+		this.setInputs(inputs);
+		this.feedForward();
+		let noUseGap = 0.05;
 		let output = this.multiDecision();
-		  if (output[0].value < (0)) {
+		console.log(output);
+		  if (output[0].value < (noUseGap)) {
 			window.down[i] = true;
-		} else if (output[0] > (0)) {
+		} else if (output[0] > (-noUseGap)) {
 			window.up[i] = true;
 		}
-		  if (output[1] < (0)) {
+		  if (output[1] < (noUseGap)) {
 			window.left[i] = true;
-		} else if (output[1] > (0)) {
+		} else if (output[1] > (noUseGap)) {
 			window.right[i] = true;
 		}
 		  if (0 < output[2]) {
@@ -523,7 +526,7 @@ let crossover = { // Crossover methods.
 		let newGenes = [];
 
 		for (let i = 0; i < genesx.length; i++) {
-			if (Math.random() < 0.5) newGenes.push(genesx[i]);
+			if (Math.random() < 0.2) newGenes.push(genesx[i]);
 			else newGenes.push(genesy[i]);
 		}
 
