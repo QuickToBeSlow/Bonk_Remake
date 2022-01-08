@@ -560,7 +560,7 @@ let mutate = { // Mutation function (More to come!).
 				if (genes[j]>2) {genes[j]=2}
 			}
 		}
-		return num;
+		return genes;
 	}
 }
 
