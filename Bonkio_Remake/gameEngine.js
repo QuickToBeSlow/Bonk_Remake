@@ -122,11 +122,13 @@ function NEAT(config) {
 
 	this.export = function (index, download = false) {
 		let data = [];
+		// download = true;
+		var creature = this.creatures[index];
 		data.push(JSON.parse(JSON.stringify(this.exportModel)));
-		data.push([this.creatures[index].flattenGenes()]);
-		console.log(this.creatures[index].flattenGenes());
-		data[1].push(this.creatures[index].flattenGenes());
-		console.log(data[1]);
+		// data.push([]);
+		data.push([...this.creatures[index].flattenGenes()]);
+		console.log(data);
+		// data[1] = [...this.creatures[index].flattenGenes()];
 		// if (index != null) {
 		// 	data[1].push(this.creatures[index].flattenGenes());
 		// } else {
@@ -163,7 +165,7 @@ function NEAT(config) {
 		// if (JSON.stringify(data[0]) === JSON.stringify(this.exportModel)) {
 			// console.log('Importing ' + data[1].length + ' creature(s)');
 			let newCreature = new Creature(this.model);
-			newCreature.setFlattenedGenes(data[1][i]);
+			newCreature.setFlattenedGenes(data[1]);
 		// } else {
 		// 	throw "Invalid model!";
 		// }
@@ -211,6 +213,7 @@ function Creature(model) {
 	}
 
 	this.setFlattenedGenes = function (genes) { // Sets an array of weights as the creature's genes.
+		console.log(genes);
 		for (let i = 0; i < this.network.layers.length - 1; i++) {
 			for (let w = 0; w < this.network.layers[i].nodes.length; w++) {
 				for (let e = 0; e < this.network.layers[i].nodes[w].weights.length; e++) {
