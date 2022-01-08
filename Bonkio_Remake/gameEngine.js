@@ -213,7 +213,7 @@ function Creature(model) {
 	}
 
 	this.setFlattenedGenes = function (genes) { // Sets an array of weights as the creature's genes.
-		console.log(genes);
+		// console.log(genes);
 		for (let i = 0; i < this.network.layers.length - 1; i++) {
 			for (let w = 0; w < this.network.layers[i].nodes.length; w++) {
 				for (let e = 0; e < this.network.layers[i].nodes[w].weights.length; e++) {
@@ -270,10 +270,24 @@ function Creature(model) {
 				if (Math.random() < mutationRate) genes[i] = (Math.random() * 2) - 1;
 			}
 			return genes;
+		},
+
+		GAUSIAN: function (genes, mutationRate) {
+
+			for (let j = 0; j < genes.length; j++) {
+				if (Math.random() < mutationRate) {
+					let w = genes[j];
+					//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
+					genes[j] = w + (randn_bm(mode));
+					if (genes[j]<-2) {genes[j]=-2}
+					if (genes[j]>2) {genes[j]=2}
+				}
+			}
+			return num;
 		}
 	}
 	
-	this.mutationMethod = mutate.RANDOM;
+	this.mutationMethod = mutate.GAUSIAN;
 
 	this.mutate = function () { // Parses every creature's genes passes them to the mutation function and sets their new (mutated) genes.
 		let genes = this.flattenGenes();
@@ -533,6 +547,20 @@ let mutate = { // Mutation function (More to come!).
 			if (Math.random() < mutationRate) genes[i] = (Math.random() * 2) - 1;
 		}
 		return genes;
+	},
+
+	GAUSIAN: function (genes, mutationRate) {
+
+		for (let j = 0; j < genes.length; j++) {
+			if (Math.random() < mutationRate) {
+				let w = genes[j];
+				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
+				genes[j] = w + (randn_bm(mode));
+				if (genes[j]<-2) {genes[j]=-2}
+				if (genes[j]>2) {genes[j]=2}
+			}
+		}
+		return num;
 	}
 }
 
@@ -699,7 +727,7 @@ let mutate = { // Mutation function (More to come!).
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 256;
+	window.TOTAL = 512;
 	//Changed to use NEAT NNs.
 	var NNs;
 	var savedNNs = [];
@@ -713,7 +741,7 @@ let mutate = { // Mutation function (More to come!).
 		],
 		mutationRate: 0.05,
 		crossoverMethod: crossover.RANDOM,
-		mutationMethod: mutate.RANDOM,
+		mutationMethod: mutate.GAUSIAN,
 		populationSize: window.TOTAL
 	};
 
@@ -1651,8 +1679,8 @@ let mutate = { // Mutation function (More to come!).
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				// window.level++;
-				// if (window.level >= window.runners.length) {window.level = 0;}
+				window.level++;
+				if (window.level >= window.runners.length) {window.level = 0;}
 				// window.level = Math.round(Math.random()*(window.runners.length-1));
 				// window.level = Math.round(Math.random()*(window.runners.length-2)+1);
 			}
