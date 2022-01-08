@@ -286,9 +286,8 @@
 		}
 		$('#downloadModel').click(function(){
 
-
 			window.fileName = prompt("Please enter the desired file name", "savedModel");
-			Test.prototype.downloadModel(window.fileName);
+			window.gameEngine.prototype.downloadModel(window.fileName);
 			// window.testModel.model.save("downloads://"+window.fileName);
 		});
 		$('#loadPretrained').click(function(){
