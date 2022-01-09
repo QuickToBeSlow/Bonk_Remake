@@ -338,7 +338,7 @@ function Creature(model) {
 
 		this.setInputs(inputs);
 		this.feedForward();
-		let noUseGap = 0.05;
+		let noUseGap = 0;
 		let output = this.multiDecision();
 		// console.log(output);
 		  if (output[0].value < (noUseGap)) {
