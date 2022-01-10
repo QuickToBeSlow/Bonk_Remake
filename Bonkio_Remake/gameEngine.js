@@ -1668,8 +1668,8 @@ let mutate = { // Mutation function (More to come!).
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 				// window.level = Math.round(Math.random()*(window.runners.length-1));
 				// window.level = Math.round(Math.random()*(window.runners.length-2)+1);
 			}
