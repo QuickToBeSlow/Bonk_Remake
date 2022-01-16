@@ -1662,7 +1662,7 @@ let mutate = { // Mutation function (More to come!).
 			NNScores.push(0);
 		}
 		var NNFitnesses = [];
-	
+	 
 		Test.prototype.endGame = function (winner) {
 			if (!window.testingMode) {
 				round++;
