@@ -204,7 +204,7 @@
 	$(document).ready(function(){
 		
 		window.runners = [angledPlatforms, DEATH, flatMap, spacedOutPlatforms, wallMap];
-		// window.runners = [flatMap];
+		// window.runners = [angledPlatforms];
 		window.level = 0;
 		window.runner = null;
 		window.scores = [0,0];
@@ -285,8 +285,10 @@
 			console.log(window.testModel);
 		}
 		$('#downloadModel').click(function(){
+
 			window.fileName = prompt("Please enter the desired file name", "savedModel");
-			window.testModel.model.save("downloads://"+window.fileName);
+			window.gameEngine.prototype.downloadModel(window.fileName);
+			// window.testModel.model.save("downloads://"+window.fileName);
 		});
 		$('#loadPretrained').click(function(){
 			window.path = "https://quicktobeslow.github.io/Bonk_Remake/Bonkio_Remake/PTModel2.json";

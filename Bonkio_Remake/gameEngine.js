@@ -120,14 +120,13 @@ function NEAT(config) {
 		this.creatures[index].setInputs(array);
 	}
 
-	this.export = function (index, download = false) {
+	this.export = function (index) {
 		let data = [];
-		// download = true;
 		var creature = this.creatures[index];
 		data.push(JSON.parse(JSON.stringify(this.exportModel)));
 		// data.push([]);
 		data.push([...this.creatures[index].flattenGenes()]);
-		console.log(data);
+		// console.log(data);
 		// data[1] = [...this.creatures[index].flattenGenes()];
 		// if (index != null) {
 		// 	data[1].push(this.creatures[index].flattenGenes());
@@ -137,19 +136,6 @@ function NEAT(config) {
 		// 	}
 		// }
 		window.testModel = this.import(data);
-	
-		//DOWNLOADS MODEL (not ideal for later, but for testing purposes it's fine)
-		if (download) {
-			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-			console.log(data);
-			console.log(JSON.stringify(data));
-			console.log(encodeURIComponent(JSON.stringify(data)));
-			var dlAnchorElem = document.createElement("a");
-			dlAnchorElem.setAttribute("href",     dataStr     );
-			dlAnchorElem.setAttribute("download", "savedModel.json");
-			dlAnchorElem.click();
-			dlAnchorElem.remove();
-		}
 		// return data;
 	}
 
@@ -352,9 +338,9 @@ function Creature(model) {
 
 		this.setInputs(inputs);
 		this.feedForward();
-		let noUseGap = 0.05;
+		let noUseGap = 0;
 		let output = this.multiDecision();
-		console.log(output);
+		// console.log(output);
 		  if (output[0].value < (noUseGap)) {
 			window.down[i] = true;
 		} else if (output[0] > (-noUseGap)) {
@@ -1676,14 +1662,14 @@ let mutate = { // Mutation function (More to come!).
 			NNScores.push(0);
 		}
 		var NNFitnesses = [];
-	
+	 
 		Test.prototype.endGame = function (winner) {
 			if (!window.testingMode) {
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				window.level++;
-				if (window.level >= window.runners.length) {window.level = 0;}
+				// window.level++;
+				// if (window.level >= window.runners.length) {window.level = 0;}
 				// window.level = Math.round(Math.random()*(window.runners.length-1));
 				// window.level = Math.round(Math.random()*(window.runners.length-2)+1);
 			}
@@ -1909,6 +1895,36 @@ let mutate = { // Mutation function (More to come!).
 		
 		Test.prototype.makeNN = function(brain) {
 			return new NN(brain);
+		}
+
+		Test.prototype.downloadModel = function(name) {
+
+			let jsonModel = JSON.stringify(window.testModel);
+			//DOWNLOADS MODEL
+			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonModel);
+			// console.log(data);
+			console.log(jsonModel);
+			// console.log(encodeURIComponent(JSON.stringify(data)));
+			var dlAnchorElem = document.createElement("a");
+			dlAnchorElem.setAttribute("href",     dataStr     );
+			dlAnchorElem.setAttribute("download", name+".json");
+			dlAnchorElem.click();
+			dlAnchorElem.remove();
+		}
+
+		Test.prototype.loadModel = function(name) {
+
+			let jsonModel = JSON.stringify(window.testModel);
+			//DOWNLOADS MODEL
+			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonModel);
+			// console.log(data);
+			console.log(jsonModel);
+			// console.log(encodeURIComponent(JSON.stringify(data)));
+			var dlAnchorElem = document.createElement("a");
+			dlAnchorElem.setAttribute("href",     dataStr     );
+			dlAnchorElem.setAttribute("download", name+".json");
+			dlAnchorElem.click();
+			dlAnchorElem.remove();
 		}
 
 		window.gameEngine = Test;
