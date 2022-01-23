@@ -122,7 +122,6 @@ function NEAT(config) {
 
 	this.export = function (index) {
 		let data = [];
-		var creature = this.creatures[index];
 		data.push(JSON.parse(JSON.stringify(this.exportModel)));
 		// data.push([]);
 		data.push([...this.creatures[index].flattenGenes()]);
@@ -180,7 +179,7 @@ function Creature(model) {
 		this.lastOutputs[i]=0.5;
 	}
 
-	this.flattenGenes = function () { // Flattens the genes of the creature's genes and returns them as an array.
+	this.flattenGenes = function () { // Flattens the creature's genes and returns them as an array.
 		let genes = [];
 
 		for (let i = 0; i < this.network.layers.length - 1; i++) {
@@ -446,10 +445,11 @@ function Layer(nodeCount, type, activationfunc) { // A layer component of a netw
 			layer.nodes[w].value += this.bias.weights[w];
 		}
 
-		if (layer.activationfunc.name !== "SOFTMAX") for (let w = 0; w < layer.nodes.length; w++)
-			layer.nodes[w].value = layer.activationfunc(layer.nodes[w].value);
+		// if (layer.activationfunc.name !== "SOFTMAX")
+			for (let w = 0; w < layer.nodes.length; w++)
+				layer.nodes[w].value = layer.activationfunc(layer.nodes[w].value);
 
-		else layer.setValues(layer.activationfunc(layer.getValues()));
+		// else layer.setValues(layer.activationfunc(layer.getValues()));
 	}
 
 	this.getValues = function () { // Returns the values of the nodes in the layer as an array.
@@ -1914,18 +1914,44 @@ let mutate = { // Mutation function (More to come!).
 
 		Test.prototype.loadModel = function(name) {
 
-			let jsonModel = JSON.stringify(window.testModel);
-			//DOWNLOADS MODEL
-			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonModel);
-			// console.log(data);
-			console.log(jsonModel);
-			// console.log(encodeURIComponent(JSON.stringify(data)));
-			var dlAnchorElem = document.createElement("a");
-			dlAnchorElem.setAttribute("href",     dataStr     );
-			dlAnchorElem.setAttribute("download", name+".json");
-			dlAnchorElem.click();
-			dlAnchorElem.remove();
+			let file = document.getElementById("file").files[0];
+			let data;
+
+			read = new FileReader();
+
+			read.readAsBinaryString(file);
+
+			read.onloadend = function(){
+				// console.log(read.result);
+				data = JSON.parse(read.result);
+				console.log(data);
+
+			console.log('doupload',data)
+			// alert('your file has been uploaded');
+			// location.reload();
+
+			// console.log(data[1].responseText);
+			window.data = data;
+			let newCreature = new Creature(data.network.model);
+			let flattenedGenes = [];
+			for (let i = 0; i < data.network.layers.length - 1; i++) {
+				for (let w = 0; w < data.network.layers[i].nodes.length; w++) {
+					for (let e = 0; e < data.network.layers[i].nodes[w].weights.length; e++) {
+						flattenedGenes.push(data.network.layers[i].nodes[w].weights[e]);
+					}
+				}
+	
+				for (let w = 0; w < data.network.layers[i].bias.weights.length; w++) {
+					flattenedGenes.push(data.network.layers[i].bias.weights[w]);
+				}
+			}
+
+			newCreature.setFlattenedGenes(flattenedGenes);
+			console.log(newCreature);
+
+			window.testModel = newCreature;
 		}
+	}
 
 		window.gameEngine = Test;
 			
