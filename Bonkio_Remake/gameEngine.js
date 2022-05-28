@@ -1,559 +1,442 @@
+//Current notes:
+//turn away from tensorflow.js completely (since we're using NEAT), and use JSON.stringify() and JSON.parse()
+//to save and read the data.
+
 (function(){
 
 
 
 
-/*
-	Author: ExtensionShoe
-	Date: 30/08/2019
-	License: MIT
+	var activationsNames = ["Sigmoid", "Identity", "Step", "Tanh", "ReLu"];
 
-	Edited by Blake Meyer on 1/1/2022
-*/
-
-function NEAT(config) {
-	this.creatures = [];
-	this.oldCreatures = [];
-	this.model = config.model;
-	this.exportModel = [];
-	this.populationSize = config.populationSize || 500;
-	this.mutationRate = config.mutationRate || 0.05;
-	this.crossoverMethod = config.crossoverMethod || crossover.RANDOM;
-	this.mutationMethod = config.mutationMethod || mutate.RANDOM;
-	this.generation = 0;
-
-	for (let i = 0; i < this.model.length; i++) { // Sanitize the model.
-		let data = Object.assign({}, this.model[i]);
-		if (this.model[i].activationfunc) {
-			data.activationfunc = data.activationfunc.name;
-			this.exportModel.push(data);
-		} else {
-			this.exportModel.push(data);
-		}
-	}
-
-	for (let i = 0; i < this.populationSize; i++) { // Create the creatures.
-		this.creatures.push(new Creature(this.model));
-	}
-
-	this.mutate = function () { // Parses every creature's genes passes them to the mutation function and sets their new (mutated) genes.
-		for (let i = 0; i < this.populationSize; i++) {
-			let genes = this.creatures[i].flattenGenes();
-			genes = this.mutationMethod(genes, this.mutationRate);
-			this.creatures[i].setFlattenedGenes(genes);
-		}
-	}
-
-	this.crossover = function () { // Takes two creature's genes flattens them and passes them to the crossover function.
-		for (let i = 0; i < this.populationSize; i++) {
-			this.oldCreatures = Object.assign([], this.creatures);
-			let parentx = this.pickCreature();
-			let parenty = this.pickCreature();
-
-			let genes = this.crossoverMethod(parentx.flattenGenes(), parenty.flattenGenes());
-			this.creatures[i].setFlattenedGenes(genes);
-		}
-	}
-
-	this.pickCreature = function () { // Normalizes every creature's score (fitness) and and returns a creature based on their fitness value.
-		let sum = 0;
-		for (let i = 0; i < this.oldCreatures.length; i++) {
-			sum += Math.pow(this.oldCreatures[i].score, 2);
-		}
-
-		for (let i = 0; i < this.oldCreatures.length; i++) {
-			this.oldCreatures[i].fitness = Math.pow(this.oldCreatures[i].score, 2) / sum;
-		}
-		let index = 0;
-		let r = Math.random();
-		while (r > 0) {
-			r -= this.oldCreatures[index].fitness;
-			index += 1;
-		}
-		index -= 1;
-		return this.oldCreatures[index];
-	}
-
-	this.setFitness = function (fitness, index) { // Sets a creature's score. This will then be normalized for actual fitness value.
-		this.creatures[index].score = fitness;
-	}
-
-	this.feedForward = function () { // Feeds forward every creature's network.
-		for (let i = 0; i < this.creatures.length; i++) {
-			this.creatures[i].feedForward();
-		}
-	}
-
-	this.doGen = function () { // Does 1 fast generation with crossover and mutation.
-		//Blake's Edit
-
-		//End of Blake's Edit
-
-		this.crossover();
-		this.mutate();
-		this.generation++;
-		console.log('Generation: ' + this.generation);
-	}
-
-	this.bestCreature = function () { // Returns the index of the best creature from the previous generation.
-		let index = 0;
-		let max = -Infinity;
-		for (let i = 0; i < this.oldCreatures.length; i++) {
-			if (this.oldCreatures[i].fitness > max) {
-				max = this.oldCreatures[i].fitness;
-				index = i;
-			}
-		}
-		return index;
-	}
-
-	this.getDecisions = function () { // Returns every creature's desicion index in an array.
-		let result = [];
-
-		for (let i = 0; i < this.creatures.length; i++) {
-			result.push(this.creatures[i].desicion());
-		}
-		return result;
-	}
-
-	this.setInputs = function (array, index) { // Sets the inputs of the creature indexed as "index".
-		this.creatures[index].setInputs(array);
-	}
-
-	this.export = function (index) {
-		let data = [];
-		data.push(JSON.parse(JSON.stringify(this.exportModel)));
-		// data.push([]);
-		data.push([...this.creatures[index].flattenGenes()]);
-		// console.log(data);
-		// data[1] = [...this.creatures[index].flattenGenes()];
-		// if (index != null) {
-		// 	data[1].push(this.creatures[index].flattenGenes());
-		// } else {
-		// 	for (let i = 0; i < this.populationSize; i++) {
-		// 		data[1].push(this.creatures[i].flattenGenes());
-		// 	}
-		// }
-		window.testModel = this.import(data);
-		// return data;
-	}
-
-	this.import = function (data) {
-		
-		// var request = new XMLHttpRequest();
-		// request.open("GET", path, false);
-		// request.send(null)
-		// var data = JSON.parse(request.responseText);
-		// console.log(data);
-
-
-		// if (JSON.stringify(data[0]) === JSON.stringify(this.exportModel)) {
-			// console.log('Importing ' + data[1].length + ' creature(s)');
-			let newCreature = new Creature(this.model);
-			newCreature.setFlattenedGenes(data[1]);
-		// } else {
-		// 	throw "Invalid model!";
-		// }
-		return newCreature;
-	}
-
-	this.getTensorflowModel = function(index) { // Generate the requested tensorflow model.
-		if (index) {
-			// Generate the model for the index provided.
-			return this.creatures[index].network.getTensorflowModel();
-		} else {
-			// Generate the model the best performing creature.
-			return this.creatures[this.bestCreature()].network.getTensorflowModel();
-		}
-	}
-}
-
-function Creature(model) {
-	this.network = new Network(model); // Init the network
-
-	this.fitness = 0;
-	this.score = 0;
+	//The Node Class
+	class Node {
+		constructor(num, lay, isOutput) {
+			this.number = num;
+			this.layer = lay;
+			this.activationFunction = Math.floor(Math.random() * 5); //Number between 0 and 4
+			this.bias = Math.random() * 2 - 1;
+			this.output = isOutput || false; //is this node an Output node?
 	
-	this.lastOutputs=[];
-	for (let i=0; i<window.eyes; i++) {
-		this.lastOutputs[i]=0.5;
-	}
-
-	this.flattenGenes = function () { // Flattens the creature's genes and returns them as an array.
-		let genes = [];
-
-		for (let i = 0; i < this.network.layers.length - 1; i++) {
-			for (let w = 0; w < this.network.layers[i].nodes.length; w++) {
-				for (let e = 0; e < this.network.layers[i].nodes[w].weights.length; e++) {
-					genes.push(this.network.layers[i].nodes[w].weights[e]);
-				}
-			}
-
-			for (let w = 0; w < this.network.layers[i].bias.weights.length; w++) {
-				genes.push(this.network.layers[i].bias.weights[w]);
-			}
+			this.inputSum = 0;
+			this.outputValue = 0;
+			this.outputConnections = [];
 		}
-
-		return genes;
-	}
-
-	this.setFlattenedGenes = function (genes) { // Sets an array of weights as the creature's genes.
-		// console.log(genes);
-		for (let i = 0; i < this.network.layers.length - 1; i++) {
-			for (let w = 0; w < this.network.layers[i].nodes.length; w++) {
-				for (let e = 0; e < this.network.layers[i].nodes[w].weights.length; e++) {
-					this.network.layers[i].nodes[w].weights[e] = genes[0];
-					genes.splice(0, 1);
-				}
-			}
-
-			for (let w = 0; w < this.network.layers[i].bias.weights.length; w++) {
-				this.network.layers[i].bias.weights[w] = genes[0];
-				genes.splice(0, 1);
-			}
-		}
-	}
-
-	this.feedForward = function () { // Feeds forward the creature's network.
-		this.network.feedForward();
-	}
-
-	this.setInputs = function (inputs) { // Sets the inputs of the creature.
-		this.network.layers[0].setValues(inputs);
-	}
-
-	this.desicion = function () { // Some spaghetti code that returns the desicion of the creature. For SOFTMAX outputs.
-		let index = -1; 
-		let max = -Infinity;
-		for (let i = 0; i < this.network.layers[this.network.layers.length - 1].nodes.length; i++) {
-			if (this.network.layers[this.network.layers.length - 1].nodes[i].value > max) {
-				max = this.network.layers[this.network.layers.length - 1].nodes[i].value;
-				index = i;
-			}
-		}
-		return index;
-	}
-
-	//Added by Blake, allows for multiple decisions to be made.
-	this.multiDecision = function () {
-		let values = [];
-		for (let i=0; i<this.network.layers[this.network.layers.length - 1].nodes.length; i++) {
-			values[i] = this.network.layers[this.network.layers.length - 1].nodes[i].value;
-		}
-		// for (let i = 0; i < this.network.layers[this.network.layers.length - 1].nodes.length; i++) {
-		// 	if (this.network.layers[this.network.layers.length - 1].nodes[i].value > 0.5) {
-		// 		indexes.push(i);
-		// 	}
-		// }
-		return values;
-	}
-
-	//WIP
-	let mutate = { // Mutation function (More to come!).
-		RANDOM: function (genes, mutationRate) { // Randomly sets the weights to a completely random value.
-			for (let i = 0; i < genes.length; i++) {
-				if (Math.random() < mutationRate) genes[i] = (Math.random() * 2) - 1;
-			}
-			return genes;
-		},
-
-		GAUSIAN: function (genes, mutationRate) {
-
-			for (let j = 0; j < genes.length; j++) {
-				if (Math.random() < mutationRate) {
-					let w = genes[j];
-					//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-					genes[j] = w + (randn_bm(mode));
-					if (genes[j]<-2) {genes[j]=-2}
-					if (genes[j]>2) {genes[j]=2}
-				}
-			}
-			return genes;
-		}
-	}
 	
-	this.mutationMethod = mutate.GAUSIAN;
-
-	this.mutate = function () { // Parses every creature's genes passes them to the mutation function and sets their new (mutated) genes.
-		let genes = this.flattenGenes();
-		genes = this.mutationMethod(genes, this.mutationRate);
-		this.setFlattenedGenes(genes);
-	}
-
-	this.crossover = function () { // Takes two creature's genes flattens them and passes them to the crossover function.
-		for (let i = 0; i < this.populationSize; i++) {
-			this.oldCreatures = Object.assign([], this.creatures);
-			let parentx = this.pickCreature();
-			let parenty = this.pickCreature();
-
-			let genes = this.crossoverMethod(parentx.flattenGenes(), parenty.flattenGenes());
-			this.creatures[i].setFlattenedGenes(genes);
+		engage() { //Pass down the network the calculated output value
+			if (this.layer != 0) //No activation function on input nodes
+				this.outputValue = this.activation(this.inputSum + this.bias);
+	
+	
+			this.outputConnections.forEach((conn) => {
+				if (conn.enabled) //Do not pass value if connection is disabled
+					conn.toNode.inputSum += conn.weight * this.outputValue; //Weighted output sum
+			});
 		}
-	}
-
-	this.output = function(i, p1, p2) {
-		let inputs = [];
-		// inputs[0] = Math.atan(p1.GetPosition().x/p1.GetPosition().y)+(Math.random()-0.5)*noise;
-		// inputs[1] = Math.max(Math.min((Math.sqrt(Math.pow(p1.GetLinearVelocity().x, 2) + Math.pow(p1.GetLinearVelocity().y, 2))), 1), -1)/velocityRange+(Math.random()-0.5)*noise;
-
-		// inputs[2] = Math.atan(p2.GetPosition().x/p2.GetPosition().y)+(Math.random()-0.5)*noise;
-		// inputs[3] = Math.max(Math.min((Math.sqrt(Math.pow(p2.GetLinearVelocity().x, 2) + Math.pow(p2.GetLinearVelocity().y, 2))), 1), -1)/velocityRange+(Math.random()-0.5)*noise;
-
-		inputs[0] = Math.max(Math.min((p1.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-		inputs[1] = Math.max(Math.min((p1.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-		inputs[2] = Math.max(Math.min((p2.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-		inputs[3] = Math.max(Math.min((p2.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-		inputs[4] = strengths[i]/10+(Math.random()-0.5)*noise;
-		inputs[5] = strengths[(1-i)]/10+(Math.random()-0.5)*noise;
-		inputs[6] = Math.max(Math.min(((p1.GetPosition().x-p2.GetPosition().x)/posRange), 1), -1)+(Math.random()-0.5)*noise;
-		inputs[7] = Math.max(Math.min(((p1.GetPosition().y-p2.GetPosition().y)/posRange), 1), -1)+(Math.random()-0.5)*noise;
-		let PPosX = p1.GetPosition().x;
-		let PPosY = p1.GetPosition().y;
-		for(let m=0; m<window.eyes; m++) {
-			inputs[8+m] = this.lastOutputs[m];
+	
+		mutateBias() { //Randomly mutate the bias of this node
+			let rand = Math.random();
+			if (rand < 0.05) //5% chance of being assigned a new random value
+				this.bias = Math.random() * 2 - 1;
+			else //95% chance of being uniformly perturbed
+				this.bias += randomGaussian() / 50;
 		}
-
-		// let change = 360/(window.eyes)/180*Math.PI;
-		for (let m=0; m<window.eyes; m++) {
-			// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-			eyeRotation[i][m] = 2*(this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
-			let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[i][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[i][m]))*eyeRange)));
-			inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
-			inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle+(Math.random()-0.5)*noise || 0;
+	
+		mutateActivation() { //Randomly choose a new activationFunction
+			this.activationFunction = Math.floor(Math.random() * 5); //Number between 0 and 4
 		}
-		// let GRSeparation = window.GRRange/window.groundEyes;
-		// let tester;
-		// let leftDisp = 0;
-		// let rightDisp = 0;
-
-		let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange));
-		inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
-		inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle+(Math.random()-0.5)*noise || 0;
-		return inputs;
-	}
-
-	this.think = function(i) {
-		let inputs = (i==0) ? this.output(i, window.Player1, window.Player2) : this.output(i, window.Player2, window.Player1);
-
-		this.setInputs(inputs);
-		this.feedForward();
-		let noUseGap = 0;
-		let output = this.multiDecision();
-		// console.log(output);
-		  if (output[0].value < (noUseGap)) {
-			window.down[i] = true;
-		} else if (output[0] > (-noUseGap)) {
-			window.up[i] = true;
-		}
-		  if (output[1] < (noUseGap)) {
-			window.left[i] = true;
-		} else if (output[1] > (noUseGap)) {
-			window.right[i] = true;
-		}
-		  if (0 < output[2]) {
-			window.heavy[i] = true;
-		}
-		for(let m=0; m<window.eyes; m++) {
-			this.lastOutputs[m]=output[3+m];
-		}
-	}
-}
-
-function Network(model) { // Neural Network.
-	this.layers = [];
-	this.model = model;
-
-	for (let i = 0; i < model.length; i++) { // Init all the layers.
-		this.layers.push(new Layer(model[i].nodeCount, model[i].type, model[i].activationfunc));
-	}
-
-	for (let i = 0; i < this.layers.length - 1; i++) { // Connect the layers to each other.
-		this.layers[i].connect(this.layers[i + 1].nodes.length);
-	}
-
-	this.feedForward = function () { // Feeds forward the network.
-		for (let i = 0; i < this.layers.length - 1; i++) {
-			this.layers[i].feedForward(this.layers[i + 1]);
-		}
-	}
-
-	this.getTensorflowModel = function () { // Generates a tensorflow model from the current network.
-		
-		// Collect the weights from each layer in the network.
-		let weights = [];
-		for(let i = 0; i < this.layers.length - 1; i++) {
-			let weights_ = [];
-			for(let j = 0; j < this.layers[i].nodes.length; j++) {
-				weights_.push(this.layers[i].nodes[j].weights);
+	
+		isConnectedTo(node) { //Check if two nodes are connected
+			if (node.layer == this.layer) //nodes in the same layer cannot be connected
+				return false;
+	
+	
+			if (node.layer < this.layer) { //Check parameter node connections
+				node.outputConnections.forEach((conn) => {
+					if (conn.toNode == this) //Is Node connected to This?
+						return true;
+				});
+			} else { //Check this node connections
+				this.outputConnections.forEach((conn) => {
+					if (conn.toNode == node) //Is This connected to Node?
+						return true;
+				});
 			}
-			weights.push(weights_);
+	
+			return false;
 		}
-
-		// Initialize the input and hidden layers.
-		let input = tf.input({shape: [this.model[0].nodeCount]});
-		let previous = input;
-		for(let i = 1; i < this.model.length - 1; i++) {
-			previous = tf.layers.dense({units: this.model[i].nodeCount, activation: 'relu'}).apply(previous);
+	
+		clone() { //Returns a copy of this node
+			let node = new Node(this.number, this.layer, this.output);
+			node.bias = this.bias; //Same bias
+			node.activationFunction = this.activationFunction; //Same activationFunction
+			return node;
 		}
-		// Initialize the output layer.
-		let output = tf.layers.dense({units: this.model[this.model.length - 1].nodeCount, activation: 'softmax'}).apply(previous);
-
-		// Create the model with random weights.
-		let model = tf.model({inputs: input, outputs: output});
-
-		// Set the weights of the model to the weights found by NEAT.
-		for(let i = 1; i < this.model.length; i++) {
-			model.layers[i].setWeights([tf.tensor(weights[i - 1], [weights[i-1].length, weights[i-1][0].length], dtype="float32"), tf.fill([this.model[i].nodeCount],0, dtype="float32")]);
-		}
-
-		return model;
-	}
-}
-
-function Layer(nodeCount, type, activationfunc) { // A layer component of a network with nodes and bias node.
-	this.nodes = [];
-	this.bias = undefined;
-	this.type = type;
-	this.activationfunc = activationfunc;
-
-	for (let i = 0; i < nodeCount; i++) { // Inits  nodes.
-		this.nodes.push(new Node());
-	}
-
-	if (this.type !== "output") this.bias = new Node();
-
-	this.connect = function (count) { // Connects one layer to another.
-		for (let i = 0; i < this.nodes.length; i++) {
-			this.nodes[i].initWeights(count);
-		}
-
-		if (this.bias !== undefined) this.bias.initWeights(count);
-	}
-
-	this.feedForward = function (layer) { // Feeds forward the layers values to the specified layer.
-		for (let i = 0; i < this.bias.weights.length; i++) {
-			layer.nodes[i].value = 0;
-		}
-
-		for (let i = 0; i < this.nodes.length; i++) {
-			for (let w = 0; w < this.nodes[i].weights.length; w++) {
-				layer.nodes[w].value += this.nodes[i].value * this.nodes[i].weights[w];
+	
+		activation(x) { //All the possible activation Functions
+			switch (this.activationFunction) {
+				case 0: //Sigmoid
+					return 1 / (1 + Math.pow(Math.E, -4.9 * x));
+					break;
+				case 1: //Identity
+					return x;
+					break;
+				case 2: //Step
+					return x > 0 ? 1 : 0;
+					break;
+				case 3: //Tanh
+					return Math.tanh(x);
+					break;
+				case 4: //ReLu
+					return x < 0 ? 0 : x;
+					break;
+				default: //Sigmoid
+					return 1 / (1 + Math.pow(Math.E, -4.9 * x));
+					break;
 			}
 		}
-
-		for (let w = 0; w < this.bias.weights.length; w++) {
-			layer.nodes[w].value += this.bias.weights[w];
-		}
-
-		// if (layer.activationfunc.name !== "SOFTMAX")
-			for (let w = 0; w < layer.nodes.length; w++)
-				layer.nodes[w].value = layer.activationfunc(layer.nodes[w].value);
-
-		// else layer.setValues(layer.activationfunc(layer.getValues()));
 	}
 
-	this.getValues = function () { // Returns the values of the nodes in the layer as an array.
+
+
+	//2
+	//The Genome Class
+
+class Genome {
+	constructor(inp, out, id, offSpring = false) {
+		this.inputs = inp; //Number of inputs
+		this.outputs = out; //Number of outputs
+		this.id = id; //Genome id -> used for the drawing
+		this.layers = 2;
+		this.nextNode = 0;
+
+		this.nodes = [];
+		this.connections = [];
+
+		if(!offSpring) { //This is not an offspring genome generate a fullyConnected net
+			for (let i = 0; i < this.inputs; i++) {
+				this.nodes.push(new Node(this.nextNode, 0));
+				this.nextNode++;
+			}
+
+			for (let i = 0; i < this.outputs; i++) {
+				let node = new Node(this.nextNode, 1, true);
+				this.nodes.push(node);
+				this.nextNode++;
+			}
+
+
+			for (let i = 0; i < this.inputs; i++) {
+				for (let j = this.inputs; j < this.outputs + this.inputs; j++) {
+					let weight = Math.random() * this.inputs * Math.sqrt(2 / this.inputs);
+					this.connections.push(new Connection(this.nodes[i], this.nodes[j], weight));
+				}
+			}
+		}
+	}
+
+	//Network Core
+	generateNetwork() {
+		//Clear all outputConnections in the nodes
+		this.nodes.forEach((node) => {
+			node.outputConnections.splice(0, node.outputConnections.length);
+		});
+
+		//Add the connections to the Nodes
+		this.connections.forEach((conn) => {
+			conn.fromNode.outputConnections.push(conn);
+		});
+
+		//Prepare for feed forward
+		this.sortByLayer();
+	}
+
+	feedForward(inputValues) {
+		this.generateNetwork(); //Connect all up
+
+		//Clear old inputs
+		this.nodes.forEach((node) => { node.inputSum = 0; });
+
+		//assign new inputs
+		for (let i = 0; i < this.inputs; i++)
+			this.nodes[i].outputValue = inputValues[i];
+
+		//Engage all nodes and Extract the results from the outputs
 		let result = [];
-		for (let i = 0; i < this.nodes.length; i++) {
-			result.push(this.nodes[i].value);
-		}
+		this.nodes.forEach((node) => {
+			node.engage();
+
+			if (node.output)
+				result.push(node.outputValue);
+		});
 		return result;
 	}
 
-	this.setValues = function (values) { // Sets an array as the nodes values.
-		for (let i = 0; i < this.nodes.length; i++) {
-			this.nodes[i].value = values[i];
-		}
-	}
-}
 
-function Node() { // A Node.
-	this.value = 0;
-	this.weights = [];
+	//Crossover
+	crossover(partner) {
+		//TODO: find a good way to generate unique ids
+		let offSpring = new Genome(this.inputs, this.outputs, 0, true); //Child genome
+		offSpring.nextNode = this.nextNode;
 
 
-	this.initWeights = function (count) { // Randomly initalize weights.
-		for (let i = 0; i < count; i++) {
-			this.weights.push((Math.random() * 2) - 1);
-		}
-	}
-}
-
-let activation = { // Supported activation functions.
-	RELU: function (x) {
-		if (x > 0) return x;
-		else return 0;
-	},
-	TANH: function (x) {
-		return Math.tanh(x);
-	},
-	SIGMOID: function (x) {
-		return (1 / (1 + Math.exp(-x)));
-	},
-	LEAKY_RELU: function (x) {
-		if (x > 0) return x;
-		else return (x * 0.01);
-	},
-	SOFTMAX: function (array) {
-		let sum = 0;
-		let result = [];
-		for (let i = 0; i < array.length; i++) {
-			sum += Math.exp(array[i]);
-		}
-		for (let i = 0; i < array.length; i++) {
-			result.push(Math.exp(array[i]) / sum);
-		}
-		return result;
-	}
-}
-
-let crossover = { // Crossover methods.
-	RANDOM: function (genesx, genesy) { // Randomly take genes from parentx or parenty and return newly created genes.
-		let newGenes = [];
-
-		for (let i = 0; i < genesx.length; i++) {
-			if (Math.random() < 0.2) newGenes.push(genesx[i]);
-			else newGenes.push(genesy[i]);
+		//Take all nodes from this parent - output node activation 50%-50%
+		for(let i = 0; i < this.nodes.length; i++){
+			let node = this.nodes[i].clone();
+			if(node.output) {
+				let partnerNode = partner.nodes[partner.getNode(node.number)];
+				if(Math.random() > 0.5) {
+					node.activationFunction = partnerNode.activationFunction;
+					node.bias = partnerNode.bias;
+				}
+			}
+			offSpring.nodes.push(node);
 		}
 
-		return newGenes;
-	},
-	SLICE: function (genesx, genesy) { // Takes a starting and an ending point in parentx's genes removes the genes in between and replaces them with parenty's genes. (How nature does it.)
-		let start = Math.floor(Math.random() * (genesx.length));
-		let end = Math.floor(Math.random() * (genesx.length - start + 2)) + start + 1;
-		let cutPart = genesx.splice(start, end);
+		//Randomly take connections from this or the partner network
+		let maxLayer = 0;
+		for(let i = 0; i < this.connections.length; i++) {
+			let index = this.commonConnection(this.connections[i].getInnovationNumber(), partner.connections);
 
-		Array.prototype.splice.apply(genesy, [start, cutPart.length].concat(cutPart));
+			if(index != -1) { //There is a commonConnection
+				let conn = Math.random() > 0.5 ? this.connections[i].clone() : partner.connections[index].clone();
 
-		return genesy;
+				//Reassign nodes
+				let fromNode = offSpring.nodes[offSpring.getNode(conn.fromNode.number)];
+				let toNode = offSpring.nodes[offSpring.getNode(conn.toNode.number)];
+				conn.fromNode = fromNode;
+				conn.toNode = toNode;
 
-	}
-}
+				//Add this connection to the child
+				if(fromNode && toNode)
+					offSpring.connections.push(conn);
+			}
+			else { //No common connection -> take from this
+				let conn = this.connections[i].clone();
 
-let mutate = { // Mutation function (More to come!).
-	RANDOM: function (genes, mutationRate) { // Randomly sets the weights to a completely random value.
-		for (let i = 0; i < genes.length; i++) {
-			if (Math.random() < mutationRate) genes[i] = (Math.random() * 2) - 1;
-		}
-		return genes;
-	},
+				//Reassign nodes
+				let fromNode = offSpring.nodes[offSpring.getNode(conn.fromNode.number)];
+				let toNode = offSpring.nodes[offSpring.getNode(conn.toNode.number)];
+				conn.fromNode = fromNode;
+				conn.toNode = toNode;
 
-	GAUSIAN: function (genes, mutationRate) {
-
-		for (let j = 0; j < genes.length; j++) {
-			if (Math.random() < mutationRate) {
-				let w = genes[j];
-				//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-				genes[j] = w + (randn_bm(mode));
-				if (genes[j]<-2) {genes[j]=-2}
-				if (genes[j]>2) {genes[j]=2}
+				//Add this connection to the child
+				if(fromNode && toNode)
+					offSpring.connections.push(conn);
 			}
 		}
-		return genes;
+
+		offSpring.layers = this.layers;
+		return offSpring;
+	}
+
+
+
+	//Mutation Stuff
+	mutate() {
+		//console.log("Mutation...");
+		let mut;
+
+		if(Math.random() < 0.8) { //80%
+			//MOD Connections
+			mut = "ModConn";
+			//let i = Math.floor(Math.random() * this.connections.length);
+			//this.connections[i].mutateWeight();
+			for (var i = 0; i < this.connections.length; i++) {
+				this.connections[i].mutateWeight();
+			}
+		}
+
+		if(Math.random() < 0.5) { //50%
+			//MOD Bias
+			mut = "ModBias";
+			//let i = Math.floor(Math.random() * this.nodes.length);
+			//this.nodes[i].mutateBias();
+			for (var i = 0; i < this.nodes.length; i++) {
+				this.nodes[i].mutateBias();
+			}
+		}
+
+		if(Math.random() < 0.1) { //10%
+			//MOD Node
+			mut = "ModAct";
+			let i = Math.floor(Math.random() * this.nodes.length);
+			this.nodes[i].mutateActivation();
+		}
+
+		if(Math.random() < 0.05) { //5%
+			//ADD Connections
+			mut = "AddConn";
+			this.addConnection();
+		}
+
+		if(Math.random() < 0.01) { //1%
+			//ADD Node
+			mut = "AddNode";
+			this.addNode();
+		}
+	}
+
+	addNode() { //Add a node to the network
+		//Get a random connection to replace with a node
+		let connectionIndex = Math.floor(Math.random() * this.connections.length);
+		let pickedConnection = this.connections[connectionIndex];
+		pickedConnection.enabled = false;
+		this.connections.splice(connectionIndex, 1); //Delete the connection
+
+		//Create the new node
+		let newNode = new Node(this.nextNode, pickedConnection.fromNode.layer + 1);
+		this.nodes.forEach((node) => { //Shift all nodes layer value
+			if (node.layer > pickedConnection.fromNode.layer)
+				node.layer++;
+		});
+
+		//New connections
+		let newConnection1 = new Connection(pickedConnection.fromNode, newNode, 1);
+		let newConnection2 = new Connection(newNode, pickedConnection.toNode, pickedConnection.weight);
+
+		this.layers++;
+		this.connections.push(newConnection1); //Add connection
+		this.connections.push(newConnection2); //Add connection
+		this.nodes.push(newNode); //Add node
+		this.nextNode++;
+	}
+
+	addConnection() { //Add a connection to the network
+		if (this.fullyConnected())
+			return; //Cannot add connections if it's fullyConnected
+
+		//Choose to nodes to connect
+		let node1 = Math.floor(Math.random() * this.nodes.length);
+		let node2 = Math.floor(Math.random() * this.nodes.length);
+
+		//Search for two valid nodes
+		while (this.nodes[node1].layer == this.nodes[node2].layer
+			|| this.nodesConnected(this.nodes[node1], this.nodes[node2])) {
+			node1 = Math.floor(Math.random() * this.nodes.length);
+			node2 = Math.floor(Math.random() * this.nodes.length);
+		}
+
+		//Switch nodes based on their layer
+		if (this.nodes[node1].layer > this.nodes[node2].layer) {
+			let temp = node1;
+			node1 = node2;
+			node2 = temp;
+		}
+
+		//add the connection
+		let newConnection = new Connection(this.nodes[node1], this.nodes[node2], Math.random() * this.inputs * Math.sqrt(2 / this.inputs));
+		this.connections.push(newConnection);
+	}
+
+
+
+	//Utilities
+	commonConnection(innN, connections) {
+		//Search through all connections to check for
+		//one with the correct Innovation Number
+		for(let i = 0; i < connections.length; i++){
+			if(innN == connections[i].getInnovationNumber())
+				return i;
+		}
+
+		//Found nothing
+		return -1;
+	}
+
+	nodesConnected(node1, node2) {
+		//Search if there is a connection between node1 & node2
+		for (let i = 0; i < this.connections.length; i++) {
+			let conn = this.connections[i];
+			if ((conn.fromNode == node1 && conn.toNode == node2)
+				|| (conn.fromNode == node2 && conn.toNode == node1)) {
+				return true;
+			}
+		};
+
+		return false;
+	}
+
+	fullyConnected() {
+		//check if the network is fully connected
+		let maxConnections = 0;
+		let nodesPerLayer = [];
+
+		//Calculate all possible connections
+		this.nodes.forEach((node) => {
+			if (nodesPerLayer[node.layer] != undefined)
+				nodesPerLayer[node.layer]++;
+			else
+				nodesPerLayer[node.layer] = 1;
+		});
+
+		for (let i = 0; i < this.layers - 1; i++)
+			for (let j = i + 1; j < this.layers; j++)
+				maxConnections += nodesPerLayer[i] * nodesPerLayer[j];
+
+		//Compare
+		return maxConnections == this.connections.length;
+	}
+
+	sortByLayer(){
+		//Sort all nodes by layer
+		this.nodes.sort((a, b) => {
+			return a.layer - b.layer;
+		});
+	}
+
+	clone() { //Returns a copy of this genome
+		let clone = new Genome(this.inputs, this.outputs, this.id);
+		clone.nodes = this.nodes.slice(0, this.nodes.length);
+		clone.connections = this.connections.slice(0, this.connections.length);
+
+		return clone;
+	}
+
+	getNode(x){ //Returns the index of a node with that Number
+		for(let i = 0; i < this.nodes.length; i++)
+			if(this.nodes[i].number == x)
+				return i;
+
+		return -1;
+	}
+
+	calculateWeight() { //Computational weight of the network
+		return this.connections.length + this.nodes.length;
 	}
 }
 
 
+	//3
+	//The Connection Class
+//Is where all the weights are stored
+//Mostly used for a cleaner and more readable code.
+class Connection {
+	constructor(from, to, weight){
+		this.fromNode = from; //type: Node
+		this.toNode = to; //type: Node
+		this.weight = weight; //type: Number
+		this.enabled = true;
+	}
+
+	mutateWeight(){ //Randomly mutate the weight of this connection
+		let rand = Math.random();
+		if (rand < 0.05) //5% chance of being assigned a new random value
+			this.weight = Math.random() * 2 - 1;
+		else //95% chance of being uniformly perturbed
+			this.weight += randomGaussian() / 50;
+	}
+
+	clone(){ //Returns a copy of this connection
+		let clone = new Connection(this.fromNode, this.toNode, this.weight);
+		clone.enabled = this.enabled;
+		return clone;
+	}
+
+	getInnovationNumber(){ //Using https://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function
+		return (1/2)*(this.fromNode.number + this.toNode.number)*(this.fromNode.number + this.toNode.number + 1) + this.toNode.number;
+	}
+}
 
 
 
@@ -670,11 +553,6 @@ let mutate = { // Mutation function (More to come!).
 			// if (num > 1 || num < -1) return randn_bm(true); // resample between 0 and 1
 		}
 		return num;
-	}
-
-	function sigmoid(value) {
-		// return value;
-		return (Math.pow(Math.E, value)/(1+Math.pow(Math.E, value)));
 	}
 	//converts inputs to sigmoid values (this is used for the inputs!)
 
@@ -983,13 +861,6 @@ let mutate = { // Mutation function (More to come!).
 			}
 	  	}
 	
-	// function keyPressed() {
-	//   if (key === 'S') {
-	//     let NN = NNs[0];
-	//     saveJSON(NN.brain, 'NN.json');
-	//   }
-	// }
-	
 	//Make new NEAT AIs.
 	NNs = new NEAT(config);
 
@@ -1005,22 +876,13 @@ let mutate = { // Mutation function (More to come!).
 	
 	
 	function nextGeneration() {
-		// console.log('next generation');
 		calculateFitness();
-
-		//NOTE: Might want to re-add the "save winner" functionality later on if this is implemented.
-		// NNs.doGen();
 
 		console.log(NNs);
 		for (let i = 0; i < TOTAL; i++) {
-		//   NNs[0][i] = pickOne(0, i);
-		//   if (controlPlayer1) {
-		//   	NNs[1][i] = pickOne(1, i);
-		//   }
 		let NN1 = pickOne(i);
 		let NN2 = pickOne(i);
 		NN1.crossover(NN2);
-		// console.log(NN2);
 		NNs.creatures[i] = NN1;
 		}
 		for (let i = 0; i < TOTAL; i++) {
@@ -1081,9 +943,6 @@ let mutate = { // Mutation function (More to come!).
 		var Test = function() {
 			this.__constructor(arguments);
 		}
-		
-	
-		  
 		  
 		  var Vec = function(x, y) {
 			this.x = x;
@@ -1278,28 +1137,6 @@ let mutate = { // Mutation function (More to come!).
 			m_physScale = 10;
 			m_world.SetWarmStarting(true);
 			
-			// Create border of boxes
-			var wall = new b2PolygonShape();
-			var wallBd = new b2BodyDef();
-			
-			// // Left
-			// wallBd.position.Set( -9.5 / m_physScale, 36 / m_physScale / 2);
-			// wall.SetAsBox(10/m_physScale, 40/m_physScale/2);
-			// this._wallLeft = m_world.CreateBody(wallBd);
-			// this._wallLeft.CreateFixture2(wall);
-			// // Right
-			// wallBd.position.Set((64 + 9.5) / m_physScale, 36 / m_physScale / 2);
-			// this._wallRight = m_world.CreateBody(wallBd);
-			// this._wallRight.CreateFixture2(wall);
-			// // Top
-			// wallBd.position.Set(64 / m_physScale / 2, (36 + 9.5) / m_physScale);
-			// wall.SetAsBox(68/m_physScale/2, 10/m_physScale);
-			// this._wallTop = m_world.CreateBody(wallBd);
-			// this._wallTop.CreateFixture2(wall);	
-			// // Bottom
-			// wallBd.position.Set(64 / m_physScale / 2, -9.5 / m_physScale);
-			// this._wallBottom = m_world.CreateBody(wallBd);
-			// this._wallBottom.CreateFixture2(wall);
 			var b2Listener = b2ContactListener;
 			//Add listeners for contact
 			var listener = new b2Listener;
