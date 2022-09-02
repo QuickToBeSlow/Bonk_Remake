@@ -103,7 +103,7 @@
 	//The Genome Class
 
 class Genome {
-	constructor(inp, out, offSpring = false) {
+	constructor(inp, out, offSpring = false, nodes = null, connections = null) {
 		
 		//from other method
 		this.lastOutputs=[];
@@ -123,8 +123,8 @@ class Genome {
 		this.layers = 2;
 		this.nextNode = 0;
 
-		this.nodes = [];
-		this.connections = [];
+		this.nodes = nodes || [];
+		this.connections = connections || [];
 
 		if(!offSpring) { //This is not an offspring genome generate a fullyConnected net
 			for (let i = 0; i < this.inputs; i++) {
@@ -239,7 +239,14 @@ class Genome {
 		//Engage all nodes and Extract the results from the outputs
 		let result = [];
 		this.nodes.forEach((node) => {
-			node.engage();
+			if (node.layer != 0) //No activation function on input nodes
+				node.outputValue = node.activation(node.inputSum + node.bias);
+
+
+			node.outputConnections.forEach((conn) => {
+				if (conn.enabled) //Do not pass value if connection is disabled
+					conn.toNode.inputSum += conn.weight * node.outputValue; //Weighted output sum
+			});
 
 			if (node.output)
 				result.push(node.outputValue);
@@ -1794,8 +1801,20 @@ class Connection {
 		}
 
 		Test.prototype.downloadModel = function(name) {
-
-			let jsonModel = JSON.stringify(window.testModel);
+			const replacerFunc = () => {
+				const visited = new WeakSet();
+				return (key, value) => {
+				  if (typeof value === "object" && value !== null) {
+					if (visited.has(value)) {
+					  return;
+					}
+					visited.add(value);
+				  }
+				  return value;
+				};
+			  };
+			  
+			let jsonModel = JSON.stringify(window.testModel, replacerFunc());
 			//DOWNLOADS MODEL
 			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonModel);
 			// console.log(data);
@@ -1815,13 +1834,27 @@ class Connection {
 
 			read = new FileReader();
 
-			read.readAsBinaryString(file);
+			read.readAsText(file);
 
 			read.onloadend = function(){
-				// console.log(read.result);
+				console.log(read.result);
 				data = JSON.parse(read.result);
-				
-				window.testModel = data;
+				let dataConnections = [];
+				let lastLength = 0;
+
+				data.nodes = data.nodes.filter(function(e){return e}); 
+
+				for (let i=0; i<data.nodes.length; i++) {
+					// if (data.nodes[i]==null) continue;
+					for (let j=0; j<data.nodes[i].outputConnections.length; j++) {
+						dataConnections[lastLength+j];
+					}
+					lastLength += data.nodes[i].outputConnections.length;
+				}
+				data.connections = dataConnections;
+				window.testModel = new Genome(data.inputs,data.outputs,false,data.nodes,data.connections);
+				// window.testModel = data;
+				console.log(window.testModel);
 		}
 	}
 
