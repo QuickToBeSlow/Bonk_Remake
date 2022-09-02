@@ -103,22 +103,28 @@
 	//The Genome Class
 
 class Genome {
-	constructor(inp, out, id, offSpring = false) {
-		this.inputs = inp; //Number of inputs
-		this.outputs = out; //Number of outputs
-		this.id = id; //Genome id -> used for the drawing
-		this.layers = 2;
-		this.nextNode = 0;
-
-		this.nodes = [];
-		this.connections = [];
-
+	constructor(inp, out, offSpring = false) {
+		
 		//from other method
 		this.lastOutputs=[];
 		for (let i=0; i<window.eyes; i++) {
 			this.lastOutputs[i]=0.5;
 		}
 		//end
+
+		//if inputs are defined, then proceed as normal. If not, create new neural network.
+		  if (inp==null || out==null) {
+			inp = 8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2;
+			out = 3+this.lastOutputs.length;
+		  }
+
+		this.inputs = inp; //Number of inputs
+		this.outputs = out; //Number of outputs
+		this.layers = 2;
+		this.nextNode = 0;
+
+		this.nodes = [];
+		this.connections = [];
 
 		if(!offSpring) { //This is not an offspring genome generate a fullyConnected net
 			for (let i = 0; i < this.inputs; i++) {
@@ -455,7 +461,7 @@ class Genome {
 	}
 
 	clone() { //Returns a copy of this genome
-		let clone = new Genome(this.inputs, this.outputs, this.id);
+		let clone = new Genome(this.inputs, this.outputs);
 		clone.nodes = this.nodes.slice(0, this.nodes.length);
 		clone.connections = this.connections.slice(0, this.connections.length);
 
@@ -669,17 +675,6 @@ class Connection {
 	var savedNNs = [];
 	var winnerList = [];
 
-	//NEAT implementation in these two variable definitions.
-	var config = {
-		model: [
-			{nodeCount: 8+window.eyes+(window.eyes*2)+window.groundEyes*2, type: "input"},
-			{nodeCount: 3+window.eyes, type: "output", activationfunc: activation.TANH}
-		],
-		mutationRate: 0.05,
-		crossoverMethod: crossover.RANDOM,
-		mutationMethod: mutate.GAUSIAN,
-		populationSize: window.TOTAL
-	};
 
 	window.saveTourneyWinner = false;
 	window.saveRedNN = false;
@@ -930,17 +925,16 @@ class Connection {
 	// 		}
 	//   	}
 	
-	//Make new NEAT AIs.
-	NNs = new NEAT(config);
-
 	  tf.setBackend('cpu');
-	//   for (let i = 0; i < TOTAL; i++) {
-	// 	// NNs[0][i] = new NN();
-	// 	// if (controlPlayer1) {
-	// 	// 	NNs[1][i] = new NN();
-	// 	// }
-	// 	NNs[i] = new NN();
-	//   }
+
+	  //Make new NEAT AIs.
+	  for (let i = 0; i < TOTAL; i++) {
+		NNs[0][i] = new NN();
+		if (controlPlayer1) {
+			NNs[1][i] = new NN();
+		}
+		NNs[i] = new Genome();
+	  }
 		// console.log(NNs);
 	
 	
