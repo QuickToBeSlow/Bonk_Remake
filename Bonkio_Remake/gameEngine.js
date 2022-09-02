@@ -266,7 +266,7 @@ class Genome {
 	//Crossover
 	crossover(partner) {
 		//TODO: find a good way to generate unique ids
-		let offSpring = new Genome(this.inputs, this.outputs, 0, true); //Child genome
+		let offSpring = new Genome(this.inputs, this.outputs, false); //Child genome
 		offSpring.nextNode = this.nextNode;
 
 
