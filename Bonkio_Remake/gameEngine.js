@@ -1595,15 +1595,15 @@ class Connection {
 				}
 				
 				if (window.saveRedNN) {
-					// NNs[index].brain.model.save("localstorage://savedModel");
+					window.testModel = NNs[index];
+					// NNs[index].save("localstorage://savedModel");
 					//NOT DONE YET!
-					NNs.export(index);
 					window.saveRedNN = false;
 				}
 				if (window.saveBlueNN) {
-					// NNs[index2].brain.model.save("localstorage://savedModel");
+					window.testModel = NNs[index2];
+					// NNs[index2].save("localstorage://savedModel");
 					//NOT DONE YET!
-					NNs.export(index2);
 					window.saveBlueNN = false;
 				}
 	
@@ -1820,32 +1820,8 @@ class Connection {
 			read.onloadend = function(){
 				// console.log(read.result);
 				data = JSON.parse(read.result);
-				console.log(data);
-
-			console.log('doupload',data)
-			// alert('your file has been uploaded');
-			// location.reload();
-
-			// console.log(data[1].responseText);
-			window.data = data;
-			let newCreature = new Creature(data.network.model);
-			let flattenedGenes = [];
-			for (let i = 0; i < data.network.layers.length - 1; i++) {
-				for (let w = 0; w < data.network.layers[i].nodes.length; w++) {
-					for (let e = 0; e < data.network.layers[i].nodes[w].weights.length; e++) {
-						flattenedGenes.push(data.network.layers[i].nodes[w].weights[e]);
-					}
-				}
-	
-				for (let w = 0; w < data.network.layers[i].bias.weights.length; w++) {
-					flattenedGenes.push(data.network.layers[i].bias.weights[w]);
-				}
-			}
-
-			newCreature.setFlattenedGenes(flattenedGenes);
-			console.log(newCreature);
-
-			window.testModel = newCreature;
+				
+				window.testModel = data;
 		}
 	}
 
