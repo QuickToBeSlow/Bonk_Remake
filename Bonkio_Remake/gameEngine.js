@@ -39,7 +39,7 @@
 			if (rand < 0.05) //5% chance of being assigned a new random value
 				this.bias = Math.random() * 2 - 1;
 			else //95% chance of being uniformly perturbed
-				this.bias += randomGaussian() / 50;
+				this.bias += randn_bm() / 50;
 		}
 	
 		mutateActivation() { //Randomly choose a new activationFunction
@@ -499,7 +499,7 @@ class Connection {
 		if (rand < 0.05) //5% chance of being assigned a new random value
 			this.weight = Math.random() * 2 - 1;
 		else //95% chance of being uniformly perturbed
-			this.weight += randomGaussian() / 50;
+			this.weight += randn_bm() / 50;
 	}
 
 	clone(){ //Returns a copy of this connection
@@ -1623,7 +1623,7 @@ class Connection {
 						if (window.saveTourneyWinner == true) {
 							// NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
 							//NOT DONE YET!
-							NNs.export(winnerList[0]);
+							window.testModel = NNs[winnerList[0]];
 
 							window.saveTourneyWinner = false;
 						}
