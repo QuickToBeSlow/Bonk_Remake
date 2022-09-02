@@ -671,7 +671,7 @@ class Connection {
 	var currentNN = 0;
 	window.TOTAL = 512;
 	//Changed to use NEAT NNs.
-	var NNs;
+	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
 
@@ -929,10 +929,6 @@ class Connection {
 
 	  //Make new NEAT AIs.
 	  for (let i = 0; i < TOTAL; i++) {
-		NNs[0][i] = new NN();
-		if (controlPlayer1) {
-			NNs[1][i] = new NN();
-		}
 		NNs[i] = new Genome();
 	  }
 		// console.log(NNs);
@@ -946,7 +942,7 @@ class Connection {
 		let NN1 = pickOne(i);
 		let NN2 = pickOne(i);
 		NN1.crossover(NN2);
-		NNs.creatures[i] = NN1;
+		NNs[i] = NN1;
 		}
 		for (let i = 0; i < TOTAL; i++) {
 			savedNNs[0][i] = null;
@@ -1448,10 +1444,10 @@ class Connection {
 				if (!window.testingMode) {
 					let index = winnerList[currentNN];
 					let index2 = winnerList[currentNN+1];
-					NNs.creatures[index].think(0);
+					NNs[index].think(0);
 					if (controlPlayer1) {
 
-						NNs.creatures[index2].think(1);
+						NNs[index2].think(1);
 					}
 				} else if (window.testModel != undefined) {
 					window.testModel.think(1);
@@ -1585,11 +1581,11 @@ class Connection {
 					window.scores = [0,0];
 					if (reward > reward2) {
 						NNScores[index2] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
-						if (winnerList.length == 2) {secondBest = NNs.creatures[index];}
+						if (winnerList.length == 2) {secondBest = NNs[index];}
 						winnerList.splice(currentNN, 1);
 					} else {
 						NNScores[index] += (Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)))*10;
-						if (winnerList.length == 2) {secondBest = NNs.creatures[index2];}
+						if (winnerList.length == 2) {secondBest = NNs[index2];}
 						winnerList.splice(currentNN+1, 1);
 					}
 					reward = 0;
@@ -1635,7 +1631,7 @@ class Connection {
 						window.winner = winnerList[0];
 						generation++;
 						// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
-						savedNNs = [...NNs.creatures];
+						savedNNs = [...NNs];
 						NNScores = quickSort(NNScores);
 						nextGeneration();
 						NNScores = [];
