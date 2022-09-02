@@ -123,8 +123,16 @@ class Genome {
 		this.layers = 2;
 		this.nextNode = 0;
 
-		this.nodes = nodes || [];
-		this.connections = connections || [];
+		if (nodes != null) {
+			this.nodes = nodes;
+		} else {
+			this.nodes = [];
+		}
+		if (connections != null) {
+			this.connections = connections;
+		} else {
+			this.connections = [];
+		}
 
 		if(!offSpring) { //This is not an offspring genome generate a fullyConnected net
 			for (let i = 0; i < this.inputs; i++) {
