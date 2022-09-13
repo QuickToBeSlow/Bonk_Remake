@@ -47,49 +47,49 @@ Test.prototype.createWorld = function() {
 	// window.FloorFixture = b.CreateFixture(fd);
 	// window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(8, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(16, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(24, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(32, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(40, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(48, 10);
 	b = world.CreateBody(bd);
 	b.CreateFixture(fd);
 	window.shapes.push(b.CreateFixture(fd));
 
-	fd.shape = new b2CircleShape(15/m_physScale);
+	fd.shape = new b2CircleShape(20/m_physScale);
 	bd.userData = "Floor";
 	bd.position.Set(56, 10);
 	b = world.CreateBody(bd);
@@ -120,7 +120,7 @@ Test.prototype.createWorld = function() {
 // 	} else {
 // 		bd.position.Set(375/m_physScale, 120/m_physScale);
 // 	}
-	bd.position.Set((300+Math.round(Math.random()*75-37.5))/m_physScale, (275+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((200+Math.round(Math.random()*75-37.5))/m_physScale, (275+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(275/m_physScale, 120/m_physScale);
 	window.Player1 = world.CreateBody(bd);
 	window.PFixture1 = window.Player1.CreateFixture(fd);
@@ -143,7 +143,7 @@ Test.prototype.createWorld = function() {
 	fd.friction = 0.0;
 	fd.isSensor = false;
 	fd.shape = P2;
-	bd.position.Set((300+Math.round(Math.random()*75-37.5))/m_physScale, (275+Math.round(Math.random()*25))/m_physScale);
+	bd.position.Set((400+Math.round(Math.random()*75-37.5))/m_physScale, (275+Math.round(Math.random()*25))/m_physScale);
 	// bd.position.Set(325/m_physScale, 120/m_physScale);
 	bd.userData = "Player2";
 	window.Player2 = world.CreateBody(bd);

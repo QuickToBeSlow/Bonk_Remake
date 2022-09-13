@@ -190,7 +190,10 @@ class Genome {
 			let PPosX = p1.GetPosition().x;
 			let PPosY = p1.GetPosition().y;
 			for(let m=0; m<window.eyes; m++) {
-				inputs[8+m] = this.lastOutputs[m];
+				if (Number.isFinite(this.lastOutputs[m]))
+					inputs[8+m] = this.lastOutputs[m];
+				else
+					inputs[8+m] = 0;
 			}
 
 			// let change = 360/(window.eyes)/180*Math.PI;
@@ -670,7 +673,7 @@ class Connection {
 	window.draw = true;
 	window.noise = 0; // 5/100
 	var eyeRange = 40;
-	var posRange = 5;
+	var posRange = 50;
 	var velocityRange = 30;
 	var eyeRotation = [];
 	eyeRotation[0] = [];
@@ -684,7 +687,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 512;
+	window.TOTAL = 128;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
@@ -956,7 +959,7 @@ class Connection {
 		for (let i = 0; i < TOTAL; i++) {
 		let NN1 = pickOne(i);
 		let NN2 = pickOne(i);
-		NN1.crossover(NN2);
+		NN1 = NN1.crossover(NN2);
 		NNs[i] = NN1;
 		}
 		for (let i = 0; i < TOTAL; i++) {
