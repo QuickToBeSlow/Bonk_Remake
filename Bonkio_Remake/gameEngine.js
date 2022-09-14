@@ -689,7 +689,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 32;
+	window.TOTAL = 512;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
@@ -1355,8 +1355,8 @@ class Connection {
 				round++;
 
 				//Varies the level every single round instead of at the end of a tournament.
-				// window.level++;
-				// if (window.level >= window.runners.length) {window.level = 0;}
+				window.level++;
+				if (window.level >= window.runners.length) {window.level = 0;}
 				// window.level = Math.round(Math.random()*(window.runners.length-1));
 				// window.level = Math.round(Math.random()*(window.runners.length-2)+1);
 			}
