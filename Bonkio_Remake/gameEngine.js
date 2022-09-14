@@ -758,17 +758,14 @@ class Connection {
 		index--;
 		let child;
 		if (pos == 0) {
-			let NeuralN;
-			NeuralN = savedNNs[winnerList[0]].clone();
-			child = NeuralN;
+			let NeuralN = savedNNs[winnerList[0]].clone();
+			child = NeuralN.clone();
 		} else if (pos == (TOTAL) && window.prevWinner != undefined && TOTAL > 2) {
-			let NeuralN;
-			NeuralN = window.prevWinner.clone();
-			child = NeuralN;
+			let NeuralN = window.prevWinner.clone();
+			child = NeuralN.clone();
 		} else {
-			let NeuralN = savedNNs[index].clone();
-			child = NeuralN;
-			child.mutate();
+			let NeuralN = savedNNs[index].clone().mutate();
+			child = NeuralN.clone();
 		}
 		return child.clone();
 	  }
