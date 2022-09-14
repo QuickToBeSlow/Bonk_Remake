@@ -134,7 +134,11 @@ class Genome {
 			this.connections = [];
 		}
 
+		this.offSpring = true;
 		if(!offSpring) { //This is not an offspring genome generate a fullyConnected net
+			if (nodes != null && nodes.length!=0) {
+				return;
+			}
 			for (let i = 0; i < this.inputs; i++) {
 				this.nodes.push(new Node(this.nextNode, 0));
 				this.nextNode++;
@@ -274,7 +278,8 @@ class Genome {
 		let offSpring = new Genome(this.inputs, this.outputs, false); //Child genome
 		offSpring.nextNode = this.nextNode;
 
-
+		offSpring.nodes = [];
+		offSpring.connections = [];
 		//Take all nodes from this parent - output node activation 50%-50%
 		for(let i = 0; i < this.nodes.length; i++){
 			let node = this.nodes[i].clone();
@@ -730,7 +735,7 @@ class Connection {
 			let NN1 = pickOne(i);
 			let NN2 = pickOne(i);
 			NN1 = NN1.crossover(NN2).clone();
-			NNs[i] = NN1;
+			NNs[i] = NN1.clone();
 		}
 
 		//removes NNs if NNs array is larger than TOTAL.
