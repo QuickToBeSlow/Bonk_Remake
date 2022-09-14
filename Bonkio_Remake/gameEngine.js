@@ -193,7 +193,7 @@ class Genome {
 				if (Number.isFinite(this.lastOutputs[m]))
 					inputs[8+m] = Math.max(Math.min(this.lastOutputs[m], 1), -1);
 				else {
-					inputs[8+m] = 0;
+					inputs[8+m] = 0.5;
 					this.lastOutputs[m] = 0.5;
 				}
 			}
@@ -689,7 +689,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 128;
+	window.TOTAL = 32;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
@@ -714,262 +714,33 @@ class Connection {
 	var canColReward = true;
 	var hasCollided = false;
 	var generation = 0;
-	
-	// class NN {
-	// 	constructor(brain) {
-	// 	  this.score = 0;
-	// 	  this.fitness = 0;
-	// 	  this.lastOutputs=[];
-	// 	  for (let i=0; i<window.eyes; i++) {
-	// 		  this.lastOutputs[i]=0.5;
-	// 	  }
-
-	// 	  if (brain) {
-	// 		this.brain = brain.copy();
-	// 	  } else {
-	// 		this.brain = new NeuralNetwork(8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2, [9, 7], 3+this.lastOutputs.length);
-	// 	  }
-	// 	}
 		
-	// 	dispose() {
-	// 	  this.brain.dispose();
-	// 	}
-	
-	// 	mutate() {
-	// 	//   this.brain.mutate(3/((8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2)*6+6*6+6*(3+this.lastOutputs.length)));
-	// 	  this.brain.mutate(0.075);
-	// 	}
-	  
-	// 	crossover(network) {
-	// 		this.brain.crossover(network.brain.model, 0.05);
-	// 	}
-
-	// 	output(i, p1, p2) {
-	// 		let inputs = [];
-	// 		// inputs[0] = Math.atan(p1.GetPosition().x/p1.GetPosition().y)+(Math.random()-0.5)*noise;
-	// 		// inputs[1] = Math.max(Math.min((Math.sqrt(Math.pow(p1.GetLinearVelocity().x, 2) + Math.pow(p1.GetLinearVelocity().y, 2))), 1), -1)/velocityRange+(Math.random()-0.5)*noise;
-
-	// 		// inputs[2] = Math.atan(p2.GetPosition().x/p2.GetPosition().y)+(Math.random()-0.5)*noise;
-	// 		// inputs[3] = Math.max(Math.min((Math.sqrt(Math.pow(p2.GetLinearVelocity().x, 2) + Math.pow(p2.GetLinearVelocity().y, 2))), 1), -1)/velocityRange+(Math.random()-0.5)*noise;
-
-	// 		inputs[0] = Math.max(Math.min((p1.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-	// 		inputs[1] = Math.max(Math.min((p1.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-	// 		inputs[2] = Math.max(Math.min((p2.GetLinearVelocity().x/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-	// 		inputs[3] = Math.max(Math.min((p2.GetLinearVelocity().y/velocityRange), 1), -1)+(Math.random()-0.5)*noise;
-	// 		inputs[4] = strengths[i]/10+(Math.random()-0.5)*noise;
-	// 		inputs[5] = strengths[(1-i)]/10+(Math.random()-0.5)*noise;
-	// 		inputs[6] = Math.max(Math.min(((p1.GetPosition().x-p2.GetPosition().x)/posRange), 1), -1)+(Math.random()-0.5)*noise;
-	// 		inputs[7] = Math.max(Math.min(((p1.GetPosition().y-p2.GetPosition().y)/posRange), 1), -1)+(Math.random()-0.5)*noise;
-	// 		let PPosX = p1.GetPosition().x;
-	// 		let PPosY = p1.GetPosition().y;
-	// 		for(let m=0; m<window.eyes; m++) {
-	// 			inputs[8+m] = this.lastOutputs[m];
-	// 		}
-
-	// 		// let change = 360/(window.eyes)/180*Math.PI;
-	// 		for (let m=0; m<window.eyes; m++) {
-	// 			// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
-	// 			eyeRotation[i][m] = 2*(this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
-	// 			let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[i][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[i][m]))*eyeRange)));
-	// 			inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
-	// 			inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle+(Math.random()-0.5)*noise || 0;
-	// 		}
-	// 		// let GRSeparation = window.GRRange/window.groundEyes;
-	// 		// let tester;
-	// 		// let leftDisp = 0;
-	// 		// let rightDisp = 0;
-
-	// 		let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange));
-	// 		inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
-	// 		inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle+(Math.random()-0.5)*noise || 0;
-	// 		return inputs;
-	// 	}
-
-	// 	think(i) {
-	// 		let inputs = (i==0) ? this.output(i, window.Player1, window.Player2) : this.output(i, window.Player2, window.Player1);
-
-	// 		let output = this.brain.predict(inputs);
-	// 	  	if (output[0] < (0.5)) {
-	// 			window.down[i] = true;
-	// 		} else if (output[0] > (0.5)) {
-	// 			window.up[i] = true;
-	// 		}
-	// 	  	if (output[1] < (0.5)) {
-	// 			window.left[i] = true;
-	// 		} else if (output[1] > (0.5)) {
-	// 			window.right[i] = true;
-	// 		}
-	// 	  	if (0.5 < output[2]) {
-	// 			window.heavy[i] = true;
-	// 		}
-	// 		for(let m=0; m<window.eyes; m++) {
-	// 			this.lastOutputs[m]=output[3+m];
-	// 		}
-	// 	}
-	  
-	// 	// update() {
-	// 	//   this.score++;
-	// 	// }
-	//   }
-	//   class NeuralNetwork {
-	// 	constructor(a, b, c, d) {
-	// 	  if (a instanceof tf.Sequential) {
-	// 		this.model = a;
-	// 		this.input_nodes = b;
-	// 		this.hidden_nodes = c;
-	// 		this.output_nodes = d;
-	// 	  } else {
-	// 		this.input_nodes = a;
-	// 		this.hidden_nodes = b;
-	// 		this.output_nodes = c;
-	// 		this.model = this.createModel();
-	// 	  }
-	// 	}
-	  
-	// 	copy() {
-	// 	  return tf.tidy(() => {
-	// 		const modelCopy = this.createModel();
-	// 		const weights = this.model.getWeights();
-	// 		const weightCopies = [];
-	// 		for (let i = 0; i < weights.length; i++) {
-	// 		  weightCopies[i] = weights[i].clone();
-	// 		}
-	// 		modelCopy.setWeights(weightCopies);
-	// 		return new NeuralNetwork(
-	// 		  modelCopy,
-	// 		  this.input_nodes,
-	// 		  this.hidden_nodes,
-	// 		  this.output_nodes
-	// 		);
-	// 	  });
-	// 	}
-	  
-	// 	mutate(rate) {
-	// 	  tf.tidy(() => {
-	// 		const weights = this.model.getWeights();
-	// 		const mutatedWeights = [];
-	// 		for (let i = 0; i < weights.length; i++) {
-	// 		  let tensor = weights[i];
-	// 		  let shape = weights[i].shape;
-	// 		  let values = tensor.dataSync().slice();
-	// 		  let mode = (i%2==1&&i!=weights.length);
-	// 		  for (let j = 0; j < values.length; j++) {
-	// 			if (Math.random() < rate) {
-	// 			  let w = values[j];
-	// 			//   values[j] = (Math.abs(w) > 0) ? (w + randn_bm()*w) : w + randn_bm()+0.5;
-	// 			  values[j] = w + (randn_bm(mode));
-	// 			  if (values[j]<-2) {values[j]=-2}
-	// 			  if (values[j]>2) {values[j]=2}
-	// 			}
-	// 		  }
-	// 		  let newTensor = tf.tensor(values, shape);
-	// 		  mutatedWeights[i] = newTensor;
-	// 		}
-	// 		this.model.setWeights(mutatedWeights);
-	// 	  });
-	// 	}
-		
-	// 	crossover(network, rate) {
-	// 		tf.tidy(() => {
-	// 		  const weights1 = this.model.getWeights();
-	// 		  const weights2 = network.getWeights();
-	// 		  const crossoverWeights = [];
-	// 		  for (let i = 0; i < weights1.length; i++) {
-	// 			let tensor1 = weights1[i];
-	// 			let tensor2 = weights2[i];
-	// 			let shape = weights1[i].shape;
-	// 			let values1 = tensor1.dataSync().slice();
-	// 			let values2 = tensor2.dataSync().slice();
-	// 			for (let j = 0; j < values1.length; j++) {
-	// 			  if (Math.random() < rate) {
-	// 				values1[j] = values2[j];
-	// 			  }
-	// 			}
-	// 			let newTensor = tf.tensor(values1, shape);
-	// 			crossoverWeights[i] = newTensor;
-	// 		  }
-	// 		  this.model.setWeights(crossoverWeights);
-	// 		});
-	// 	  }
-	  
-	// 	dispose() {
-	// 	  this.model.dispose();
-	// 	}
-	  
-	// 	predict(inputs) {
-	// 	  return tf.tidy(() => {
-	// 		const xs = tf.tensor2d([inputs]);
-	// 		const ys = this.model.predict(xs);
-	// 		const outputs = ys.dataSync();
-	// 		// console.log(outputs);
-	// 		return outputs;
-	// 	  });
-	// 	}
-	
-	// 	createModel() {
-	// 		const model = tf.sequential();
-	// 		for (let i=0; i<this.hidden_nodes.length; i++) {
-	// 			if (i==0) {
-	// 				let hidden = tf.layers.dense({
-	// 					units: this.hidden_nodes[i],
-	// 					inputShape: [this.input_nodes],
-	// 					activation: 'selu',
-	// 					useBias: true,
-	// 					biasInitializer: 'randomUniform',
-	// 				});
-	// 				model.add(hidden);
-	// 			} else if (i%2 == 0) {
-	// 				let hidden = tf.layers.dense({
-	// 					units: this.hidden_nodes[i],
-	// 					activation: 'selu',
-	// 					useBias: true,
-	// 					biasInitializer: 'randomUniform',
-	// 				});
-	// 				model.add(hidden);
-	// 			} else {
-	// 				let hidden = tf.layers.dense({
-	// 					units: this.hidden_nodes[i],
-	// 					activation: 'selu',
-	// 					useBias: true,
-	// 					biasInitializer: 'randomUniform',
-	// 				});
-	// 				model.add(hidden);
-	// 			}
-	// 		}
-	// 		const output = tf.layers.dense({
-	// 			units: this.output_nodes,
-	// 			activation: 'sigmoid'
-	// 		});
-	// 		model.add(output);
-	// 		return model;
-	// 		}
-	//   	}
-	
 	  tf.setBackend('cpu');
 
 	  //Make new NEAT AIs.
 	  for (let i = 0; i < TOTAL; i++) {
 		NNs[i] = new Genome();
-	  }
-		// console.log(NNs);
-	
+	  }	
 	
 	function nextGeneration() {
 		calculateFitness();
 
 		console.log(NNs);
 		for (let i = 0; i < TOTAL; i++) {
-		let NN1 = pickOne(i);
-		let NN2 = pickOne(i);
-		NN1 = NN1.crossover(NN2);
-		NNs[i] = NN1;
+			let NN1 = pickOne(i);
+			let NN2 = pickOne(i);
+			NN1 = NN1.crossover(NN2).clone();
+			NNs[i] = NN1;
 		}
-		for (let i = 0; i < TOTAL; i++) {
-			savedNNs[0][i] = null;
-			if (controlPlayer1) {
-				savedNNs[1][i] = null;
-			}
+
+		//removes NNs if NNs array is larger than TOTAL.
+		if (NNs.length>TOTAL) {
+			let deleteNum = NNs.length-TOTAL;
+			NNs.splice(TOTAL-1, deleteNum);
 		}
+		// for (let i = 0; i < TOTAL; i++) {
+		// 	savedNNs[i] = null;
+		// }
 		savedNNs = [];
 	  }
 	  
@@ -988,18 +759,18 @@ class Connection {
 		let child;
 		if (pos == 0) {
 			let NeuralN;
-			NeuralN = savedNNs[winnerList[0]];
+			NeuralN = savedNNs[winnerList[0]].clone();
 			child = NeuralN;
 		} else if (pos == (TOTAL) && window.prevWinner != undefined && TOTAL > 2) {
 			let NeuralN;
-			NeuralN = window.prevWinner;
+			NeuralN = window.prevWinner.clone();
 			child = NeuralN;
 		} else {
-			let NeuralN = savedNNs[index];
+			let NeuralN = savedNNs[index].clone();
 			child = NeuralN;
 			child.mutate();
 		}
-		return child;
+		return child.clone();
 	  }
 	  
 	  function calculateFitness() {
