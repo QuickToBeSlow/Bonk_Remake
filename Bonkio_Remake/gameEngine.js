@@ -689,7 +689,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 512;
+	window.TOTAL = 128;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
@@ -764,7 +764,8 @@ class Connection {
 			let NeuralN = window.prevWinner.clone();
 			child = NeuralN.clone();
 		} else {
-			let NeuralN = savedNNs[index].clone().mutate();
+			let NeuralN = savedNNs[index].clone();
+			NeuralN.mutate();
 			child = NeuralN.clone();
 		}
 		return child.clone();
