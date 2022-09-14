@@ -191,9 +191,11 @@ class Genome {
 			let PPosY = p1.GetPosition().y;
 			for(let m=0; m<window.eyes; m++) {
 				if (Number.isFinite(this.lastOutputs[m]))
-					inputs[8+m] = this.lastOutputs[m];
-				else
+					inputs[8+m] = Math.max(Math.min(this.lastOutputs[m], 1), -1);
+				else {
 					inputs[8+m] = 0;
+					this.lastOutputs[m] = 0.5;
+				}
 			}
 
 			// let change = 360/(window.eyes)/180*Math.PI;
