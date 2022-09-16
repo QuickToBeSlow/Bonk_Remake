@@ -700,7 +700,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 32;
+	window.TOTAL = 512;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
