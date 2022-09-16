@@ -101,7 +101,6 @@
 
 	//2
 	//The Genome Class
-
 class Genome {
 	constructor(inp, out, offSpring = false, nodes = null, connections = null) {
 		
@@ -134,7 +133,6 @@ class Genome {
 			this.connections = [];
 		}
 
-		this.offSpring = true;
 		if(!offSpring) { //This is not an offspring genome generate a fullyConnected net
 			if (nodes != null && nodes.length!=0) {
 				return;
@@ -334,7 +332,6 @@ class Genome {
 
 	//Mutation Stuff
 	mutate() {
-		//console.log("Mutation...");
 		let mut;
 
 		if(Math.random() < 0.8) { //80%
@@ -411,8 +408,13 @@ class Genome {
 		let node2 = Math.floor(Math.random() * this.nodes.length);
 
 		//Search for two valid nodes
+		let counter = 0;
 		while (this.nodes[node1].layer == this.nodes[node2].layer
 			|| this.nodesConnected(this.nodes[node1], this.nodes[node2])) {
+			counter++;
+			//return if a connection cannot be found.
+			if (counter>this.nodes.length) return;
+			
 			node1 = Math.floor(Math.random() * this.nodes.length);
 			node2 = Math.floor(Math.random() * this.nodes.length);
 		}
@@ -426,6 +428,7 @@ class Genome {
 
 		//add the connection
 		let newConnection = new Connection(this.nodes[node1], this.nodes[node2], Math.random() * this.inputs * Math.sqrt(2 / this.inputs));
+		
 		this.connections.push(newConnection);
 	}
 
@@ -561,7 +564,6 @@ class Connection {
 	  rayCastInput.p2 = p2;
 	  rayCastInput.maxFraction = 1;
 	  let closestShape;
-	//   console.log(rayCastInput);
 	for (let m=0; m<shapes.length; m++) {
 	  if(window.shapes[m].RayCast(rayCastOutput, rayCastInput)){
 		if (rayCastOutput.fraction < rayCastInput.maxFraction && rayCastOutput.fraction >= 0) {
@@ -676,6 +678,10 @@ class Connection {
 	window.eyes = 2;
 	window.groundEyes = 1;
 	window.GRRange = 0;
+
+	window.inpt = 8+window.eyes+(window.eyes*2)+window.groundEyes*2;
+	window.outpt = 3+window.eyes;
+	
 	window.debug = false;
 	window.draw = true;
 	window.noise = 0; // 5/100
@@ -694,7 +700,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 128;
+	window.TOTAL = 32;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
@@ -742,6 +748,7 @@ class Connection {
 		if (NNs.length>TOTAL) {
 			let deleteNum = NNs.length-TOTAL;
 			NNs.splice(TOTAL-1, deleteNum);
+			winnerList.splice(TOTAL-1, deleteNum);
 		}
 		// for (let i = 0; i < TOTAL; i++) {
 		// 	savedNNs[i] = null;
@@ -753,10 +760,7 @@ class Connection {
 		let index = 0;
 		let r = Math.random();
 		// let r = randn_bm(true);
-		// console.log(savedNNs);
 		while (r > 0) {
-			// console.log(savedNNs[i][index].fitness); 
-			// console.log(r);
 			r = r - NNFitnesses[index];
 		  index++;
 		}
@@ -780,7 +784,6 @@ class Connection {
 		let sum = 0;
 		for (let score of NNScores) {
 			sum += score;
-			// console.log(NN.score);
 		}
 		for (let j=0; j<TOTAL; j++) {
 			NNFitnesses.push(NNScores[j] / sum);
@@ -1195,7 +1198,8 @@ class Connection {
 				}
 				let p1Lead = window.scores[0]-window.scores[1];
 				let p2Lead = window.scores[1]-window.scores[0];
-				if (window.Player1.GetPosition().x < -40 || window.Player1.GetPosition().x > 100 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200 || p1Lead <=-leadTolerance) {
+				if (window.Player1.GetPosition().x < -40 || window.Player1.GetPosition().x > 100 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200) {
+					if (p1Lead <=-leadTolerance) round = roundCap;
 					//if red is offscreen
 					if (!window.testingMode) {
 						reward  += 10; //blue's reward
@@ -1203,7 +1207,8 @@ class Connection {
 					}
 					this.endGame(1);
 					break;
-				} else if (window.Player2.GetPosition().x < -40 || window.Player2.GetPosition().x > 100 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200 || p2Lead <=-leadTolerance) {
+				} else if (window.Player2.GetPosition().x < -40 || window.Player2.GetPosition().x > 100 || window.Player2.GetPosition().y < 0 || window.Player2.GetPosition().y > 200) {
+					if (p2Lead <=-leadTolerance) round = roundCap;
 					//if blue is offscreen
 					if (!window.testingMode) {
 						reward  -= 10; //blue's reward
@@ -1250,7 +1255,6 @@ class Connection {
 				if (window.heavy[0]) {
 					// slowDown = true;
 					window.PFixture1.SetDensity(strengths[0]);
-					// console.log(PFixture1);
 					window.Player1.ResetMassData();
 					if (strengths[0]>1) {
 						strengths[0]-=(decay*maxStrengths[0]);
@@ -1270,7 +1274,6 @@ class Connection {
 				if (window.heavy[1]) {
 					// slowDown = true;
 					window.PFixture2.SetDensity(strengths[1]);
-					// console.log(PFixture2);
 					window.Player2.ResetMassData();
 					if (strengths[1]>1) {
 						strengths[1]-=(decay*maxStrengths[1]);
@@ -1401,14 +1404,12 @@ class Connection {
 					window.saveBlueNN = false;
 				}
 	
-				if (controlPlayer1) {activeNNs = 2;} else {activeNNs = 1;}
 				if (currentNN < winnerList.length-1) {
 					// (controlPlayer1) ? currentNN+=2 : currentNN++;
 					if (round >= roundCap) {
 						round = 0;
 						currentNN++;
 					}
-					// console.log(winnerList);
 				} else if (round >= roundCap) {
 					round = 0;
 					currentNN = 0;
@@ -1417,7 +1418,7 @@ class Connection {
 						if (window.saveTourneyWinner == true) {
 							// NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
 							//NOT DONE YET!
-							window.testModel = NNs[winnerList[0]];
+							window.testModel = NNs[winnerList[0]].clone();
 
 							window.saveTourneyWinner = false;
 						}
@@ -1592,8 +1593,16 @@ class Connection {
 				const visited = new WeakSet();
 				return (key, value) => {
 				  if (typeof value === "object" && value !== null) {
+					//Instead of fromNode and toNode, might use layer:X, number: X, and locate Nodes later!
 					if (visited.has(value)) {
-					  return;
+						if (key=="toNode") {
+							value = {"number": value.number, "layer": value.layer};
+						} else {
+							return;
+						}
+					}
+					if (key=="fromNode" || key=="toNode") {
+						value = {"number": value.number, "layer": value.layer};
 					}
 					visited.add(value);
 				  }
@@ -1602,11 +1611,9 @@ class Connection {
 			  };
 			  
 			let jsonModel = JSON.stringify(window.testModel, replacerFunc());
+			// console.log(jsonModel);
 			//DOWNLOADS MODEL
 			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonModel);
-			// console.log(data);
-			console.log(jsonModel);
-			// console.log(encodeURIComponent(JSON.stringify(data)));
 			var dlAnchorElem = document.createElement("a");
 			dlAnchorElem.setAttribute("href",     dataStr     );
 			dlAnchorElem.setAttribute("download", name+".json");
@@ -1624,7 +1631,6 @@ class Connection {
 			read.readAsText(file);
 
 			read.onloadend = function(){
-				console.log(read.result);
 				data = JSON.parse(read.result);
 				let dataConnections = [];
 				let lastLength = 0;
@@ -1633,15 +1639,28 @@ class Connection {
 
 				for (let i=0; i<data.nodes.length; i++) {
 					// if (data.nodes[i]==null) continue;
+					
+					//allows nodes to have access to their prototypes...
+
+					let node = new Node(data.nodes[i].number, data.nodes[i].layer, data.nodes[i].output);
+					node.bias = data.nodes[i].bias; //Same bias
+					node.activationFunction = data.nodes[i].activationFunction; //Same activationFunction
+
+					data.nodes[i] = node;
+
+
 					for (let j=0; j<data.nodes[i].outputConnections.length; j++) {
-						dataConnections[lastLength+j];
+						dataConnections[lastLength+j] = data.nodes[i].outputConnections[j];
+						dataConnections[lastLength+j].fromNode = data.nodes[i];
+						
+						//find the target Nodes and relink them in dataConnections
+						var nodeNum = dataConnections[lastLength+j].toNode.number;
+						dataConnections[lastLength+j].toNode = data.nodes[nodeNum];
 					}
 					lastLength += data.nodes[i].outputConnections.length;
 				}
 				data.connections = dataConnections;
 				window.testModel = new Genome(data.inputs,data.outputs,false,data.nodes,data.connections);
-				// window.testModel = data;
-				console.log(window.testModel);
 		}
 	}
 
