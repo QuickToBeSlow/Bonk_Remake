@@ -700,7 +700,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 64;
+	window.TOTAL = 512;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
@@ -1638,6 +1638,7 @@ class Connection {
 				data.nodes = data.nodes.filter(function(e){return e}); 
 
 				for (let i=0; i<data.nodes.length; i++) {
+					//allows nodes to have access to their prototypes...
 					let node = new Node(data.nodes[i].number, data.nodes[i].layer, data.nodes[i].output);
 					node.outputConnections = data.nodes[i].outputConnections;
 					node.bias = data.nodes[i].bias; //Same bias
@@ -1646,13 +1647,7 @@ class Connection {
 				}
 
 				for (let i=0; i<data.nodes.length; i++) {
-					// if (data.nodes[i]==null) continue;
 					
-					//allows nodes to have access to their prototypes...
-
-
-
-
 					for (let j=0; j<data.nodes[i].outputConnections.length; j++) {
 						//allows connections to have access to their prototypes...
 						let clone = new Connection(data.nodes[i].outputConnections[j].fromNode, data.nodes[i].outputConnections[j].toNode, data.nodes[i].outputConnections[j].weight);
