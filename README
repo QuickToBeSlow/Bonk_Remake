@@ -1,2 +1,12 @@
-I repurposed the code from https://github.com/HBehrens/box2d.js and converted it into a neural network trainer via a genetic algorithm.
-The game is fashioned from the popular IO game bonk.io, and if all goes well it may be used to generate AIs for the game.
+(OLD SUMMARY) I repurposed the code from https://github.com/HBehrens/box2d.js and converted it into a neural network trainer via a genetic algorithm. The game is fashioned from the popular IO game bonk.io, and if all goes well it may be used to generate AIs for the game.
+
+How to use:
+Users are able to save any model by clicking "save tournament winner," "save red player," or "save blue player," and at the end of the tournament (or match in the case of saving red/blue) the user may fight the AI by clicking "toggle testing mode." If the user wishes to download their model they may use the "download model" button. Currently AIs aren't able to be uploaded with a file upload, but that will change once I have free time to work on it. The toggle debug option shows the raycasts which grab platform distances for one of the AIs. Other things should be pretty self-explanatory for the most part.
+
+TODO:
+1. Allow user to grab AIs from their downloads (think of a standard file upload. Not hard to implement).
+2. Implement the NEAT algorithm for real this time (got scammed with a library claiming to implement NEAT).
+   Harder than the first, but not that bad.
+   
+Time table:
+Because I'm working on other projects this has been and will be on the back-burner for a while. I plan to work on this more perhaps after the end of February. We'll see what happens though, I have other programming projects I'm focusing on as well with college and all.
