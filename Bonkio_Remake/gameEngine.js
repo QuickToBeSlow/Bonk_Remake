@@ -700,7 +700,7 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 128;
+	window.TOTAL = 1024;
 	var startBracketLength = TOTAL/2;
 	var genTotal = TOTAL;
 	//Changed to use NEAT NNs.
