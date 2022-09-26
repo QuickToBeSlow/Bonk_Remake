@@ -701,6 +701,7 @@ class Connection {
 	var leadTolerance = 5;
 	var currentNN = 0;
 	window.TOTAL = 128;
+	var startBracketLength = TOTAL/2;
 	var genTotal = TOTAL;
 	//Changed to use NEAT NNs.
 	var NNs = [];
@@ -1126,6 +1127,8 @@ class Connection {
 
 			c.fillText("Game: "+(TOTAL-winnerList.length+1) + " of " + (TOTAL-1), 5, 90);
             c.fillText("Round: "+(round+1) + " of " + roundCap, 5, 105);
+            c.fillText(((bracket==0) ? "Winner's bracket" : "Loser's bracket")+", game "
+			+(currentNN+1)+"/"+(startBracketLength), 5, 120);
 	
 			c.fillText("speed:" + supaSpeed,5, 30);
 			if(this._paused) {
@@ -1476,13 +1479,14 @@ class Connection {
 
 					if (bracket==1 && loserList.length*2>winnerList.length
 						&& winnerList.length+loserList.length*2!=genTotal) {
-						
-					} else {
+							startBracketLength = 1;
+						} else {
 						bracket = 1 - bracket;
+						startBracketLength = ((bracket==0) ? winnerList.length : loserList.length)/2;
 					}
 					console.log("winnerList Length: "+winnerList.length+"; loserList Length: "+loserList.length);
 					if (winnerList.length == 1 && loserList.length == 0) {
-						NNScores[winnerList[0]] += Math.log2(TOTAL)*10;
+						// NNScores[winnerList[0]] += Math.log2(TOTAL)*10;
 						if (window.saveTourneyWinner == true) {
 							// NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
 							//NOT DONE YET!
@@ -1507,6 +1511,8 @@ class Connection {
 						NNFitnesses = [];
 						winnerList = [];
 						loserList = [];
+						bracket = 0;
+						startBracketLength = TOTAL/2;
 						for (let j=0; j<TOTAL; j++) {
 							winnerList.push(j);
 						}
