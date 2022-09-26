@@ -1477,12 +1477,11 @@ class Connection {
 					round = 0;
 					currentNN = 0;
 
+					startBracketLength = Math.ceil(((bracket==0) ? winnerList.length : loserList.length)/2);
 					if (bracket==1 && loserList.length*2>winnerList.length
 						&& winnerList.length+loserList.length*2!=genTotal) {
-							startBracketLength = 1;
 						} else {
 						bracket = 1 - bracket;
-						startBracketLength = ((bracket==0) ? winnerList.length : loserList.length)/2;
 					}
 					console.log("winnerList Length: "+winnerList.length+"; loserList Length: "+loserList.length);
 					if (winnerList.length == 1 && loserList.length == 0) {
