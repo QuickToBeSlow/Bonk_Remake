@@ -700,17 +700,19 @@ class Connection {
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 512;
+	window.TOTAL = 128;
+	var genTotal = TOTAL;
 	//Changed to use NEAT NNs.
 	var NNs = [];
 	var savedNNs = [];
 	var winnerList = [];
+	var loserList = [];
+	var bracket = 0; // 0 = winner's bracket, 1 = loser's bracket.
 
 
 	window.saveTourneyWinner = false;
 	window.saveRedNN = false;
 	window.saveBlueNN = false;
-	// var secondBest;
 	window.testingMode = false;
 	window.testingChange = false;
 	window.winner = undefined;
@@ -1075,8 +1077,8 @@ class Connection {
                 }
 				let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || 0;
 				c.fillText(Math.round(distVal), (PPosX*12.5) , ((PPosY*-12.5)+600) + (distVal*12.5));
-				
-				for (let i = 0; i < NNScores.length; i+=2) {
+				let length = (NNScores.length > 256) ? 256 : NNScores.length;
+				for (let i = 0; i < length; i+=2) {
 					if (NNScores[i]>NNScores[i+1]) {
 						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
 					}
@@ -1108,6 +1110,7 @@ class Connection {
 					}
 					c.fillText("NNscores[" + (i+1) + "]: " + NNScores[i+1],205,115+i/2*10);
 				}
+				length = (winnerList.length > 256) ? 256 : winnerList.length;
 				for (let i = 0; i < winnerList.length; i++) {
 					c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";
 					if (currentNN==i){
@@ -1198,6 +1201,8 @@ class Connection {
 				}
 				let p1Lead = window.scores[0]-window.scores[1];
 				let p2Lead = window.scores[1]-window.scores[0];
+				//Player1 (reward2) is red, (reward) Player2 is blue. Player1 is player controlled in testing mode.
+				//Index2 corresponds with reward
 				if (window.Player1.GetPosition().x < -40 || window.Player1.GetPosition().x > 100 || window.Player1.GetPosition().y < 0 || window.Player1.GetPosition().y > 200) {
 					if (p1Lead <=-leadTolerance) round = roundCap;
 					//if red is offscreen
@@ -1241,8 +1246,20 @@ class Connection {
 				//We don't want a for loop, as we only want one neural network going at once. We will do iterative generation testing.
 				// for (let i=0; i<NNs.length; i++) {
 				if (!window.testingMode) {
-					let index = winnerList[currentNN];
-					let index2 = winnerList[currentNN+1];
+					let index;
+					let index2;
+					if (winnerList.length+loserList.length==2) {
+						index = (winnerList.length==1) ? winnerList[0] : loserList[0];
+						index2 = (winnerList.length==1) ? loserList[0] : loserList[1];
+					} else {
+						if (bracket == 0) {
+							index = winnerList[currentNN];
+							index2 = winnerList[currentNN+1];
+						} else if (bracket == 1) {
+							index = loserList[currentNN];
+							index2 = loserList[currentNN+1];
+						}
+					}
 					NNs[index].think(0);
 					if (controlPlayer1) {
 
@@ -1368,22 +1385,65 @@ class Connection {
 			}
 			if (!window.testingMode) {
 				steps = 0;
-				let index = winnerList[currentNN];
-				let index2 = winnerList[currentNN+1];
+				let index;
+				let index2;
+				if (winnerList.length+loserList.length==2) {
+					index = (winnerList.length==1) ? winnerList[0] : loserList[0];
+					index2 = (winnerList.length==1) ? loserList[0] : loserList[1];
+				} else {
+					if (bracket == 0) {
+						index = winnerList[currentNN];
+						index2 = winnerList[currentNN+1];
+					} else if (bracket == 1) {
+						index = loserList[currentNN];
+						index2 = loserList[currentNN+1];
+					}
+				}
 				// NNScores[index] += reward;
 				// if (controlPlayer1) {
 				// 	NNScores[index2] += reward2;
 				// }
 				if (round >= roundCap) {
 					window.scores = [0,0];
+	//Player1 (reward2) is red, (reward) Player2 is blue. Player1 is player controlled in testing mode.
+	//Index2 corresponds with reward
+
 					if (reward > reward2) {
-						NNScores[index2] += Math.pow(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)), 2)*10;
-						if (winnerList.length == 2) {secondBest = NNs[index];}
-						winnerList.splice(currentNN, 1);
+						// NNScores[index2] += Math.pow(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)), 2)*10;
+						NNScores[index2] += 10;
+						if (winnerList.length+loserList.length==2) {
+							if (winnerList.length==1) {
+								loserList.push(winnerList[0]);
+								winnerList = [];
+							} else {
+								winnerList.push(loserList[1]);
+								loserList = [];
+							}
+						} else {
+							if (bracket==0) {
+								loserList.push(winnerList[currentNN]);
+								winnerList.splice(currentNN, 1);
+							} else if (bracket==1) {
+								loserList.splice(currentNN, 1);
+							}
+						}
 					} else {
 						NNScores[index] += Math.pow(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)), 2)*10;
-						if (winnerList.length == 2) {secondBest = NNs[index2];}
-						winnerList.splice(currentNN+1, 1);
+						if (winnerList.length+loserList.length==2) {
+							if (winnerList.length==1) {
+								loserList = [];
+							} else {
+								winnerList.push(loserList[0]);
+								loserList = [];
+							}
+						} else {
+							if (bracket==0) {
+								loserList.push(winnerList[currentNN+1]);
+								winnerList.splice(currentNN+1, 1);
+							} else if (bracket==1) {
+								loserList.splice(currentNN+1, 1);
+							}
+						}
 					}
 					reward = 0;
 					reward2 = 0;
@@ -1403,8 +1463,8 @@ class Connection {
 					//NOT DONE YET!
 					window.saveBlueNN = false;
 				}
-	
-				if (currentNN < winnerList.length-1) {
+				let bracketLength = (bracket==0) ? winnerList.length : loserList.length;
+				if (currentNN < bracketLength-1) {
 					// (controlPlayer1) ? currentNN+=2 : currentNN++;
 					if (round >= roundCap) {
 						round = 0;
@@ -1413,7 +1473,15 @@ class Connection {
 				} else if (round >= roundCap) {
 					round = 0;
 					currentNN = 0;
-					if (winnerList.length == 1) {
+
+					if (bracket==1 && loserList.length*2>winnerList.length
+						&& winnerList.length+loserList.length*2!=genTotal) {
+						
+					} else {
+						bracket = 1 - bracket;
+					}
+					console.log("winnerList Length: "+winnerList.length+"; loserList Length: "+loserList.length);
+					if (winnerList.length == 1 && loserList.length == 0) {
 						NNScores[winnerList[0]] += Math.log2(TOTAL)*10;
 						if (window.saveTourneyWinner == true) {
 							// NNs[winnerList[0]].brain.model.save("localstorage://savedModel");
@@ -1428,6 +1496,7 @@ class Connection {
 						// NNScores[Math.floor(winnerList[0]/TOTAL)][winnerList[0]] += TOTAL; //large reward for tournament winner.
 						savedNNs = [...NNs];
 						NNScores = quickSort(NNScores);
+						genTotal = TOTAL;
 						nextGeneration();
 						NNScores = [];
 						for (let i=0; i<TOTAL; i++) {
@@ -1437,6 +1506,7 @@ class Connection {
 						}
 						NNFitnesses = [];
 						winnerList = [];
+						loserList = [];
 						for (let j=0; j<TOTAL; j++) {
 							winnerList.push(j);
 						}
