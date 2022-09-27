@@ -169,7 +169,7 @@
 			<td><button id="toggleTestingMode" >toggle testing mode</button></td>
 			<td><button id="loadModel" >load model (testing only)</button></td>
 			<td><button id="downloadModel" >download model</button></td>
-			<td><button id="loadPretrained" >load pretrained model</button></td>
+			<td><button onclick="runner.loadModel(true)" id="loadPretrained" >load pretrained model</button></td>
 			<td><button id="nextMap" >next map</button></td>
 			
 		</tr>
@@ -178,6 +178,7 @@
 			<td height="22"></td>
 			<td><input type="file" name="file" id="file"></td>
 			<td><button onclick="runner.loadModel()" name="submit">load model (testing only)</button></td>
+			<td style="display:none"><input type="file" name="pretrainedModel" id="pretrainedModel"></td>
 		</tr>
 		<tr>
 			<th>Debugging</th>
@@ -287,20 +288,15 @@
 			window.path = prompt("Please enter file path to the neural network", "localstorage://savedModel");
 			getModel();
 		});
-		async function getModel() {
-			window.testModel = window.gameEngine.prototype.makeNN(await tf.loadLayersModel(window.path).brain);
-			console.log(window.testModel);
-		}
 		$('#downloadModel').click(function(){
-
 			window.fileName = prompt("Please enter the desired file name", "savedModel");
 			window.gameEngine.prototype.downloadModel(window.fileName);
 			// window.testModel.model.save("downloads://"+window.fileName);
 		});
-		$('#loadPretrained').click(function(){
-			window.path = "https://quicktobeslow.github.io/Bonk_Remake/Bonkio_Remake/PTModel2.json";
-			getModel();
-		});
+		// $('#loadPretrained').click(function(){
+		// 	window.path = "https://quicktobeslow.github.io/Bonk_Remake/Bonkio_Remake/PTModel2.json";
+		// 	getModel();
+		// });
 		$('#nextMap').click(function(){
 			window.level++;
 			if (window.level >= window.runners.length) {window.level = 0;}

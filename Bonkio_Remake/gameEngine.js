@@ -1696,9 +1696,17 @@ class Connection {
 			dlAnchorElem.remove();
 		}
 
-		Test.prototype.loadModel = function(name) {
 
-			let file = document.getElementById("file").files[0];
+		async function getPretrained(){
+			let response = await fetch('https://quicktobeslow.github.io/Bonk_Remake/Bonkio_Remake/PTModel2.json');
+			let data = await response.blob();
+			return new File([data], "PTModel2.json");
+		}
+		
+		Test.prototype.loadModel = function(pretrained = false) {
+
+			let file = (pretrained) ? document.getElementById("file").files[0]
+			: getPretrained();
 			let data;
 
 			read = new FileReader();
