@@ -147,6 +147,7 @@
 	</style>
 </head>
 <body>
+
 	<h1>Bonk.io AI Trainer</h1>
 	<canvas style = "margin-left: auto; margin-right: auto; display: block;" tabindex = "1" id="canvas" width="800"  height="600"></canvas>
 	<hr>
@@ -184,14 +185,22 @@
 			<th>Debugging</th>
 			<td><button id="toggleDebug" >toggle debug</button></td>
 		</tr>
+		<tr>
+			<th>Level Control</th>
+			<td><input type="checkbox" id="autoChangeLevels" onclick="window.autochange = !window.autochange;">Auto-change Levels</td>
+
+			<td><input type="checkbox" id="map1" onclick="window.changeMap(0);">DEATH Map</td>
+			<td><input type="checkbox" id="map2" onclick="window.changeMap(1)">Flat Map</td>
+			<td><input type="checkbox" id="map3" onclick="window.changeMap(2)">Spaced Out Platforms Map</td>
+			<td><input type="checkbox" id="map4" onclick="window.changeMap(3)">Angled Map</td>
+			<td><input type="checkbox" id="map5" onclick="window.changeMap(4)">Wall Map</td>
+			<td><input type="checkbox" id="map6" onclick="window.changeMap(5)">For Novices Map</td>
+			<td><input type="checkbox" id="map7" onclick="window.changeMap(6)">Angled Platforms Map</td>
+		</tr>
 	</table>
 	<hr>
 
 	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
-	<!-- <script>
-		console.log(tf);
-	</script> -->
-	<!-- worked! -->
 	<script src="../javascript/Box2D/box2d.min.js" type="text/javascript"></script> 
 
 	<script src="jquery.min.js"></script>
@@ -204,15 +213,40 @@
 	<script src="DEATH.js"></script>
 	<script src="flatMap.js"></script>
 	<script src="spacedOutPlatforms.js"></script>
+	<script src="angledMap.js"></script>
 	<script src="wallMap.js"></script>
 	<script src="forNovices.js"></script>
 	<script src="angledPlatforms.js"></script>
+
+	<!-- Script for level controls -->
+	<script>
+		var possibleLevels = [DEATH, flatMap, spacedOutPlatforms, angledMap, wallMap, forNovices, angledPlatforms];
+		window.levelCount = 7;
+		window.maps = [];
+		for (let i=0; i<window.levelCount; i++) {
+			window.maps[i] = true;
+		}
+		window.updateLevels = function() {
+			window.level = 0;
+			window.runners = [];
+			for (let i=0; i<window.maps.length; i++) {
+				if (window.maps[i]) {
+					window.runners.push(possibleLevels[i]);
+				}
+			}
+		}
+		window.changeMap = function(mapNum) {
+			window.maps[mapNum] = document.getElementById("map"+(mapNum+1)).checked ?? false;
+			window.updateLevels();
+		}
+	</script>
+
 	<script type="text/javascript">
 
 	$(document).ready(function(){
 		
-		window.runners = [angledPlatforms, forNovices, flatMap];
-		// window.runners = [angledPlatforms];
+		// window.runners = [angledPlatforms, forNovices, flatMap];
+		window.runners = [angledMap];
 		window.level = 0;
 		window.runner = null;
 		window.scores = [0,0];
