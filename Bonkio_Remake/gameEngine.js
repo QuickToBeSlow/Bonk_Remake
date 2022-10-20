@@ -1707,7 +1707,7 @@ class Connection {
 		
 		Test.prototype.loadModel = function(pretrained = false) {
 
-			let file = (pretrained) ? document.getElementById("file").files[0]
+			let file = (!pretrained) ? document.getElementById("file").files[0]
 			: getPretrained();
 			let data;
 

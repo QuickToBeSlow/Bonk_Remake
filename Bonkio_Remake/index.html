@@ -178,7 +178,7 @@
 
 			<td height="22"></td>
 			<td><input type="file" name="file" id="file"></td>
-			<td><button onclick="runner.loadModel()" name="submit">load model (testing only)</button></td>
+			<td><button onclick="runner.loadModel(false)" name="submit">load model (testing only)</button></td>
 			<td style="display:none"><input type="file" name="pretrainedModel" id="pretrainedModel"></td>
 		</tr>
 		<tr>
@@ -224,7 +224,7 @@
 		window.levelCount = 7;
 		window.maps = [];
 		for (let i=0; i<window.levelCount; i++) {
-			window.maps[i] = true;
+			window.maps[i] = false;
 		}
 		window.updateLevels = function() {
 			window.level = 0;
@@ -233,6 +233,9 @@
 				if (window.maps[i]) {
 					window.runners.push(possibleLevels[i]);
 				}
+			}
+			if (window.runners.length==0) {
+				window.runners = [possibleLevels[0]];
 			}
 		}
 		window.changeMap = function(mapNum) {
