@@ -1706,12 +1706,12 @@ class Connection {
 			return new File([data], "PTModel2.json");
 		}
 		
-		Test.prototype.loadModel = function(pretrained = false) {
+		Test.prototype.loadModel = async function(pretrained = false) {
 
 			let file = (!pretrained) ? document.getElementById("file").files[0]
-			: getPretrained();
+			: (await getPretrained());
 			let data;
-
+			console.log(file);
 			read = new FileReader();
 
 			read.readAsText(file);
