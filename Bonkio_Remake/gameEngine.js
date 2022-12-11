@@ -684,7 +684,7 @@ class Connection {
 	
 	window.debug = false;
 	window.draw = true;
-	window.noise = 0; // 5/100
+	window.noise = 2/100; // 5/100
 	var eyeRange = 40;
 	var posRange = 50;
 	var velocityRange = 30;
@@ -1010,8 +1010,8 @@ class Connection {
 				if ((contact.GetFixtureA().GetBody().GetUserData() == 'Player1' && contact.GetFixtureB().GetBody().GetUserData() == 'Player2') || (contact.GetFixtureB().GetBody().GetUserData() == 'Player1' && contact.GetFixtureA().GetBody().GetUserData() == 'Player2')) {
 					hasCollided = true;
 					if (canColReward && !window.testingMode) {
-						reward += (window.heavy[1] == true) ? strengths[1]/roundCap/5 : 1/roundCap;
-						reward2 += (window.heavy[0] == true) ? strengths[0]/roundCap/5 : 1/roundCap;
+						reward += (window.heavy[1] == true) ? strengths[1]/roundCap : 1/roundCap;
+						reward2 += (window.heavy[0] == true) ? strengths[0]/roundCap : 1/roundCap;
 					}
 				}
 			}
@@ -1229,10 +1229,10 @@ class Connection {
 					return;
 				this._world.ClearForces();
 				if (!window.testingMode) {
-					reward -= 0.001;
-					reward2 -= 0.001;
-					reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
-					reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
+					// reward -= 0.001;
+					// reward2 -= 0.001;
+					// reward -= Math.abs(window.Player2.GetLinearVelocity().x)/5000;
+					// reward2 -= Math.abs(window.Player1.GetLinearVelocity().x)/5000;
 				}
 				window.up[1] = false;
 				window.down[1] = false;
@@ -1415,7 +1415,7 @@ class Connection {
 
 					if (reward > reward2) {
 						// NNScores[index2] += Math.pow(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)), 2)*10;
-						NNScores[index2] += 10;
+						NNScores[index2] += 10+reward/roundCap;
 						if (winnerList.length+loserList.length==2) {
 							if (winnerList.length==1) {
 								loserList.push(winnerList[0]);
@@ -1433,7 +1433,8 @@ class Connection {
 							}
 						}
 					} else {
-						NNScores[index] += Math.pow(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)), 2)*10;
+						// NNScores[index] += Math.pow(Math.floor(Math.log2(TOTAL))-Math.floor(Math.log2(winnerList.length)), 2)*10;
+						NNScores[index] += 10+reward2/roundCap;
 						if (winnerList.length+loserList.length==2) {
 							if (winnerList.length==1) {
 								loserList = [];
