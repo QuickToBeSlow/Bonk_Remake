@@ -744,6 +744,7 @@ class Connection {
 			let NN1 = pickOne(i);
 			let NN2 = pickOne(i);
 			NN1 = NN1.crossover(NN2).clone();
+			NN1.mutate();
 			NNs[i] = NN1.clone();
 		}
 
@@ -777,7 +778,7 @@ class Connection {
 			child = NeuralN.clone();
 		} else {
 			let NeuralN = savedNNs[index].clone();
-			NeuralN.mutate();
+			// NeuralN.mutate();
 			child = NeuralN.clone();
 		}
 		return child.clone();
