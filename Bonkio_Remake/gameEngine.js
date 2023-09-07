@@ -173,6 +173,7 @@ class Genome {
 		//Prepare for feed forward
 		this.sortByLayer();
 	}
+		//NEW PLAN 8/21/2023: add in many different possible inputs and let the AI decide which ones are relevant. This includes global positions, spread out ground eyes, etc.
 		output(i, p1, p2) {
 			let inputs = [];
 			// inputs[0] = Math.atan(p1.GetPosition().x/p1.GetPosition().y)+(Math.random()-0.5)*noise;
@@ -204,7 +205,10 @@ class Genome {
 			for (let m=0; m<window.eyes; m++) {
 				// eyeRotation[0][m] = (this.lastOutputs[m]*2-1.5+1*m%2)*Math.PI;
 				eyeRotation[i][m] = 2*(this.lastOutputs[m]*2-1)*Math.PI-Math.PI/2;
-				let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((eyeRotation[i][m]))*eyeRange), PPosY-(Math.sin((eyeRotation[i][m]))*eyeRange)));
+				let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY),
+					new b2Vec2(PPosX+(Math.cos((eyeRotation[i][m]))*eyeRange),
+					PPosY-(Math.sin((eyeRotation[i][m]))*eyeRange)),
+					(i == 1));
 				inputs[8+this.lastOutputs.length+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
 				inputs[8+this.lastOutputs.length+m+window.eyes] = cast.angle+(Math.random()-0.5)*noise || 0;
 			}
@@ -213,9 +217,26 @@ class Genome {
 			// let leftDisp = 0;
 			// let rightDisp = 0;
 
+			//creates a raycast directly towards the floor.
 			let cast = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange));
 			inputs[8+this.lastOutputs.length+window.eyes*2] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
 			inputs[8+this.lastOutputs.length+window.eyes*2+1] = cast.angle+(Math.random()-0.5)*noise || 0;
+
+			//create fixed raycasts with angular spread towards floor based on number of fixedEyes, fixedSpreadAmount, and fixedEyeDirection
+			let anglePerFixedEye = window.fixedSpreadAmount/window.fixedEyes;
+			let curAngle = window.fixedEyeDirection-window.fixedSpreadAmount/4;
+			for (let m=0; m<window.fixedEyes; m++) {
+				let cast = raycast(window.FloorFixture,
+					new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.cos((curAngle))*eyeRange),
+					PPosY-(Math.sin((curAngle))*eyeRange)),
+					//only save debugNums if it's on a frame that will be shown (supaspeed stuff) and if it's the second player (i == 1)
+					(i == 1));
+				inputs[8+this.lastOutputs.length+window.eyes*2+1+m] = (cast.distance || -eyeRange)/eyeRange+(Math.random()-0.5)*noise;
+				inputs[8+this.lastOutputs.length+window.eyes*2+1+m+window.fixedEyes] = cast.angle+(Math.random()-0.5)*noise || 0;
+				//adjust curAngle for next iteration
+				curAngle+=anglePerFixedEye;
+			}
+
 			return inputs;
 		}
 
@@ -559,7 +580,8 @@ class Connection {
 	var rayCastOutput =  new b2RayCastOutput();
 	var m_physScale = 10;
 
-	function raycast(b2Fixture, p1, p2, maxFraction){
+	//original inputs: b2Fixture, p1, p2, maxFraction
+	function raycast(b2Fixture, p1, p2, showDebugNum = false){
 	  rayCastInput.p1 = p1;
 	  rayCastInput.p2 = p2;
 	  rayCastInput.maxFraction = 1;
@@ -572,14 +594,24 @@ class Connection {
 		}
 	  }
 	}
-
 	if(closestShape != undefined && closestShape.RayCast(rayCastOutput, rayCastInput)){
 		let norm = rayCastOutput.normal;
+		//reflection angle (?)
+		let angle = (Math.atan(norm.y/norm.x)/Math.PI*2+1.5)%2-0.5;
+		//true angle:
+		let tAngle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+		let fraction = rayCastOutput.fraction;
+		let distance = (rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2));
+		if (showDebugNum) {
+			// window.debugNums.push([norm,angle,fraction,distance])
+			window.debugNums.push([tAngle, distance])
+			// console.log(window.debugNums);
+		}
 		return {
 			normal: norm,
-			angle: (Math.atan(norm.y/norm.x)/Math.PI*2+1.5)%2-0.5,
-			fraction: rayCastOutput.fraction,
-			distance: (rayCastOutput.fraction)*Math.sqrt(Math.pow(rayCastInput.p1.x-rayCastInput.p2.x, 2)+Math.pow(rayCastInput.p1.y-rayCastInput.p2.y, 2))
+			angle: angle,
+			fraction: fraction,
+			distance: distance
 		}
 	}
 	  return false;
@@ -677,12 +709,19 @@ class Connection {
 	*/
 	window.eyes = 2;
 	window.groundEyes = 1;
+	//eyes will have a 10 or 20 degree spread I'm thinking, and they will not move. Let NEAT algorithm filter to the best inputs.
+	window.fixedEyes = 2;
+	window.fixedSpreadAmount = 80/360*2*Math.PI; //40 degree spread (20 on each side)
+	window.fixedEyeDirection = 90/360*2*Math.PI; //270 degree angle (directly at floor)
 	window.GRRange = 0;
 
-	window.inpt = 8+window.eyes+(window.eyes*2)+window.groundEyes*2;
+	// window.inpt = 8+this.lastOutputs.length+(window.eyes*2)+window.groundEyes*2+(window.fixedEyes*2);
+	// window.inpt = 9+this.lastOutputs.length+window.eyes*2+window.fixedEyes*2;
 	window.outpt = 3+window.eyes;
 	
+	window.showNNScoresList = false;
 	window.debug = false;
+	window.debugNums = []; //clear every frame and add to it every frame when raycast is called
 	window.draw = true;
 	window.noise = 2/100; // 5/100
 	var eyeRange = 40;
@@ -695,12 +734,13 @@ class Connection {
 		eyeRotation[0][i]=0.5;
 		eyeRotation[1][i]=0.5;
 	}
+	let inpt = (window.prompt("Please enter total population size (powers of 2).", "128"));
+	window.TOTAL = (inpt >= 2) ? Math.pow(2,Math.ceil(Math.log2(inpt))) : 128;
 	var controlPlayer1 = true;
 	var round = 0;
 	var roundCap = 15;
 	var leadTolerance = 5;
 	var currentNN = 0;
-	window.TOTAL = 1024;
 	var startBracketLength = TOTAL/2;
 	var genTotal = TOTAL;
 	//Changed to use NEAT NNs.
@@ -1063,7 +1103,7 @@ class Connection {
 				this._world.SetDebugDraw(this._dbgDraw);
 				this._world.DrawDebugData();
 			}
-	
+			let scaleAmt = 12.5
 			c.fillStyle = "black";
             c.fillText("score: red - "+window.scores[0]+" - blue - "+window.scores[1], 250, 15);
             c.fillText("current reward (Player1): "+Math.round(reward2*1000)/1000, 5, 45);
@@ -1071,61 +1111,74 @@ class Connection {
             c.fillText("generation : "+generation, 250, 30);
             c.fillText("current match : Network #" + winnerList[currentNN]+" VS Network #"+winnerList[currentNN+1],250, 45);
 			if (window.debug) {
+				//instead of doing raycast again, retrieve values from debugNums and display those
 				let PPosX = window.Player2.GetPosition().x;
-                let PPosY = window.Player2.GetPosition().y;
-                for (let l=0; l<(window.eyes); l++) {
-                    let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(l+eyeRotation[1][l])*200), PPosY-(Math.cos(l+eyeRotation[1][l])*200))).distance || null;
-                    c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(l+eyeRotation[1][l])*distVal*11.5) , ((PPosY*-12.5)+600) + PPosY+(Math.cos(l+eyeRotation[1][l])*distVal*11.5));
-                }
+				let PPosY = window.Player2.GetPosition().y;
+				for (let l=0; l<window.debugNums.length; l++) {
+					let dist = window.debugNums[l][1];
+					let angle = window.debugNums[l][0];
+					// console.log((PPosX*scaleAmt) + (Math.sin(angle)*dist*scaleAmt) , ((PPosY*-scaleAmt)+600) + (Math.cos(angle)*dist*scaleAmt))
+					c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")"
+					// console.log(angle);
+					c.fillText(Math.round(dist), (PPosX*scaleAmt) + (Math.cos(angle)*dist*scaleAmt) , ((PPosY*-scaleAmt)+600) - (Math.sin(angle)*dist*scaleAmt));
+				}
+				c.fillText(0, (PPosX*scaleAmt) , (PPosY*-scaleAmt)+600);
+				//---
+                // for (let l=0; l<(window.eyes); l++) {
+                //     let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX+(Math.sin(eyeRotation[1][l])*200), PPosY-(Math.cos(eyeRotation[1][l])*200))).distance || null;
+                //     c.fillText(Math.round(distVal), (PPosX*11.5) + PPosX+(Math.sin(eyeRotation[1][l])*distVal*11.5) , ((PPosY*-12.5)+600) + PPosY+(Math.cos(eyeRotation[1][l])*distVal*11.5));
+                // }
 				let distVal = raycast(window.FloorFixture, new b2Vec2(PPosX, PPosY), new b2Vec2(PPosX, PPosY-eyeRange)).distance || 0;
 				c.fillText(Math.round(distVal), (PPosX*12.5) , ((PPosY*-12.5)+600) + (distVal*12.5));
-				let length = (NNScores.length > 256) ? 256 : NNScores.length;
-				for (let i = 0; i < length; i+=2) {
-					if (NNScores[i]>NNScores[i+1]) {
-						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+				if (window.showNNScoresList) {
+					let length = (NNScores.length > 256) ? 256 : NNScores.length;
+					for (let i = 0; i < length; i+=2) {
+						if (NNScores[i]>NNScores[i+1]) {
+							c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+						}
+						if (NNScores[i]<NNScores[i+1]) {
+							c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+						}
+						if (NNScores[i]== 0 && NNScores[i+1] == 0) {
+							c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+						}
+						if (winnerList[currentNN]==i || winnerList[currentNN+1]==i){
+							c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+						}
+						c.fillText("NNscores[" + (i) + "]: " + NNScores[i],5,115+i/2*10);//currentNN
 					}
-					if (NNScores[i]<NNScores[i+1]) {
-						c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+					c.fillText("currentNN : "+currentNN, 250, 60);
+					c.fillText("winnerList[currentNN] : "+winnerList[currentNN], 250, 70);
+					for (let i = 0; i < NNScores.length; i+=2) {
+						if (NNScores[i+1]>NNScores[i]) {
+							c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
+						}
+						if (NNScores[i]>NNScores[i+1]) {
+							c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
+						}
+						if (NNScores[i]== 0 && NNScores[i+1] == 0) {
+							c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+						}
+						if (winnerList[currentNN]==i+1 || winnerList[currentNN+1]==i+1){
+							c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+						}
+						c.fillText("NNscores[" + (i+1) + "]: " + NNScores[i+1],205,115+i/2*10);
 					}
-					if (NNScores[i]== 0 && NNScores[i+1] == 0) {
-						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
+					length = (winnerList.length > 256) ? 256 : winnerList.length;
+					for (let i = 0; i < winnerList.length; i++) {
+						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";
+						if (currentNN==i){
+							c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+							c.fillText("current match : Network #" + winnerList[i]+" VS Network #"+winnerList[i+1],250, 45);
+						}
+						if (currentNN+1==i){
+							c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
+						}
+						c.fillText("winnerList[" + (i) + "]: " + winnerList[i],500,10+(i)*9);
 					}
-					if (winnerList[currentNN]==i || winnerList[currentNN+1]==i){
-						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
-					}
-					c.fillText("NNscores[" + (i) + "]: " + NNScores[i],5,115+i/2*10);//currentNN
-				}
-				c.fillText("currentNN : "+currentNN, 250, 60);
-				c.fillText("winnerList[currentNN] : "+winnerList[currentNN], 250, 70);
-				for (let i = 0; i < NNScores.length; i+=2) {
-					if (NNScores[i+1]>NNScores[i]) {
-						c.fillStyle = "rgb("+(0)+","+(180)+","+(0)+")"; //green
-					}
-					if (NNScores[i]>NNScores[i+1]) {
-						c.fillStyle = "rgb("+(180)+","+(0)+","+(0)+")"; //red
-					}
-					if (NNScores[i]== 0 && NNScores[i+1] == 0) {
-						c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";  //black
-					}
-					if (winnerList[currentNN]==i+1 || winnerList[currentNN+1]==i+1){
-						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
-					}
-					c.fillText("NNscores[" + (i+1) + "]: " + NNScores[i+1],205,115+i/2*10);
-				}
-				length = (winnerList.length > 256) ? 256 : winnerList.length;
-				for (let i = 0; i < winnerList.length; i++) {
-					c.fillStyle = "rgb("+(0)+","+(0)+","+(0)+")";
-					if (currentNN==i){
-						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
-						c.fillText("current match : Network #" + winnerList[i]+" VS Network #"+winnerList[i+1],250, 45);
-					}
-					if (currentNN+1==i){
-						c.fillStyle = "rgb("+(80)+","+(80)+","+(255)+")"; //blue
-					}
-					c.fillText("winnerList[" + (i) + "]: " + winnerList[i],500,10+(i)*9);
 				}
 			}
-
+			window.debugNums = [];
 			c.fillText("Game: "+(TOTAL-winnerList.length+1) + " of " + (TOTAL-1), 5, 90);
             c.fillText("Round: "+(round+1) + " of " + roundCap, 5, 105);
             c.fillText(((bracket==0) ? "Winner's bracket" : "Loser's bracket")+", game "
@@ -1192,7 +1245,7 @@ class Connection {
 				this.endGame(-1);
 			}
 			var delta = (typeof delta == "undefined") ? 1/this._fps : delta;
-			for (i = 0; i < supaSpeed; i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
+			for (window.i = 0; window.i < supaSpeed; window.i++) { // a for loop that iterates the this._world.Step() function "supaSpeed" amount of times before each render.
 				if (!window.testingMode) {
 					steps++;
 					if (steps > 5000) {this.endGame(-1); break;}
